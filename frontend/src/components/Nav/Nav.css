@@ -1,0 +1,91 @@
+.z-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 56px;
+  height: 60px;
+  background: rgba(8, 11, 13, 0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s;
+}
+
+.z-nav--scrolled {
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Brand */
+.z-nav__id {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.z-nav__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 14px rgba(0, 255, 140, 0.6);
+  animation: zblink 2.5s infinite;
+}
+
+.z-nav__name {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.z-nav__name span {
+  color: var(--green);
+}
+
+/* Links */
+.z-nav__links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
+
+.z-nav__links a {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text3);
+  transition: color 0.2s;
+}
+
+.z-nav__links a:hover {
+  color: var(--cyan);
+}
+
+/* Status */
+.z-nav__status {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--green);
+  letter-spacing: 0.12em;
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  opacity: 0.7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .z-nav {
+    padding: 0 24px;
+  }
+
+  .z-nav__links,
+  .z-nav__status {
+    display: none;
+  }
+}

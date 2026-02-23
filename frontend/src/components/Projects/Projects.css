@@ -1,0 +1,121 @@
+.z-proj__grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 22px;
+}
+
+.z-proj__card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 34px 30px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s;
+  display: flex;
+  flex-direction: column;
+}
+
+.z-proj__card:hover {
+  border-color: var(--green-mid);
+  background: var(--bg3);
+  transform: translateY(-3px);
+}
+
+.z-proj__card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--green), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.z-proj__card:hover::after {
+  opacity: 1;
+}
+
+/* Muted / upcoming */
+.z-proj__card--muted {
+  border-style: dashed;
+  opacity: 0.4;
+}
+
+.z-proj__card--muted:hover {
+  opacity: 0.6;
+  transform: none;
+  border-color: var(--border);
+}
+
+/* Badge */
+.z-proj__badge {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  color: var(--green);
+  display: inline-flex;
+  width: fit-content;
+  margin-bottom: 20px;
+}
+
+.z-proj__card--muted .z-proj__badge {
+  color: var(--text3);
+  border-color: var(--text3);
+}
+
+/* Title */
+.z-proj__title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.z-proj__card--muted .z-proj__title {
+  color: var(--text3);
+}
+
+/* Desc */
+.z-proj__desc {
+  font-size: 0.84rem;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.75;
+  flex: 1;
+}
+
+/* Link */
+.z-proj__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+  text-decoration: none;
+  margin-top: 26px;
+  transition: gap 0.2s;
+}
+
+.z-proj__link:hover {
+  gap: 14px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .z-proj__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .z-proj__grid {
+    grid-template-columns: 1fr;
+  }
+}
