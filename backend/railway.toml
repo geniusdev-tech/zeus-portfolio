@@ -3,7 +3,4 @@ builder = "nixpacks"
 
 [deploy]
 startCommand = "./zeus-backend"
-healthcheckPath = "/api/health"
-healthcheckTimeout = 10
-restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 3
+
