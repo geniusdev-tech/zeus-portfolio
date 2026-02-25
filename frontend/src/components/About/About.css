@@ -1,0 +1,102 @@
+.z-about__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+/* ── Text ── */
+.z-about__text p {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.9;
+  margin-bottom: 20px;
+}
+
+.z-about__text p strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.z-about__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 32px;
+}
+
+.z-about__tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  color: var(--text2);
+  transition: all 0.2s;
+}
+
+.z-about__tag:hover {
+  border-color: var(--green);
+  color: var(--green);
+  background: var(--green-lo);
+}
+
+.z-about__tag.cyan:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: var(--cyan-lo);
+}
+
+/* ── Stats ── */
+.z-about__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.z-about__stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 22px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--green);
+  transition: background 0.2s;
+}
+
+.z-about__stat:hover {
+  background: var(--bg3);
+}
+
+.z-about__stat.cyan {
+  border-left-color: var(--cyan);
+}
+
+.z-about__stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.z-about__stat-value {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.z-about__stat.cyan .z-about__stat-value {
+  color: var(--cyan);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .z-about__grid {
+    grid-template-columns: 1fr;
+  }
+}

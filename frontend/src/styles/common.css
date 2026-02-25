@@ -1,0 +1,143 @@
+/* ── Layout ─────────────────────────────────────────── */
+.z-section {
+  position: relative;
+  z-index: 1;
+  padding: 100px 56px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.z-full {
+  position: relative;
+  z-index: 1;
+  background: var(--bg1);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 100px 0;
+}
+
+.z-full .z-section {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.z-divider-line {
+  position: relative;
+  z-index: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 0 56px;
+}
+
+/* ── Section Header ─────────────────────────────────── */
+.z-sec-header {
+  margin-bottom: 64px;
+}
+
+.z-sec-tag {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.z-sec-tag::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--green);
+}
+
+.z-sec-tag.cyan {
+  color: var(--cyan);
+}
+
+.z-sec-tag.cyan::before {
+  background: var(--cyan);
+}
+
+.z-sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 3.5vw, 3.8rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  color: var(--text);
+}
+
+.z-sec-title em {
+  font-style: normal;
+  color: var(--green);
+}
+
+.z-sec-title.cyan em {
+  color: var(--cyan);
+}
+
+/* ── Buttons ────────────────────────────────────────── */
+.z-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 28px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  transition: all 0.2s;
+}
+
+.z-btn-g {
+  background: var(--green);
+  color: #030a05;
+  border: 1px solid var(--green);
+}
+
+.z-btn-g:hover {
+  background: transparent;
+  color: var(--green);
+  box-shadow: var(--glow-g);
+}
+
+.z-btn-o {
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.z-btn-o:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+/* ── Scroll Reveal ──────────────────────────────────── */
+.z-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.z-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .z-section {
+    padding: 64px 24px;
+  }
+
+  .z-divider-line {
+    margin: 0 24px;
+  }
+}

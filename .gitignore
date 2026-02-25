@@ -1,0 +1,13 @@
+# Backend
+backend/zeus-backend
+backend/.env
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# OS
+.DS_Store
+*.log
