@@ -21,10 +21,10 @@ func main() {
 	mux := http.NewServeMux()
 
 	// ── Routes ──────────────────────────────────────────
-	mux.HandleFunc("POST /api/contact",        mailer.HandleContact)
-	mux.HandleFunc("GET  /api/status",         status.HandleStatus)
-	mux.HandleFunc("GET  /api/github/activity",github.HandleActivity)
-	mux.HandleFunc("GET  /api/health",         handleHealth)
+	mux.HandleFunc("POST /api/contact", mailer.HandleContact)
+	mux.HandleFunc("GET /api/status", status.HandleStatus)
+	mux.HandleFunc("GET /api/github/activity", github.HandleActivity)
+	mux.HandleFunc("GET /api/health", handleHealth)
 
 	// ── Middleware chain ─────────────────────────────────
 	handler := middleware.Chain(
