@@ -1,7 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import './StatusDashboard.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const cleanUrl = (url) => {
+  if (!url) return 'http://localhost:8080';
+  const match = url.match(/https?:\/\/[^\s]+/);
+  return match ? match[0] : url;
+};
+
+const API_URL = cleanUrl(import.meta.env.VITE_API_URL);
 const POLL_INTERVAL = 15_000;
 
 const GH_ICONS = {

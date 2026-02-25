@@ -2,7 +2,13 @@ import { useState } from 'react';
 import { contactLinks } from '../../data';
 import './Contact.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const cleanUrl = (url) => {
+  if (!url) return 'http://localhost:8080';
+  const match = url.match(/https?:\/\/[^\s]+/);
+  return match ? match[0] : url;
+};
+
+const API_URL = cleanUrl(import.meta.env.VITE_API_URL);
 
 function ContactForm() {
   const [form, setForm] = useState({
