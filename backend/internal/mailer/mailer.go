@@ -26,6 +26,7 @@ type ContactResponse struct {
 
 // HandleContact validates the form payload and sends an email via Resend.
 func HandleContact(w http.ResponseWriter, r *http.Request) {
+	log.Printf("[mailer] incoming request from %s", r.RemoteAddr)
 	w.Header().Set("Content-Type", "application/json")
 
 	var req ContactRequest
@@ -40,7 +41,7 @@ func HandleContact(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := send(req); err != nil {
-		log.Printf("[mailer] error: %v", err)
+		log.Printf("[mailer] FAILED to send email from %s: %v", req.Email, err)
 		writeErr(w, http.StatusInternalServerError, "Failed to send. Please try again later.")
 		return
 	}
@@ -82,7 +83,7 @@ type resendPayload struct {
 }
 
 func send(req ContactRequest) error {
-	apiKey  := os.Getenv("RESEND_API_KEY")
+	apiKey := os.Getenv("RESEND_API_KEY")
 	toEmail := os.Getenv("CONTACT_TO_EMAIL")
 
 	// Dev mode — just log
@@ -101,7 +102,7 @@ func send(req ContactRequest) error {
 	}
 
 	body, _ := json.Marshal(payload)
-	client  := &http.Client{Timeout: 10 * time.Second}
+	client := &http.Client{Timeout: 10 * time.Second}
 
 	httpReq, _ := http.NewRequest("POST", "https://api.resend.com/emails", bytes.NewReader(body))
 	httpReq.Header.Set("Authorization", "Bearer "+apiKey)
@@ -144,7 +145,7 @@ func buildHTML(req ContactRequest) string {
     <span style="color:#00ff8c;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;">● New Contact — zeus.dev</span>
   </div>
   <div style="padding:28px;">
-    <table style="width:100%;border-collapse:collapse;color:#dde4ec;">
+    <table style="width:100%%;border-collapse:collapse;color:#dde4ec;">
       <tr><td style="color:#8a95a3;padding:6px 0;font-size:0.85rem;width:100px;">Name</td><td style="padding:6px 0;font-size:0.85rem;">%s</td></tr>
       %s
       <tr><td style="color:#8a95a3;padding:6px 0;font-size:0.85rem;">Email</td><td style="padding:6px 0;font-size:0.85rem;"><a href="mailto:%s" style="color:#00e5ff;">%s</a></td></tr>

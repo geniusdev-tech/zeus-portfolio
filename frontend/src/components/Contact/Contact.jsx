@@ -4,7 +4,7 @@ import './Contact.css';
 
 const cleanUrl = (url) => {
   if (!url) return 'http://localhost:8080';
-  const match = url.match(/https?:\/\/[^\s]+/);
+  const match = url.match(/https?:\/\/[^/\s]+/);
   return match ? match[0] : url;
 };
 

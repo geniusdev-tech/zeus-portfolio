@@ -3,7 +3,7 @@ import './StatusDashboard.css';
 
 const cleanUrl = (url) => {
   if (!url) return 'http://localhost:8080';
-  const match = url.match(/https?:\/\/[^\s]+/);
+  const match = url.match(/https?:\/\/[^/\s]+/);
   return match ? match[0] : url;
 };
 
@@ -18,7 +18,7 @@ const GH_ICONS = {
 // ── Primitives ────────────────────────────────────────
 
 function GaugeBar({ value, warn = 70, critical = 90 }) {
-  const pct   = Math.min(Math.max(value, 0), 100);
+  const pct = Math.min(Math.max(value, 0), 100);
   const color = pct >= critical ? '#ff4d6a' : pct >= warn ? '#ffb830' : 'var(--green)';
   return (
     <div className="z-sd__gauge">
@@ -29,7 +29,7 @@ function GaugeBar({ value, warn = 70, critical = 90 }) {
 }
 
 function StatusBadge({ status }) {
-  const cfg = { running: ['online','green'], stopped: ['offline','red'], unknown: ['unknown','dim'] };
+  const cfg = { running: ['online', 'green'], stopped: ['offline', 'red'], unknown: ['unknown', 'dim'] };
   const [label, cls] = cfg[status] || cfg.unknown;
   return <span className={`z-sd__badge z-sd__badge--${cls}`}>● {label}</span>;
 }
@@ -63,14 +63,14 @@ function Skeleton({ rows = 3 }) {
 // ── GitHub Feed ───────────────────────────────────────
 
 function GitHubFeed() {
-  const [data,    setData]    = useState(null);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const res  = await fetch(`${API_URL}/api/github/activity`);
+        const res = await fetch(`${API_URL}/api/github/activity`);
         if (!res.ok) throw new Error();
         setData(await res.json());
         setError(false);
@@ -122,14 +122,14 @@ function GitHubFeed() {
 // ── Main ─────────────────────────────────────────────
 
 export default function StatusDashboard() {
-  const [data,    setData]    = useState(null);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState(null);
-  const [lastOk,  setLastOk]  = useState(null);
+  const [error, setError] = useState(null);
+  const [lastOk, setLastOk] = useState(null);
 
   const fetchStatus = useCallback(async () => {
     try {
-      const res  = await fetch(`${API_URL}/api/status`, { cache: 'no-store' });
+      const res = await fetch(`${API_URL}/api/status`, { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setData(await res.json());
       setLastOk(new Date());
@@ -147,10 +147,10 @@ export default function StatusDashboard() {
     return () => clearInterval(id);
   }, [fetchStatus]);
 
-  const srv      = data?.server;
+  const srv = data?.server;
   const services = data?.services ?? [];
-  const uptime   = data?.uptime;
-  const isLive   = data?.mode === 'live';
+  const uptime = data?.uptime;
+  const isLive = data?.mode === 'live';
 
   return (
     <div className="z-full" id="status">
@@ -170,7 +170,7 @@ export default function StatusDashboard() {
               <span className="z-sd__topbar-label">
                 {error ? 'Backend unreachable'
                   : isLive ? 'Live · polling every 15s'
-                  : 'Simulated metrics · polling every 15s'}
+                    : 'Simulated metrics · polling every 15s'}
               </span>
               {!error && !isLive && (
                 <span className="z-sd__topbar-pill">sim</span>
