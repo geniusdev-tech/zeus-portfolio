@@ -1,6 +1,6 @@
 [build]
-builder = "nixpacks"
+buildCommand = "go build -o zeus-backend ./cmd/server/main.go"  # ← nome correto
 
 [deploy]
 startCommand = "./zeus-backend"
-
+healthcheckTimeout = 60  # ← aumentado de 10s para 60s
