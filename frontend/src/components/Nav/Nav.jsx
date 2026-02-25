@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { navLinks } from '../../data';
 import './Nav.css';
 
@@ -13,17 +14,17 @@ export default function Nav() {
 
   return (
     <nav className={`z-nav ${scrolled ? 'z-nav--scrolled' : ''}`}>
-      <div className="z-nav__id">
+      <Link to="/" className="z-nav__id">
         <div className="z-nav__dot" />
         <div className="z-nav__name">
           <span>Zeus</span> / IT Professional
         </div>
-      </div>
+      </Link>
 
       <ul className="z-nav__links">
         {navLinks.map((section) => (
           <li key={section}>
-            <a href={`#${section}`}>{section}</a>
+            <a href={`/#${section}`}>{section}</a>
           </li>
         ))}
       </ul>

@@ -55,14 +55,14 @@ export const expertiseData = [
 ];
 
 export const stackData = [
-  { name: 'Linux',             type: 'Operating System',       pct: 95 },
-  { name: 'Go',                type: 'Systems Language',       pct: 80 },
-  { name: 'systemd',           type: 'Init / Service Manager', pct: 90 },
-  { name: 'Shell Scripting',   type: 'Automation',             pct: 88 },
-  { name: 'Networking',        type: 'TCP/IP · Routing · DNS', pct: 82 },
-  { name: 'Infra Architecture',type: 'Design & Planning',      pct: 85 },
-  { name: 'Monitoring',        type: 'Observability Concepts', pct: 78 },
-  { name: 'Python',            type: 'Scripting / Tools',      pct: 72 },
+  { name: 'Linux', type: 'Operating System', pct: 95 },
+  { name: 'Go', type: 'Systems Language', pct: 80 },
+  { name: 'systemd', type: 'Init / Service Manager', pct: 90 },
+  { name: 'Shell Scripting', type: 'Automation', pct: 88 },
+  { name: 'Networking', type: 'TCP/IP · Routing · DNS', pct: 82 },
+  { name: 'Infra Architecture', type: 'Design & Planning', pct: 85 },
+  { name: 'Monitoring', type: 'Observability Concepts', pct: 78 },
+  { name: 'Python', type: 'Scripting / Tools', pct: 72 },
 ];
 
 export const projectsData = [
@@ -70,7 +70,7 @@ export const projectsData = [
     badge: 'Infrastructure Tool — Active',
     title: 'QELO-X',
     desc: 'Lightweight orchestration layer for critical infrastructure services. Provides daemon-based process control, secure UNIX socket IPC, real-time metrics monitoring, graceful shutdown handling, and automatic restart with configurable policies. Built for production bare-metal and containerized environments.',
-    link: '#',
+    link: '/Quelox',
     muted: false,
   },
   {
@@ -90,24 +90,24 @@ export const projectsData = [
 ];
 
 export const aboutStats = [
-  { label: 'Primary OS',     value: 'Linux',               cyan: false },
-  { label: 'Infrastructure', value: 'Bare-metal + Cloud',  cyan: false },
-  { label: 'Languages',      value: 'Go · Shell · Python', cyan: true  },
-  { label: 'Init System',    value: 'systemd',             cyan: true  },
-  { label: 'Focus',          value: 'Stability & Reliability', cyan: false },
-  { label: 'Deployments',    value: 'Production-Grade',    cyan: false },
-  { label: 'Status',         value: 'Available',           cyan: true  },
+  { label: 'Primary OS', value: 'Linux', cyan: false },
+  { label: 'Infrastructure', value: 'Bare-metal + Cloud', cyan: false },
+  { label: 'Languages', value: 'Go · Shell · Python', cyan: true },
+  { label: 'Init System', value: 'systemd', cyan: true },
+  { label: 'Focus', value: 'Stability & Reliability', cyan: false },
+  { label: 'Deployments', value: 'Production-Grade', cyan: false },
+  { label: 'Status', value: 'Available', cyan: true },
 ];
 
 export const aboutTags = [
-  { label: 'Linux',          cyan: false },
-  { label: 'Networking',     cyan: false },
+  { label: 'Linux', cyan: false },
+  { label: 'Networking', cyan: false },
   { label: 'Infrastructure', cyan: false },
-  { label: 'Backend Dev',    cyan: true  },
-  { label: 'Automation',     cyan: true  },
-  { label: 'Systems Analysis',cyan: false },
-  { label: 'DevOps',         cyan: false },
-  { label: 'Production',     cyan: true  },
+  { label: 'Backend Dev', cyan: true },
+  { label: 'Automation', cyan: true },
+  { label: 'Systems Analysis', cyan: false },
+  { label: 'DevOps', cyan: false },
+  { label: 'Production', cyan: true },
 ];
 
 export const philosophyData = [
@@ -139,9 +139,9 @@ export const philosophyData = [
 ];
 
 export const contactLinks = [
-  { icon: '[@]', label: 'Email',    value: 'zeus@example.com',       href: 'mailto:zeus@example.com', cyan: false },
-  { icon: '[gh]', label: 'GitHub',  value: 'github.com/zeus',        href: '#',                       cyan: false },
-  { icon: '[in]', label: 'LinkedIn',value: 'linkedin.com/in/zeus-it', href: '#',                       cyan: true  },
+  { icon: '[@]', label: 'Email', value: 'zeus@example.com', href: 'mailto:zeus@example.com', cyan: false },
+  { icon: '[gh]', label: 'GitHub', value: 'github.com/zeus-cli', href: '#', cyan: false },
+  { icon: '[in]', label: 'LinkedIn', value: 'linkedin.com/in/zeus-it', href: '#', cyan: true },
 ];
 
 export const navLinks = ['about', 'expertise', 'projects', 'stack', 'status', 'contact'];

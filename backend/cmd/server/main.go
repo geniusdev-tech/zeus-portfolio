@@ -12,6 +12,10 @@ import (
 	"zeus-backend/internal/status"
 )
 
+func init() {
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+}
+
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -42,6 +46,8 @@ func main() {
 		IdleTimeout:  60 * time.Second,
 	}
 
+	log.Printf("[zeus-backend] startup: port=%s, origin=%s, resend=%v",
+		port, os.Getenv("ALLOWED_ORIGIN"), os.Getenv("RESEND_API_KEY") != "")
 	log.Printf("[zeus-backend] listening on :%s", port)
 	if err := srv.ListenAndServe(); err != nil {
 		log.Fatal(err)

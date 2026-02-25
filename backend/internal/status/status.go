@@ -23,16 +23,16 @@ type StatusResponse struct {
 }
 
 type ServerMetrics struct {
-	OS       string  `json:"os"`
-	Region   string  `json:"region"`
-	CPUUsage float64 `json:"cpu_usage"`
-	MemUsed  uint64  `json:"mem_used_mb"`
-	MemTotal uint64  `json:"mem_total_mb"`
-	MemPct   float64 `json:"mem_pct"`
-	LoadAvg  string  `json:"load_avg"`
-	DiskUsed uint64  `json:"disk_used_gb"`
-	DiskTotal uint64 `json:"disk_total_gb"`
-	DiskPct  float64 `json:"disk_pct"`
+	OS        string  `json:"os"`
+	Region    string  `json:"region"`
+	CPUUsage  float64 `json:"cpu_usage"`
+	MemUsed   uint64  `json:"mem_used_mb"`
+	MemTotal  uint64  `json:"mem_total_mb"`
+	MemPct    float64 `json:"mem_pct"`
+	LoadAvg   string  `json:"load_avg"`
+	DiskUsed  uint64  `json:"disk_used_gb"`
+	DiskTotal uint64  `json:"disk_total_gb"`
+	DiskPct   float64 `json:"disk_pct"`
 }
 
 type ServiceStatus struct {
@@ -64,7 +64,7 @@ var projects = []project{
 	},
 	{
 		Name:        "portfolio",
-		DisplayName: "Portfolio (zeus.dev)",
+		DisplayName: "zeus.dev",
 		HealthURL:   os.Getenv("PORTFOLIO_URL"),
 	},
 	{
@@ -136,18 +136,18 @@ func buildServerMetrics(mode string) ServerMetrics {
 		cpuBase = 22.0
 	}
 
-	cpu      := simFloat(cpuBase, 12)
-	memUsed  := uint64(simFloat(680, 80))
+	cpu := simFloat(cpuBase, 12)
+	memUsed := uint64(simFloat(680, 80))
 	memTotal := uint64(1024)
-	memPct   := float64(memUsed) / float64(memTotal) * 100
+	memPct := float64(memUsed) / float64(memTotal) * 100
 
-	load1  := cpu / 100 * 0.9
-	load5  := cpu / 100 * 0.75
+	load1 := cpu / 100 * 0.9
+	load5 := cpu / 100 * 0.75
 	load15 := cpu / 100 * 0.6
 
-	diskUsed  := uint64(simFloat(14, 1))
+	diskUsed := uint64(simFloat(14, 1))
 	diskTotal := uint64(50)
-	diskPct   := float64(diskUsed) / float64(diskTotal) * 100
+	diskPct := float64(diskUsed) / float64(diskTotal) * 100
 
 	return ServerMetrics{
 		OS:        "Linux",
@@ -177,7 +177,7 @@ func buildUptime() UptimeInfo {
 
 func checkProjects() []ServiceStatus {
 	client := &http.Client{Timeout: 5 * time.Second}
-	out    := make([]ServiceStatus, 0, len(projects))
+	out := make([]ServiceStatus, 0, len(projects))
 
 	for _, p := range projects {
 		svc := ServiceStatus{
@@ -188,7 +188,7 @@ func checkProjects() []ServiceStatus {
 		}
 
 		if p.HealthURL == "" {
-			svc.Status  = "unknown"
+			svc.Status = "unknown"
 			svc.Latency = 0
 			out = append(out, svc)
 			continue
@@ -199,10 +199,10 @@ func checkProjects() []ServiceStatus {
 		latency := time.Since(start).Milliseconds()
 
 		if err != nil || resp.StatusCode >= 400 {
-			svc.Status  = "stopped"
+			svc.Status = "stopped"
 			svc.Latency = latency
 		} else {
-			svc.Status  = "running"
+			svc.Status = "running"
 			svc.Latency = latency
 		}
 
@@ -220,14 +220,22 @@ func checkProjects() []ServiceStatus {
 
 func formatDuration(d time.Duration) string {
 	d = d.Round(time.Second)
-	days    := int(d.Hours()) / 24
-	hours   := int(d.Hours()) % 24
+	days := int(d.Hours()) / 24
+	hours := int(d.Hours()) % 24
 	minutes := int(d.Minutes()) % 60
 
 	parts := []string{}
-	if days > 0    { parts = append(parts, fmt.Sprintf("%dd", days)) }
-	if hours > 0   { parts = append(parts, fmt.Sprintf("%dh", hours)) }
-	if minutes > 0 { parts = append(parts, fmt.Sprintf("%dm", minutes)) }
-	if len(parts) == 0 { return "< 1m" }
+	if days > 0 {
+		parts = append(parts, fmt.Sprintf("%dd", days))
+	}
+	if hours > 0 {
+		parts = append(parts, fmt.Sprintf("%dh", hours))
+	}
+	if minutes > 0 {
+		parts = append(parts, fmt.Sprintf("%dm", minutes))
+	}
+	if len(parts) == 0 {
+		return "< 1m"
+	}
 	return strings.Join(parts, " ")
 }

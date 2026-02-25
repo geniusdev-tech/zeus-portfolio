@@ -1,0 +1,134 @@
+.tui-box {
+    background: var(--bg-dark);
+    border: 1px solid rgba(26, 255, 122, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-width: 450px;
+    width: 100%;
+}
+
+.tui-header {
+    background: rgba(26, 255, 122, 0.05);
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(26, 255, 122, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tui-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--neon-green);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--neon-green);
+    animation: blink 2s infinite;
+}
+
+.tui-title {
+    color: var(--neon-green);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+}
+
+.tui-content {
+    padding: 20px;
+}
+
+.tui-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+}
+
+.tui-label {
+    color: var(--text-muted);
+}
+
+.tui-value {
+    color: var(--text-light);
+}
+
+.status-running {
+    color: var(--neon-green);
+    font-weight: bold;
+}
+
+.cyan {
+    color: #00e5ff;
+}
+
+.yellow {
+    color: #f9d423;
+}
+
+.tui-separator {
+    color: rgba(26, 255, 122, 0.1);
+    margin: 15px 0;
+    text-align: center;
+}
+
+.tui-metrics-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tui-metric {
+    display: grid;
+    grid-template-columns: 40px 1fr 60px;
+    align-items: center;
+    gap: 15px;
+}
+
+.tui-bar-bg {
+    height: 4px;
+    background: rgba(26, 255, 122, 0.05);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.tui-bar-fill {
+    height: 100%;
+    background: var(--neon-green);
+    transition: width 1s ease;
+}
+
+.small {
+    font-size: 0.75rem;
+    text-align: right;
+}
+
+.tui-footer {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.tui-cursor {
+    color: var(--neon-green);
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .tui-box {
+        max-width: 100%;
+    }
+}

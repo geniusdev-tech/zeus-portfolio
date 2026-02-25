@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { projectsData } from '../../data';
 import './Projects.css';
 
@@ -24,9 +25,9 @@ export default function Projects() {
             <div className="z-proj__title">{project.title}</div>
             <div className="z-proj__desc">{project.desc}</div>
             {!project.muted && (
-              <a href={project.link} className="z-proj__link">
+              <Link to={project.link} className="z-proj__link">
                 View Project →
-              </a>
+              </Link>
             )}
           </div>
         ))}
