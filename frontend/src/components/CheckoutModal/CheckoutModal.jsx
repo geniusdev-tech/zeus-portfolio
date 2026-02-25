@@ -83,10 +83,10 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
         return payload + calculateCRC16(payload);
     };
 
-    const pixKey = import.meta.env.VITE_PIX_KEY || '+5512982474095';
-    const merchantName = import.meta.env.VITE_PIX_NAME || 'ZEUS DEV';
-    const merchantCity = import.meta.env.VITE_PIX_CITY || 'SP';
-    const usdtAddress = import.meta.env.VITE_USDT_POLYGON_ADDRESS || '0x15578C18214151ec0f6bCc0C9994b084eFB0F01E';
+    const pixKey = import.meta.env.VITE_PIX_KEY;
+    const merchantName = import.meta.env.VITE_PIX_NAME || 'ZEUS';
+    const merchantCity = import.meta.env.VITE_PIX_CITY || 'SAO PAULO';
+    const usdtAddress = import.meta.env.VITE_USDT_POLYGON_ADDRESS;
 
     const pixPayload = generatePixPayload(
         pixKey,
@@ -174,12 +174,16 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
 
                             <div className="qr-code-wrapper">
                                 <div className="qr-code-container">
-                                    <QRCodeSVG
-                                        value={paymentMethod === 'PIX' ? pixPayload : usdtAddress}
-                                        size={220}
-                                        level="H"
-                                        includeMargin={true}
-                                    />
+                                    {pixKey || usdtAddress ? (
+                                        <QRCodeSVG
+                                            value={paymentMethod === 'PIX' ? pixPayload : usdtAddress}
+                                            size={220}
+                                            level="H"
+                                            includeMargin={true}
+                                        />
+                                    ) : (
+                                        <div className="qr-error">Configuração Pendente</div>
+                                    )}
                                 </div>
                             </div>
 
@@ -188,8 +192,13 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                     {paymentMethod === 'PIX' ? 'COPIA E COLA PIX' : 'ENDEREÇO USDT (POLYGON)'}
                                 </p>
                                 <div className="copy-box">
-                                    <input readOnly value={paymentMethod === 'PIX' ? (pixPayload.substring(0, 20) + "...") : usdtAddress} />
-                                    <button onClick={() => handleCopy(paymentMethod === 'PIX' ? pixPayload : usdtAddress)}>COPIAR</button>
+                                    <input readOnly value={paymentMethod === 'PIX' ? (pixPayload ? pixPayload.substring(0, 20) + "..." : "Erro") : (usdtAddress || "Erro")} />
+                                    <button
+                                        onClick={() => handleCopy(paymentMethod === 'PIX' ? pixPayload : usdtAddress)}
+                                        disabled={paymentMethod === 'PIX' ? !pixPayload : !usdtAddress}
+                                    >
+                                        COPIAR
+                                    </button>
                                 </div>
                             </div>
 
@@ -204,9 +213,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                     )}
                 </div>
 
-                <div className="modal-footer-brand">
-                    🔒 Checkout seguro processado via PixGO
-                </div>
+                🔒 Checkout seguro e criptografado
             </div>
         </div>
     );
