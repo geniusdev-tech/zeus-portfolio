@@ -1,0 +1,340 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: modal-entry 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.modal-container {
+    background: #050505;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    width: 95%;
+    max-width: 440px;
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8), 0 0 40px rgba(26, 255, 122, 0.03);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 1.6rem;
+    cursor: pointer;
+    z-index: 20;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: #fff;
+}
+
+.modal-header {
+    padding: 40px 40px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.modal-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: #1aff7a;
+    letter-spacing: 0.3em;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.modal-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.modal-price {
+    font-family: 'JetBrains Mono', monospace;
+    color: #1aff7a;
+    font-weight: 800;
+    font-size: 1.25rem;
+}
+
+.modal-body {
+    padding: 30px 40px 40px;
+}
+
+.checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 12px;
+    letter-spacing: 0.2em;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+}
+
+.form-group input {
+    width: 100%;
+    background: #0a0a0a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 18px;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 2px;
+    outline: none;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #1aff7a;
+    background: #0f0f0f;
+    box-shadow: 0 0 15px rgba(26, 255, 122, 0.05);
+}
+
+.btn-modal-primary {
+    background: #1aff7a;
+    color: #000;
+    border: none;
+    padding: 22px;
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    border-radius: 2px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+}
+
+.btn-modal-primary:hover {
+    background: #fff;
+    transform: translateY(-2px);
+}
+
+/* Method Selection */
+.selection-label {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 20px;
+    letter-spacing: 0.2em;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.method-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.method-card {
+    background: #0a0a0a;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.method-card:hover {
+    background: #0f0f0f;
+    border-color: #1aff7a;
+    transform: translateY(-2px);
+}
+
+.method-icon {
+    font-size: 1.5rem;
+}
+
+.method-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.method-name {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.method-desc {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.75rem;
+}
+
+.method-arrow {
+    color: rgba(255, 255, 255, 0.2);
+    font-weight: 900;
+}
+
+.method-card:hover .method-arrow {
+    color: #1aff7a;
+}
+
+/* Payment Flow */
+.payment-step {
+    text-align: center;
+}
+
+.payment-status {
+    color: #1aff7a;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    letter-spacing: 0.15em;
+    font-weight: 800;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #1aff7a;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #1aff7a;
+}
+
+.blink {
+    animation: modal-glow-pulse 2s infinite;
+}
+
+.payment-timer {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 40px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.highlight {
+    color: #fff;
+    font-weight: 800;
+}
+
+.qr-code-wrapper {
+    background: #fff;
+    width: 250px;
+    height: 250px;
+    padding: 15px;
+    margin: 0 auto 40px;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.pix-copy-section {
+    text-align: left;
+}
+
+.copy-box {
+    display: flex;
+    background: #0a0a0a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.copy-box input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 14px 20px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    outline: none;
+}
+
+.copy-box button {
+    background: #1aff7a;
+    border: none;
+    color: #000;
+    padding: 0 25px;
+    font-weight: 900;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.copy-box button:hover {
+    background: #fff;
+}
+
+.payment-footer {
+    margin-top: 40px;
+}
+
+.footer-loading {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.2);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+}
+
+.modal-footer-brand {
+    padding: 25px;
+    background: rgba(0, 0, 0, 0.6);
+    text-align: center;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.15);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@keyframes modal-entry {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes modal-glow-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(1.1);
+    }
+}
