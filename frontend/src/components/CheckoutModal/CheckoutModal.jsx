@@ -213,7 +213,9 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                     )}
                 </div>
 
-                🔒 Checkout seguro e criptografado
+                <div className="modal-footer-brand">
+                    🔒 Checkout seguro e criptografado
+                </div>
             </div>
         </div>
     );
