@@ -1,8 +1,8 @@
 [build]
-buildCommand = "cd backend && go build -o ../zeus-backend ./cmd/server/main.go"
+# No buildCommand needed as Dockerfile handles it
 
 [deploy]
-startCommand = "./zeus-backend"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 60
 restartPolicyType = "ON_FAILURE"
+
