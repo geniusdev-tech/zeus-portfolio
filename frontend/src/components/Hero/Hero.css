@@ -228,14 +228,16 @@
   transition: opacity 0.05s;
 }
 
-/* ── Responsive ── */
 @media (max-width: 1100px) {
   .z-hero {
     grid-template-columns: 1fr;
+    padding: 120px 40px 60px;
+    gap: 64px;
   }
 
   .z-panel {
-    display: none;
+    max-width: 500px;
+    margin: 0 auto;
   }
 }
 

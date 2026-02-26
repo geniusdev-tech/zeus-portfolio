@@ -5,6 +5,7 @@ import Cursor from './components/Cursor';
 import Nav from './components/Nav';
 import Portfolio from './pages/Portfolio';
 import Quelox from './pages/Quelox/Quelox';
+import NeuralBackground from './components/NeuralBackground/NeuralBackground';
 
 import './styles/globals.css';
 import './styles/common.css';
@@ -15,8 +16,7 @@ export default function App() {
   return (
     <Router>
       <div className="zeus-app">
-        {/* Custom cursor */}
-        <Cursor cursorRef={cursorRef} ringRef={ringRef} />
+        <NeuralBackground />
 
         {/* Fixed navbar */}
         <Nav />
@@ -26,6 +26,9 @@ export default function App() {
           <Route path="/" element={<Portfolio />} />
           <Route path="/Quelox" element={<Quelox />} />
         </Routes>
+
+        {/* Custom cursor */}
+        <Cursor cursorRef={cursorRef} ringRef={ringRef} />
       </div>
     </Router>
   );

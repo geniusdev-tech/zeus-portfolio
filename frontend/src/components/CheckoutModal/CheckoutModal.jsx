@@ -60,8 +60,10 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
 
     const generatePixPayload = (key, name, city, amount, reference) => {
         const pad = (id, value) => {
-            const len = value.length.toString().padStart(2, '0');
-            return `${id}${len}${value}`;
+            if (!value) return '';
+            const valStr = value.toString();
+            const len = valStr.length.toString().padStart(2, '0');
+            return `${id}${len}${valStr}`;
         };
 
         const merchantInfo =
@@ -73,11 +75,11 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
             pad('26', merchantInfo) +
             pad('52', '0000') + // Merchant Category Code
             pad('53', '986') + // Currency (BRL)
-            pad('54', amount.toString()) +
+            pad('54', amount ? amount.toString() : '0.00') +
             pad('58', 'BR') + // Country Code
-            pad('59', name.substring(0, 25)) + // Merchant Name
-            pad('60', city.substring(0, 15)) + // Merchant City
-            pad('62', pad('05', reference)) + // Additional Data (Reference)
+            pad('59', (name || 'MERCHANT').substring(0, 25)) + // Merchant Name
+            pad('60', (city || 'CITY').substring(0, 15)) + // Merchant City
+            pad('62', pad('05', reference || 'PAY')) + // Additional Data (Reference)
             '6304'; // CRC16 Indicator
 
         return payload + calculateCRC16(payload);
