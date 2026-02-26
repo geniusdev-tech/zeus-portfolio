@@ -103,7 +103,9 @@
 
 .z-panel__topline {
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 1px;
   background: linear-gradient(90deg, var(--green), var(--cyan));
 }
@@ -144,12 +146,36 @@
   line-height: 2.1;
 }
 
-.z-panel__line  { display: flex; gap: 8px; }
-.z-panel__key   { color: var(--text3); flex-shrink: 0; width: 110px; }
+.z-panel__line {
+  display: flex;
+  gap: 8px;
+}
 
-.z-panel__val--default { color: var(--text);  }
-.z-panel__val--green   { color: var(--green); }
-.z-panel__val--cyan    { color: var(--cyan);  }
+.z-panel__key {
+  color: var(--text3);
+  flex-shrink: 0;
+  width: 110px;
+}
+
+.z-panel__val--default {
+  color: var(--text);
+}
+
+.z-panel__val--green {
+  color: var(--green);
+}
+
+.z-panel__val--cyan {
+  color: var(--cyan);
+}
+
+.z-panel__val--yellow {
+  color: var(--yellow);
+}
+
+.z-panel__val--dim {
+  color: var(--text3);
+}
 
 .z-panel__divider {
   height: 1px;
@@ -157,16 +183,39 @@
   margin: 12px 0;
 }
 
-.z-panel__prompt { color: var(--green); }
-.z-panel__cmd    { color: var(--text); padding-left: 6px; }
+.z-panel__prompt {
+  color: var(--green);
+}
+
+.z-panel__cmd {
+  color: var(--text);
+  padding-left: 6px;
+}
 
 .z-panel__out {
   color: var(--cyan);
   padding-left: 10px;
+  line-height: 1.6;
 }
 
 .z-panel__out--green {
   color: var(--green);
+}
+
+.z-panel__out--cyan {
+  color: var(--cyan);
+}
+
+.z-panel__out--yellow {
+  color: var(--yellow);
+}
+
+.z-panel__out--dim {
+  color: var(--text3);
+}
+
+.z-panel__output-group {
+  margin-bottom: 12px;
 }
 
 .z-panel__cursor {
