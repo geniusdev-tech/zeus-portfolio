@@ -216,10 +216,46 @@
 .z-sd__badge--dim   { color: var(--text3);  border: 1px solid var(--border); }
 
 /* ── GitHub feed ── */
+.z-sd__gh-outer {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  /* Fades out items at the top and bottom */
+  mask-image: linear-gradient(to bottom, 
+    transparent 0%, 
+    black 15%, 
+    black 85%, 
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(to bottom, 
+    transparent 0%, 
+    black 15%, 
+    black 85%, 
+    transparent 100%
+  );
+}
+
 .z-sd__gh-feed {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  height: 480px; /* Adjust height as needed */
+  position: relative;
+}
+
+.z-sd__gh-scroll {
+  display: flex;
+  flex-direction: column;
+  animation: z-gh-ticker 40s linear infinite;
+}
+
+/* Pause on hover */
+.z-sd__gh-outer:hover .z-sd__gh-scroll {
+  animation-play-state: paused;
+}
+
+@keyframes z-gh-ticker {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
 }
 
 .z-sd__gh-event {
@@ -266,10 +302,9 @@
   font-family: var(--font-mono);
   font-size: 0.58rem;
   color: var(--cyan);
-  text-decoration: none;
   letter-spacing: 0.05em;
+  opacity: 0.8;
 }
-.z-sd__gh-repo:hover { text-decoration: underline; }
 
 .z-sd__gh-time {
   font-family: var(--font-mono);

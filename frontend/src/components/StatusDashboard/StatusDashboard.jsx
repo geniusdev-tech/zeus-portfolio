@@ -93,28 +93,47 @@ function GitHubFeed() {
     </div>
   );
 
-  const events = data?.events?.slice(0, 10) ?? [];
+  const events = data?.events?.slice(0, 15) ?? [];
 
   return (
-    <div className="z-sd__gh-feed">
-      {events.length === 0 && (
-        <div className="z-sd__gh-empty">No recent public activity.</div>
-      )}
-      {events.map((ev) => (
-        <div key={ev.id} className="z-sd__gh-event">
-          <div className="z-sd__gh-icon">{GH_ICONS[ev.icon] || '○'}</div>
-          <div className="z-sd__gh-body">
-            <div className="z-sd__gh-desc">{ev.description}</div>
-            <div className="z-sd__gh-meta">
-              <a href={ev.repo_url} target="_blank" rel="noopener noreferrer"
-                className="z-sd__gh-repo">
-                {ev.repo.includes('/') ? ev.repo.split('/')[1] : ev.repo}
-              </a>
-              <span className="z-sd__gh-time">{ev.time_ago}</span>
+    <div className="z-sd__gh-outer">
+      <div className="z-sd__gh-feed">
+        {events.length === 0 && (
+          <div className="z-sd__gh-empty">No recent public activity.</div>
+        )}
+        <div className="z-sd__gh-scroll">
+          {events.map((ev) => (
+            <div key={ev.id} className="z-sd__gh-event">
+              <div className="z-sd__gh-icon">{GH_ICONS[ev.icon] || '○'}</div>
+              <div className="z-sd__gh-body">
+                <div className="z-sd__gh-desc">{ev.description}</div>
+                <div className="z-sd__gh-meta">
+                  <span className="z-sd__gh-repo">
+                    {ev.repo.includes('/') ? ev.repo.split('/')[1] : ev.repo}
+                  </span>
+                  <span className="z-sd__gh-time">{ev.time_ago}</span>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
+          {/* Duplicate for infinite loop if needed, but the user asked for "sumindo", 
+              so maybe a simple slow scroll is enough if we have many items. */}
+          {events.map((ev) => (
+            <div key={`${ev.id}-dup`} className="z-sd__gh-event">
+              <div className="z-sd__gh-icon">{GH_ICONS[ev.icon] || '○'}</div>
+              <div className="z-sd__gh-body">
+                <div className="z-sd__gh-desc">{ev.description}</div>
+                <div className="z-sd__gh-meta">
+                  <span className="z-sd__gh-repo">
+                    {ev.repo.includes('/') ? ev.repo.split('/')[1] : ev.repo}
+                  </span>
+                  <span className="z-sd__gh-time">{ev.time_ago}</span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 }
