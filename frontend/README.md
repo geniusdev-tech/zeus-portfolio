@@ -1,28 +1,7 @@
 # Zeus — IT Professional Portfolio
 
-Personal portfolio website for Zeus, built with React + Vite.
+Personal portfolio website for Zeus, built with .
 
-## Tech Stack
-
-- **React 18** — UI library
-- **Vite 5** — build tool & dev server
-- **Plain CSS** — scoped per component (no CSS-in-JS, no Tailwind)
-
-## Getting Started
-
-```bash
-# Install dependencies
-npm install
-
-# Start dev server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-```
 
 ## Project Structure
 

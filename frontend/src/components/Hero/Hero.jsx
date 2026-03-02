@@ -11,10 +11,12 @@ export default function Hero() {
             IT Professional — Full Stack Infrastructure
           </div>
 
+          <div className="z-hero__name">Zeus</div>
+
           <h1 className="z-hero__h1">
             <span className="z-hero__h1-accent">Infrastructure.</span>
             Networks.
-            <span className="z-hero__h1-dim">Systems.</span>
+            <span className="z-hero__h1-dim">Automation.</span>
             Software.
           </h1>
 
@@ -25,7 +27,7 @@ export default function Hero() {
 
           <div className="z-hero__cta">
             <a href="#projects" className="z-btn z-btn-g">View Projects →</a>
-            <a href="#contact"  className="z-btn z-btn-o">Contact</a>
+            <a href="#contact" className="z-btn z-btn-o">Contact</a>
           </div>
         </div>
 

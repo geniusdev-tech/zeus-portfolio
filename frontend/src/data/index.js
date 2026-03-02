@@ -55,14 +55,14 @@ export const expertiseData = [
 ];
 
 export const stackData = [
-  { name: 'Linux', type: 'Operating System', pct: 95 },
-  { name: 'Go', type: 'Systems Language', pct: 80 },
-  { name: 'systemd', type: 'Init / Service Manager', pct: 90 },
-  { name: 'Shell Scripting', type: 'Automation', pct: 88 },
-  { name: 'Networking', type: 'TCP/IP · Routing · DNS', pct: 82 },
-  { name: 'Infra Architecture', type: 'Design & Planning', pct: 85 },
-  { name: 'Monitoring', type: 'Observability Concepts', pct: 78 },
-  { name: 'Python', type: 'Scripting / Tools', pct: 72 },
+  { name: 'Linux', type: 'Operating System', level: 'Expert', years: '5+' },
+  { name: 'Go', type: 'Systems Language', level: 'Proficient', years: '3+' },
+  { name: 'systemd', type: 'Init / Service Manager', level: 'Expert', years: '5+' },
+  { name: 'Shell Scripting', type: 'Automation', level: 'Expert', years: '5+' },
+  { name: 'Networking', type: 'TCP/IP · Routing · DNS', level: 'Proficient', years: '4+' },
+  { name: 'Infra Architecture', type: 'Design & Planning', level: 'Proficient', years: '4+' },
+  { name: 'Monitoring', type: 'Observability', level: 'Proficient', years: '3+' },
+  { name: 'Python', type: 'Scripting / Tools', level: 'Familiar', years: '3+' },
 ];
 
 export const projectsData = [
@@ -72,20 +72,25 @@ export const projectsData = [
     desc: 'Lightweight orchestration layer for critical infrastructure services. Provides daemon-based process control, secure UNIX socket IPC, real-time metrics monitoring, graceful shutdown handling, and automatic restart with configurable policies. Built for production bare-metal and containerized environments.',
     link: '/Quelox',
     muted: false,
+    comingSoon: false,
   },
   {
-    badge: 'Upcoming',
-    title: 'Tool-02',
-    desc: 'Next infrastructure tool currently in development. Details to be announced.',
-    link: '#',
+    badge: 'Python · Multi-chain',
+    title: 'Crypto Wallet Tracker',
+    desc: 'Modular Python application for monitoring cryptocurrency wallets across multiple blockchains (BTC, LTC, ETH, BSC, TRON, XMR and more). Features automatic chain detection from address format, public API integration for balance and transaction tracking, SQLite persistence, and a Flask + PyWebView desktop GUI.',
+    link: 'https://github.com/zeus-cli',
     muted: true,
+    comingSoon: true,
+    external: true,
   },
   {
-    badge: 'Upcoming',
+    badge: 'Shell · systemd',
     title: 'Automation Suite',
-    desc: 'Collection of automation scripts and network tools for infrastructure operations.',
-    link: '#',
+    desc: 'Collection of production-grade shell scripts and systemd units for infrastructure automation: log rotation, service health checks, auto-restart policies, and network diagnostics packaged as reusable CLI tools.',
+    link: 'https://github.com/zeus-cli',
     muted: true,
+    comingSoon: true,
+    external: true,
   },
 ];
 
@@ -119,29 +124,20 @@ export const philosophyData = [
   {
     n: '02',
     title: 'Efficiency Without Waste',
-    text: 'Lightweight tools outperform bloated frameworks in constrained environments. I favor minimal, well-understood components over convenience abstractions.',
+    text: 'Lightweight tools outperform bloated frameworks. I favor minimal, well-understood components over convenience abstractions — especially in constrained environments.',
   },
   {
     n: '03',
-    title: 'Clean Architecture',
-    text: 'Separation of responsibilities. No cross-cutting concerns. Systems should be readable, auditable, and replaceable at any layer without cascading failure.',
-  },
-  {
-    n: '04',
-    title: 'Practical Solutions',
-    text: 'The best solution is the one that works reliably in the real environment — not the most elegant in theory. Engineering is about outcomes.',
-  },
-  {
-    n: '05',
-    title: 'Infrastructure Reliability',
-    text: 'Infrastructure is not a background concern. It is the foundation that determines whether everything else can function. I treat it accordingly.',
+    title: 'Engineering for Outcomes',
+    text: 'The best solution is the one that works reliably in production — not the most elegant in theory. Clean architecture, practical results, zero workarounds.',
   },
 ];
 
+// TODO: Replace with your real contact info
 export const contactLinks = [
-  { icon: '[@]', label: 'Email', value: 'zeus@example.com', href: 'mailto:zeus@example.com', cyan: false },
-  { icon: '[gh]', label: 'GitHub', value: 'github.com/zeus-cli', href: '#', cyan: false },
-  { icon: '[in]', label: 'LinkedIn', value: 'linkedin.com/in/zeus-it', href: '#', cyan: true },
+  { icon: '[@]', label: 'Email', value: 'seu@email.com', href: 'mailto:seu@email.com', cyan: false },
+  { icon: '[gh]', label: 'GitHub', value: 'github.com/seu-usuario', href: 'https://github.com/seu-usuario', cyan: false },
+  { icon: '[in]', label: 'LinkedIn', value: 'linkedin.com/in/seu-perfil', href: 'https://linkedin.com/in/seu-perfil', cyan: true },
 ];
 
-export const navLinks = ['about', 'expertise', 'projects', 'stack', 'status', 'contact'];
+export const navLinks = ['about', 'expertise', 'projects', 'stack', 'status'];

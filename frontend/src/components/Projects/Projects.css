@@ -1,9 +1,11 @@
+/* ── Grid ── */
 .z-proj__grid {
   display: grid;
   grid-template-columns: 1.6fr 1fr 1fr;
   gap: 22px;
 }
 
+/* ── Card ── */
 .z-proj__card {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -24,7 +26,9 @@
 .z-proj__card::after {
   content: '';
   position: absolute;
-  bottom: 0; left: 0; right: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 1px;
   background: linear-gradient(90deg, var(--green), transparent);
   opacity: 0;
@@ -35,19 +39,58 @@
   opacity: 1;
 }
 
-/* Muted / upcoming */
+/* ── Muted / upcoming ── */
 .z-proj__card--muted {
   border-style: dashed;
-  opacity: 0.4;
+  opacity: 0.55;
 }
 
 .z-proj__card--muted:hover {
-  opacity: 0.6;
+  opacity: 0.7;
   transform: none;
   border-color: var(--border);
 }
 
-/* Badge */
+.z-proj__card--muted:hover::after {
+  opacity: 0;
+}
+
+/* ── Em Breve overlay ── */
+.z-proj__coming-soon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.z-proj__coming-soon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 11, 13, 0.45);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.z-proj__cs-label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.25em;
+  color: var(--text3);
+  background: var(--bg1);
+  border: 1px solid var(--border);
+  padding: 10px 28px;
+  transform: rotate(-3deg);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+}
+
+/* ── Badge ── */
 .z-proj__badge {
   font-family: var(--font-mono);
   font-size: 0.55rem;
@@ -66,7 +109,7 @@
   border-color: var(--text3);
 }
 
-/* Title */
+/* ── Title ── */
 .z-proj__title {
   font-family: var(--font-display);
   font-size: 2rem;
@@ -79,7 +122,7 @@
   color: var(--text3);
 }
 
-/* Desc */
+/* ── Desc ── */
 .z-proj__desc {
   font-size: 0.84rem;
   font-weight: 300;
@@ -88,7 +131,56 @@
   flex: 1;
 }
 
-/* Link */
+/* ── CTA Button (active card) ── */
+.z-proj__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  padding: 11px 22px;
+  background: transparent;
+  border: 1px solid var(--green);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  width: fit-content;
+  transition: background 0.22s, color 0.22s, box-shadow 0.22s, gap 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.z-proj__btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--green);
+  transform: translateX(-101%);
+  transition: transform 0.22s ease;
+  z-index: 0;
+}
+
+.z-proj__btn:hover::before {
+  transform: translateX(0);
+}
+
+.z-proj__btn span,
+.z-proj__btn svg {
+  position: relative;
+  z-index: 1;
+  transition: color 0.22s;
+}
+
+.z-proj__btn:hover {
+  color: var(--bg);
+  box-shadow: var(--glow-g);
+  gap: 16px;
+}
+
+/* ── Old plain link (kept for safety) ── */
 .z-proj__link {
   display: inline-flex;
   align-items: center;
@@ -117,5 +209,10 @@
 @media (max-width: 768px) {
   .z-proj__grid {
     grid-template-columns: 1fr;
+  }
+
+  .z-proj__cs-label {
+    font-size: 1.3rem;
+    padding: 8px 20px;
   }
 }

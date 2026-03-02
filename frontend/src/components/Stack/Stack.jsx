@@ -1,32 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
 import { stackData } from '../../data';
 import './Stack.css';
 
-function StackItem({ name, type, pct }) {
-  const ref = useRef(null);
-  const [width, setWidth] = useState(0);
+const LEVEL_CLASS = {
+  Expert: 'z-stack__level--expert',
+  Proficient: 'z-stack__level--proficient',
+  Familiar: 'z-stack__level--familiar',
+};
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setTimeout(() => setWidth(pct), 200);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [pct]);
-
+function StackItem({ name, type, level, years }) {
   return (
-    <div className="z-stack__item" ref={ref}>
+    <div className="z-stack__item">
       <div className="z-stack__name">{name}</div>
       <div className="z-stack__type">{type}</div>
-      <div className="z-stack__bar">
-        <div className="z-stack__fill" style={{ width: `${width}%` }} />
+      <div className="z-stack__footer">
+        <span className={`z-stack__level ${LEVEL_CLASS[level] ?? ''}`}>{level}</span>
+        <span className="z-stack__years">{years} yrs</span>
       </div>
     </div>
   );
@@ -55,3 +43,4 @@ export default function Stack() {
     </div>
   );
 }
+

@@ -7,7 +7,6 @@ import Projects from '../components/Projects';
 import Stack from '../components/Stack';
 import Philosophy from '../components/Philosophy';
 import StatusDashboard from '../components/StatusDashboard';
-import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 
 export default function Portfolio() {
@@ -34,9 +33,6 @@ export default function Portfolio() {
 
             <div className="z-divider-line" />
             <StatusDashboard />
-
-            <div className="z-divider-line" />
-            <Contact />
 
             <Footer />
         </>
