@@ -48,7 +48,12 @@ function GaugeBar({ value, warn = 70, critical = 90 }) {
 }
 
 function StatusBadge({ status }) {
-  const cfg = { running: ['online', 'green'], stopped: ['offline', 'red'], unknown: ['unknown', 'dim'] };
+  const cfg = {
+    running: ['online', 'green'],
+    stopped: ['offline', 'red'],
+    maintenance: ['maintenance', 'yellow'],
+    unknown: ['unknown', 'dim']
+  };
   const [label, cls] = cfg[status] || cfg.unknown;
   return <span className={`z-sd__badge z-sd__badge--${cls}`}>● {label}</span>;
 }
@@ -82,10 +87,13 @@ function Skeleton() {
 // ── Service Row ───────────────────────────────────────
 
 function ServiceRow({ svc }) {
+  const isMaintenance = import.meta.env.VITE_MAINTENANCE_MODE === 'true';
+  const displayStatus = (isMaintenance && svc.name === 'qelox') ? 'maintenance' : svc.status;
+
   return (
     <div className="z-sd__service">
       <div className="z-sd__service-left">
-        <StatusBadge status={svc.status} />
+        <StatusBadge status={displayStatus} />
         <div className="z-sd__service-name">
           {svc.url ? (
             <a href={svc.url} target="_blank" rel="noopener noreferrer"

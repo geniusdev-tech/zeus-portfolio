@@ -3,6 +3,8 @@ import { projectsData } from '../../data';
 import './Projects.css';
 
 export default function Projects() {
+  const isMaintenance = import.meta.env.VITE_MAINTENANCE_MODE === 'true';
+
   return (
     <div className="z-section" id="projects">
       {/* Header */}
@@ -28,7 +30,13 @@ export default function Projects() {
               </div>
             )}
 
-            <div className="z-proj__badge">{project.badge}</div>
+            <div className="z-proj__badge">
+              {isMaintenance && project.link === '/Quelox' ? (
+                <span style={{ color: '#ffcc00' }}>⚠️ Under Maintenance</span>
+              ) : (
+                project.badge
+              )}
+            </div>
             <div className="z-proj__title">{project.title}</div>
             <div className="z-proj__desc">{project.desc}</div>
 

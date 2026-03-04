@@ -5,6 +5,7 @@ import Cursor from './components/Cursor';
 import Nav from './components/Nav';
 import Portfolio from './pages/Portfolio';
 import Quelox from './pages/Quelox/Quelox';
+import Maintenance from './pages/Maintenance/Maintenance';
 import NeuralBackground from './components/NeuralBackground/NeuralBackground';
 
 import './styles/globals.css';
@@ -12,6 +13,7 @@ import './styles/common.css';
 
 export default function App() {
   const { cursorRef, ringRef } = useCursor();
+  const isMaintenance = import.meta.env.VITE_MAINTENANCE_MODE === 'true';
 
   return (
     <Router>
@@ -24,7 +26,10 @@ export default function App() {
         {/* Routes */}
         <Routes>
           <Route path="/" element={<Portfolio />} />
-          <Route path="/Quelox" element={<Quelox />} />
+          <Route
+            path="/Quelox"
+            element={isMaintenance ? <Maintenance /> : <Quelox />}
+          />
         </Routes>
 
         {/* Custom cursor */}
