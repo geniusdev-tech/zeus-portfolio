@@ -49,6 +49,16 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
         setStep('PAYMENT');
     };
 
+    const goBack = () => {
+        if (step === 'PAYMENT') {
+            setStep('METHOD_SELECTION');
+            return;
+        }
+        if (step === 'METHOD_SELECTION') {
+            setStep('IDENTIFICATION');
+        }
+    };
+
     const formatTime = (seconds) => {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
@@ -141,7 +151,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                         <span className="modal-tag">Secure Checkout</span>
                         <h2 className="modal-title">{productName}</h2>
                         <p className="modal-subtitle">
-                            Operator license checkout with PIX and USDT payment support.
+                            Guided payment flow for operator licensing with PIX and USDT support.
                         </p>
                     </div>
                     <div className="modal-pricebox">
@@ -165,6 +175,10 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                 <div className="modal-body">
                     {step === 'IDENTIFICATION' ? (
                         <form className="checkout-form" onSubmit={handleNext}>
+                            <div className="modal-section-intro">
+                                <span className="modal-section-tag">Step 01</span>
+                                <p>Enter the delivery contact so the license and payment follow-up go to the correct inbox.</p>
+                            </div>
                             <div className="form-group">
                                 <label>Full Name</label>
                                 <input
@@ -186,12 +200,28 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                     required
                                 />
                             </div>
-                            <button type="submit" className="btn-modal-primary">
-                                Continue to Payment Method →
-                            </button>
+                            <div className="modal-actions">
+                                <button type="submit" className="btn-modal-primary">
+                                    Continue to Payment Method
+                                </button>
+                            </div>
                         </form>
                     ) : step === 'METHOD_SELECTION' ? (
                         <div className="method-selection">
+                            <div className="modal-section-intro">
+                                <span className="modal-section-tag">Step 02</span>
+                                <p>Select the transfer rail you want to use for this order.</p>
+                            </div>
+                            <div className="checkout-context">
+                                <div className="checkout-context__item">
+                                    <span className="checkout-context__label">Buyer</span>
+                                    <strong>{form.name}</strong>
+                                </div>
+                                <div className="checkout-context__item">
+                                    <span className="checkout-context__label">Delivery</span>
+                                    <strong>{form.email}</strong>
+                                </div>
+                            </div>
                             <p className="selection-label">Select the payment method</p>
                             <div className="method-cards">
                                 <button type="button" className="method-card" onClick={() => handleSelectMethod('PIX')}>
@@ -211,19 +241,35 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                     <div className="method-arrow">→</div>
                                 </button>
                             </div>
+                            <div className="modal-actions">
+                                <button type="button" className="btn-modal-secondary" onClick={goBack}>
+                                    Back
+                                </button>
+                            </div>
                         </div>
                     ) : (
                         <div className="payment-step">
-                            <div className="payment-status">
-                                <span className="status-dot blink" />
-                                {paymentMethod === 'PIX' ? 'Awaiting PIX payment' : 'Awaiting wallet transfer'}
+                            <div className="modal-section-intro">
+                                <span className="modal-section-tag">Step 03</span>
+                                <p>Use the QR code or copy field below to complete the transfer and keep the order active within the time window.</p>
                             </div>
-                            <div className="payment-timer">
-                                Payment window <span className="highlight">{formatTime(timeLeft)}</span>
+
+                            <div className="payment-topbar">
+                                <div className="payment-status">
+                                    <span className="status-dot blink" />
+                                    {paymentMethod === 'PIX' ? 'Awaiting PIX payment' : 'Awaiting wallet transfer'}
+                                </div>
+                                <div className="payment-timer">
+                                    Payment window <span className="highlight">{formatTime(timeLeft)}</span>
+                                </div>
                             </div>
 
                             <div className="payment-grid">
                                 <div className="qr-code-panel">
+                                    <div className="qr-code-meta">
+                                        <span>{paymentMethod === 'PIX' ? 'Scan to pay' : 'Scan to open wallet'}</span>
+                                        <strong>{paymentMethod}</strong>
+                                    </div>
                                     <div className="qr-code-wrapper">
                                         <div className="qr-code-container">
                                             {paymentValue ? (
@@ -241,6 +287,23 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                 </div>
 
                                 <div className="payment-details">
+                                    <div className="payment-detail payment-detail--summary">
+                                        <span className="small-label">Order summary</span>
+                                        <div className="checkout-context checkout-context--compact">
+                                            <div className="checkout-context__item">
+                                                <span className="checkout-context__label">Product</span>
+                                                <strong>{productName}</strong>
+                                            </div>
+                                            <div className="checkout-context__item">
+                                                <span className="checkout-context__label">Buyer</span>
+                                                <strong>{form.name}</strong>
+                                            </div>
+                                            <div className="checkout-context__item">
+                                                <span className="checkout-context__label">Delivery</span>
+                                                <strong>{form.email}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="payment-detail">
                                         <span className="small-label">{paymentLabel}</span>
                                         <div className="copy-box">
@@ -261,6 +324,11 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                     <div className="payment-detail payment-detail--note">
                                         <span className="small-label">Instructions</span>
                                         <p className="payment-note">{paymentHint}</p>
+                                    </div>
+                                    <div className="modal-actions modal-actions--inline">
+                                        <button type="button" className="btn-modal-secondary" onClick={goBack}>
+                                            Change Method
+                                        </button>
                                     </div>
                                 </div>
                             </div>
