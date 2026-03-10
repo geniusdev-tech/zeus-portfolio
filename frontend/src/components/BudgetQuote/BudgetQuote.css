@@ -2,13 +2,14 @@
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
   gap: 64px;
+  align-items: start;
 }
 
 .z-quote__intro p {
-  max-width: 460px;
+  max-width: 480px;
   color: var(--text2);
-  font-size: 0.95rem;
-  line-height: 1.85;
+  font-size: 0.98rem;
+  line-height: 1.9;
   margin-bottom: 30px;
 }
 
@@ -16,78 +17,118 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  margin-bottom: 24px;
 }
 
 .z-quote__highlight {
   display: flex;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 16px 18px;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 20px;
   background: var(--z-card-bg);
   border: 1px solid var(--z-card-border);
   box-shadow: var(--z-card-shadow);
-  transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
   position: relative;
   overflow: hidden;
 }
 
-.z-quote__highlight::before {
+.z-quote__highlight::before,
+.z-quote__form::before,
+.z-quote__preview::before,
+.z-quote__success::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, var(--green), transparent);
-  opacity: 0;
-  transition: opacity 0.2s;
+  background: linear-gradient(90deg, var(--green), var(--cyan), transparent);
 }
 
-.z-quote__highlight:hover {
-  background: var(--z-card-bg-hover);
-  border-color: var(--z-card-border-hover);
-  box-shadow: var(--z-card-shadow-hover);
-  transform: translateY(-3px);
-}
-
-.z-quote__highlight:hover::before {
-  opacity: 1;
+.z-quote__highlight-label,
+.z-quote__preview-label,
+.z-quote__label,
+.z-quote__form-kicker,
+.z-quote__form-note,
+.z-quote__success-badge {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 .z-quote__highlight-label {
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   color: var(--text3);
 }
 
 .z-quote__highlight-value {
-  font-size: 0.78rem;
+  font-size: 0.84rem;
   color: var(--text);
-  text-align: right;
+  line-height: 1.7;
+}
+
+.z-quote__preview,
+.z-quote__form,
+.z-quote__success {
+  position: relative;
+  border: 1px solid var(--z-card-border);
+  background: var(--z-card-bg);
+  box-shadow: var(--z-card-shadow);
+}
+
+.z-quote__preview {
+  padding: 22px 22px 20px;
+}
+
+.z-quote__preview-label {
+  display: block;
+  color: var(--cyan);
+  margin-bottom: 14px;
+}
+
+.z-quote__preview-body {
+  color: var(--text2);
+  font-size: 0.84rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  font-family: var(--font-mono);
+}
+
+.z-quote__form,
+.z-quote__success {
+  padding: 28px;
 }
 
 .z-quote__form {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 30px;
-  border: 1px solid var(--z-card-border);
-  background: var(--z-card-bg);
-  box-shadow: var(--z-card-shadow);
-  position: relative;
-  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
-.z-quote__form::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, var(--green), var(--cyan), transparent);
+.z-quote__form-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  padding-bottom: 8px;
+}
+
+.z-quote__form-kicker {
+  color: var(--green);
+  margin-bottom: 10px;
+}
+
+.z-quote__form-header h3 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 0.95;
+  letter-spacing: 0.05em;
+  color: var(--text);
+}
+
+.z-quote__form-note {
+  color: var(--text3);
+  padding-top: 6px;
 }
 
 .z-quote__row {
@@ -103,22 +144,19 @@
 }
 
 .z-quote__label {
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
   color: var(--text3);
 }
 
 .z-quote__input,
 .z-quote__textarea {
   width: 100%;
-  background: rgba(8, 11, 13, 0.72);
-  border: 1px solid var(--border);
+  background: rgba(8, 11, 13, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--text);
-  padding: 13px 15px;
-  font-size: 0.88rem;
+  padding: 14px 15px;
+  font-size: 0.9rem;
   outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
 .z-quote__input:focus,
@@ -127,10 +165,16 @@
   box-shadow: inset 0 0 0 1px rgba(0, 255, 140, 0.08);
 }
 
+.z-quote__input:disabled,
+.z-quote__textarea:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 .z-quote__textarea {
-  min-height: 140px;
+  min-height: 158px;
   resize: vertical;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
 .z-quote__error {
@@ -144,35 +188,57 @@
 }
 
 .z-quote__submit {
-  padding: 15px 18px;
+  min-height: 52px;
+  padding: 0 18px;
   border: 1px solid var(--green);
-  background: transparent;
-  color: var(--green);
+  background: linear-gradient(90deg, rgba(0, 255, 140, 0.12), rgba(0, 229, 255, 0.06));
+  color: var(--text);
   font-family: var(--font-mono);
   font-size: 0.68rem;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  transition: all 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 
 .z-quote__submit:hover {
-  background: var(--green);
-  color: #020805;
+  transform: translateY(-1px);
   box-shadow: var(--glow-g);
+  border-color: rgba(0, 255, 140, 0.4);
+}
+
+.z-quote__submit:disabled,
+.z-quote__submit.is-loading {
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+
+.z-quote__submit--ghost {
+  background: transparent;
+}
+
+.z-quote__success {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  justify-content: center;
+  min-height: 100%;
+}
+
+.z-quote__success-badge {
+  color: var(--green);
+}
+
+.z-quote__success p {
+  color: var(--text2);
+  font-size: 0.94rem;
+  line-height: 1.8;
 }
 
 @media (max-width: 1100px) {
   .z-quote__grid {
     grid-template-columns: 1fr;
     gap: 40px;
-  }
-
-  .z-quote__form {
-    order: 1;
-  }
-
-  .z-quote__intro {
-    order: 2;
   }
 }
 
@@ -185,18 +251,18 @@
     grid-template-columns: 1fr;
   }
 
-  .z-quote__form {
+  .z-quote__form,
+  .z-quote__success,
+  .z-quote__preview {
     padding: 22px;
   }
 
-  .z-quote__highlight {
+  .z-quote__form-header {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
   }
 
-  .z-quote__highlight-value {
-    text-align: left;
+  .z-quote__form-header h3 {
+    font-size: 1.6rem;
   }
 
   .z-quote__submit {
