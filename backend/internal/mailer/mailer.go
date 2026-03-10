@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"html"
 	"log"
 	"net/http"
 	"os"
@@ -133,9 +134,15 @@ func subject(req ContactRequest) string {
 }
 
 func buildHTML(req ContactRequest) string {
+	name := html.EscapeString(req.Name)
+	companyValue := html.EscapeString(req.Company)
+	email := html.EscapeString(req.Email)
+	subject := html.EscapeString(req.Subject)
+	message := strings.ReplaceAll(html.EscapeString(req.Message), "\n", "<br>")
+
 	company := ""
 	if req.Company != "" {
-		company = fmt.Sprintf(`<tr><td style="color:#8a95a3;padding:6px 0;font-size:0.85rem;">Company</td><td style="padding:6px 0;font-size:0.85rem;">%s</td></tr>`, req.Company)
+		company = fmt.Sprintf(`<tr><td style="color:#8a95a3;padding:6px 0;font-size:0.85rem;">Company</td><td style="padding:6px 0;font-size:0.85rem;">%s</td></tr>`, companyValue)
 	}
 	return fmt.Sprintf(`<!DOCTYPE html>
 <html><head><meta charset="UTF-8"></head>
@@ -152,13 +159,13 @@ func buildHTML(req ContactRequest) string {
       <tr><td style="color:#8a95a3;padding:6px 0;font-size:0.85rem;">Subject</td><td style="padding:6px 0;font-size:0.85rem;">%s</td></tr>
     </table>
     <div style="margin-top:24px;padding:18px;background:#080b0d;border-left:2px solid #00ff8c;">
-      <p style="color:#8a95a3;font-size:0.85rem;line-height:1.7;white-space:pre-wrap;margin:0;">%s</p>
+      <p style="color:#8a95a3;font-size:0.85rem;line-height:1.7;margin:0;">%s</p>
     </div>
     <p style="margin-top:20px;font-size:0.7rem;color:#4e5b68;">Sent via zeus.dev portfolio · Reply directly to this email</p>
   </div>
 </div>
 </body></html>`,
-		req.Name, company, req.Email, req.Email, req.Subject, req.Message)
+		name, company, email, email, subject, message)
 }
 
 func writeErr(w http.ResponseWriter, code int, msg string) {
