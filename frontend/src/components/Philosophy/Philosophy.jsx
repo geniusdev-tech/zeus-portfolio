@@ -6,10 +6,10 @@ export default function Philosophy() {
     <div className="z-section" id="philosophy">
       {/* Header */}
       <div className="z-sec-header z-reveal">
-        <div className="z-sec-tag">05 — Philosophy</div>
+        <div className="z-sec-tag">06 — Engineering Principles</div>
         <div className="z-sec-title">
-          How I Think<br />
-          About <em>Engineering.</em>
+          How I Make<br />
+          <em>Technical Decisions.</em>
         </div>
       </div>
 
@@ -31,10 +31,10 @@ export default function Philosophy() {
         <div className="z-philo__quote">
           <div className="z-philo__quote-deco">"</div>
           <p className="z-philo__quote-text">
-            Infrastructure is not an afterthought. It is the contract between
-            your software and the real world. Honor it with precision.
+            Infrastructure defines how software behaves under real conditions.
+            Treat it as part of the product, not as a deployment afterthought.
           </p>
-          <div className="z-philo__quote-attr">— Zeus, IT Professional</div>
+          <div className="z-philo__quote-attr">— Zeus</div>
         </div>
       </div>
     </div>

@@ -1,243 +1,232 @@
-import { useState, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import TuiSimulator from '../../components/TuiSimulator/TuiSimulator';
 import CheckoutModal from '../../components/CheckoutModal/CheckoutModal';
 import './Quelox.css';
 
+const pillars = [
+  {
+    label: 'Orchestration Core',
+    text: 'Controls node lifecycle with restart policy, supervised execution and consistent process handling.',
+  },
+  {
+    label: 'Node Telemetry',
+    text: 'Exposes CPU, memory, peer state, sync progress and runtime health in one operational view.',
+  },
+  {
+    label: 'Secure IPC',
+    text: 'Uses UNIX sockets to keep control local to the host and reduce exposed management surfaces.',
+  },
+];
+
+const architecture = [
+  {
+    title: 'Go runtime built for operators',
+    text: 'Keeps runtime overhead low and makes daemon behavior easier to operate on production Linux hosts.',
+  },
+  {
+    title: 'systemd-native process model',
+    text: 'Runs as a managed service with supervised startup, restart control, logging and host integration.',
+  },
+  {
+    title: 'Node-aware automation',
+    text: 'Designed for blockchain nodes where peer count, sync drift and runtime instability affect availability.',
+  },
+  {
+    title: 'Infrastructure-first monitoring',
+    text: 'Surfaces operational issues early so they can be handled before they become downtime or desynchronization.',
+  },
+];
+
+const workflow = [
+  'Deploy the daemon on a hardened Linux host.',
+  'Attach QELO-X to the target node and its IPC boundary.',
+  'Track health, sync state and runtime metrics continuously.',
+  'Trigger recovery actions before operational degradation becomes downtime.',
+];
+
+const comparison = [
+  ['Lifecycle control', 'Manual scripts and ad-hoc commands', 'Centralized daemon supervision'],
+  ['Monitoring', 'Reactive and fragmented', 'Continuous operational telemetry'],
+  ['Recovery', 'Human intervention required', 'Automated restart and recovery logic'],
+  ['Security surface', 'More exposed control paths', 'Local IPC and controlled boundaries'],
+  ['Node operations', 'Hard to standardize', 'Repeatable operator workflow'],
+];
+
+const stats = [
+  { label: 'Target', value: 'Critical node infrastructure' },
+  { label: 'Model', value: 'Daemon + IPC + monitoring' },
+  { label: 'Environment', value: 'Linux / systemd / production hosts' },
+];
+
 export default function Quelox() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-    const handleCheckout = () => {
-        setIsModalOpen(true);
-    };
+  return (
+    <div className="qx-page">
+      <section className="qx-hero">
+        <div className="qx-container qx-hero__grid">
+          <div className="qx-hero__content">
+            <div className="qx-kicker">Infrastructure Product — Blockchain Node Operations</div>
+            <h1 className="qx-title">QELO-X</h1>
+            <h2 className="qx-subtitle">
+              Orchestration, monitoring and recovery for blockchain infrastructure.
+            </h2>
 
-    return (
-        <div className="quelox-page">
-            {/* 1. HERO SECTION */}
-            <section className="hero-section">
-                <div className="quelox-container">
-                    <div className="hero-grid">
-                        <div className="hero-content">
-                            <div className="hero-badge">
-                                <span className="badge-dot" />
-                                <span className="badge-text">v1.0.0 – PROFESSIONALLY HARDENED</span>
-                            </div>
+            <p className="qx-lead">
+              QELO-X is a node operations layer for blockchain infrastructure. It is
+              built to supervise services, monitor runtime health, recover from common
+              failures and keep control local to the host.
+            </p>
 
-                            <h1 className="hero-title">QELO-X</h1>
-                            <h2 className="hero-subtitle">Professional Node Orchestration for Critical Infrastructure</h2>
+            <div className="qx-actions">
+              <button className="qx-btn qx-btn--primary" onClick={() => setIsModalOpen(true)}>
+                Activate QELO-X
+              </button>
+              <a className="qx-btn qx-btn--ghost" href="#architecture">
+                View Architecture
+              </a>
+            </div>
 
-                            <ul className="hero-bullets">
-                                <li>Automatic High Availability (Auto-Failover)</li>
-                                <li>Real-Time Monitoring & Telemetry</li>
-                                <li>Hardened IPC & UNIX Socket Security</li>
-                            </ul>
-
-                            <div className="hero-pricing">
-                                <span className="price-anchor">R$ 297,00</span>
-                                <div className="price-main">
-                                    R$ 199,90 <span className="price-label">Launch Offer</span>
-                                </div>
-                            </div>
-
-                            <button className="btn-primary-cta" onClick={handleCheckout}>
-                                <span>ACTIVATE QELO-X</span>
-                                <span>→</span>
-                            </button>
-
-                            <div className="cta-trust">
-                                <span>🔐 SECURE PAYMENT</span>
-                                <span>🔑 INDIVIDUAL LICENSE</span>
-                                <span>⚡ INSTANT ACTIVATION</span>
-                            </div>
-                        </div>
-
-                        <div className="hero-visual">
-                            <TuiSimulator />
-                        </div>
-                    </div>
+            <div className="qx-stats">
+              {stats.map((stat) => (
+                <div className="qx-stat" key={stat.label}>
+                  <span className="qx-stat__label">{stat.label}</span>
+                  <span className="qx-stat__value">{stat.value}</span>
                 </div>
-            </section>
+              ))}
+            </div>
+          </div>
 
-            {/* 2. PROBLEM SECTION */}
-            <section className="section-problem">
-                <div className="quelox-container">
-                    <span className="section-label">// CORE CHALLENGES</span>
-                    <h2 className="section-title">Why manual orchestration fails.</h2>
+          <div className="qx-hero__visual">
+            <div className="qx-pricebox">
+              <span className="qx-pricebox__label">Current license</span>
+              <div className="qx-pricebox__main">
+                <span className="qx-pricebox__current">R$ 199,90</span>
+                <span className="qx-pricebox__anchor">R$ 297,00</span>
+              </div>
+              <p className="qx-pricebox__copy">
+                Single license for the current release cycle.
+              </p>
+            </div>
 
-                    <div className="problem-grid">
-                        <div className="problem-card">
-                            <h3>Unstable Nodes</h3>
-                            <p>Manual configurations often lead to memory leaks and silent crashes, causing massive downtime.</p>
-                        </div>
-                        <div className="problem-card">
-                            <h3>Zero Visibility</h3>
-                            <p>Without real-time metrics, you're flying blind until your provider sends a suspension notice.</p>
-                        </div>
-                        <div className="problem-card">
-                            <h3>Security Risks</h3>
-                            <p>Exposed RPC ports and weak IPC configurations make your node a target for exploitation.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* 3. SOLUTION SECTION */}
-            <section className="section-solution">
-                <div className="quelox-container">
-                    <div className="solution-grid">
-                        <div className="solution-content">
-                            <span className="section-label">// THE QELO-X SOLUTION</span>
-                            <h2 className="section-title">Built for absolute reliability.</h2>
-
-                            <div className="feature-list">
-                                <div className="feature-item">
-                                    <h4>Auto-Failover & Recovery</h4>
-                                    <p>Inteligent monitoring that automatically restarts or re-allocates resources before a crash occurs.</p>
-                                </div>
-                                <div className="feature-item">
-                                    <h4>Real-Time Telemetry</h4>
-                                    <p>Live tracking of CPU, RAM, Latency, and Peer count via a robust Go-based daemon.</p>
-                                </div>
-                                <div className="feature-item">
-                                    <h4>Hardened IPC Sockets</h4>
-                                    <p>Secure communication via UNIX sockets, keeping your backend isolated and impenetrable.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="solution-visual">
-                            <div className="diagram-placeholder" style={{
-                                border: '1px solid var(--border-subtle)',
-                                padding: '40px',
-                                background: 'rgba(0, 255, 136, 0.02)',
-                                fontFamily: 'var(--font-technical)',
-                                fontSize: '0.8rem',
-                                color: 'var(--neon-green)'
-                            }}>
-                                <div>[SYSTEMD] ---➔ QELOX-DAEMON</div>
-                                <div style={{ marginLeft: '20px', marginTop: '10px' }}>├── [IPC] ➔ GO-QUAI</div>
-                                <div style={{ marginLeft: '20px' }}>├── [RPC] ➔ METRICS</div>
-                                <div style={{ marginLeft: '20px' }}>└── [LOG] ➔ PERSISTENCE</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* 4. TECHNICAL DEEP DIVE */}
-            <section className="section-technical">
-                <div className="quelox-container">
-                    <span className="section-label">// ARCHITECTURE</span>
-                    <h2 className="section-title">Enterprise-grade core.</h2>
-
-                    <div className="tech-cards">
-                        <div className="tech-card">
-                            <h3>MODULAR GO ENGINE</h3>
-                            <p>The entire orchestrator is written in Go 1.22+, ensuring minimal CPU overhead and blazing fast execution speeds in Linux environments.</p>
-                        </div>
-                        <div className="tech-card">
-                            <h3>SYSTEMD INTEGRATION</h3>
-                            <p>Native integration as a system service, providing automatic logging, lifecycle management, and resource isolation.</p>
-                        </div>
-                        <div className="tech-card">
-                            <h3>DYNAMIC SCALING</h3>
-                            <p>Automatically adjusts P2P connection parameters based on network density and hardware availability.</p>
-                        </div>
-                        <div className="tech-card">
-                            <h3>LOW LATENCY IPC</h3>
-                            <p>Sub-millisecond communication between the orchestrator and the node, essential for real-time synchronization.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* 5. COMPARISON TABLE */}
-            <section className="section-comparison">
-                <div className="quelox-container">
-                    <span className="section-label">// VS MANUAL</span>
-                    <h2 className="section-title">The QELO-X Advantage.</h2>
-
-                    <table className="comparison-table">
-                        <thead>
-                            <tr>
-                                <th>FEATURE</th>
-                                <th>MANUAL SCRIPTS</th>
-                                <th className="highlight-col">QELO-X DAEMON</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Automation</td>
-                                <td>None / Manual</td>
-                                <td className="highlight-col">Full Lifecycle</td>
-                            </tr>
-                            <tr>
-                                <td>Security</td>
-                                <td>Exposed Ports</td>
-                                <td className="highlight-col">Hardened IPC</td>
-                            </tr>
-                            <tr>
-                                <td>Stability</td>
-                                <td>High Failure Rate</td>
-                                <td className="highlight-col">99.9% Uptime</td>
-                            </tr>
-                            <tr>
-                                <td>Monitoring</td>
-                                <td>Reactive</td>
-                                <td className="highlight-col">Proactive/Live</td>
-                            </tr>
-                            <tr>
-                                <td>Support</td>
-                                <td>Community Only</td>
-                                <td className="highlight-col">Dedicated Dev</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            {/* 6. SECURITY SECTION */}
-            <section className="section-technical" style={{ background: 'var(--bg-deep)' }}>
-                <div className="quelox-container">
-                    <span className="section-label">// COMPLIANCE & SAFETY</span>
-                    <h2 className="section-title">Secure by Design.</h2>
-                    <div className="feature-list" style={{ maxWidth: '700px' }}>
-                        <p>Every QELO-X binary is tied to an individual hardware-validated license. Our backend performs real-time validation to prevent unauthorized redistribution while ensuring your node orchestration remains private and local.</p>
-                    </div>
-                </div>
-            </section>
-
-            {/* 7. SOCIAL PROOF */}
-            <section className="section-solution" style={{ background: '#080d0b', textAlign: 'center' }}>
-                <div className="quelox-container">
-                    <p style={{ fontFamily: 'var(--font-technical)', color: 'var(--neon-green)', fontSize: '1.2rem' }}>
-                        "Designed for Professional Node Operators & Built for High Availability"
-                    </p>
-                </div>
-            </section>
-
-            {/* 8. CTA FINAL */}
-            <section className="section-cta-final">
-                <div className="quelox-container">
-                    <div className="cta-box">
-                        <h2>Ready to Professionalize Your Infrastructure?</h2>
-                        <button className="btn-primary-cta" style={{ margin: '0 auto' }} onClick={handleCheckout}>
-                            <span>ACTIVATE QELO-X NOW</span>
-                            <span style={{ opacity: 0.6 }}>R$ 199,90</span>
-                        </button>
-                        <p style={{ marginTop: '24px', opacity: 0.4, fontSize: '0.8rem' }}>Limited Launch Pricing — Price increases to R$ 297,00 soon.</p>
-                    </div>
-                </div>
-            </section>
-
-            <CheckoutModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                productName="QELO-X LICENSE"
-                price="199.90"
-            />
+            <TuiSimulator />
+          </div>
         </div>
-    );
+      </section>
+
+      <section className="qx-section">
+        <div className="qx-container">
+          <div className="qx-section__header">
+            <div className="qx-section__tag">01 — Product Role</div>
+            <h2 className="qx-section__title">Built for nodes that need stable operation and clear telemetry.</h2>
+          </div>
+
+          <div className="qx-pillars">
+            {pillars.map((pillar) => (
+              <article className="qx-panel" key={pillar.label}>
+                <div className="qx-panel__tag">{pillar.label}</div>
+                <p className="qx-panel__text">{pillar.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="qx-section qx-section--alt" id="architecture">
+        <div className="qx-container">
+          <div className="qx-section__header">
+            <div className="qx-section__tag">02 — Architecture</div>
+            <h2 className="qx-section__title">A runtime model designed for Linux-based node operations.</h2>
+          </div>
+
+          <div className="qx-architecture">
+            {architecture.map((item) => (
+              <article className="qx-architecture__card" key={item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="qx-section">
+        <div className="qx-container qx-workflow">
+          <div>
+            <div className="qx-section__tag">03 — Workflow</div>
+            <h2 className="qx-section__title">How QELO-X fits into the node lifecycle.</h2>
+
+            <div className="qx-steps">
+              {workflow.map((step, index) => (
+                <div className="qx-step" key={step}>
+                  <span className="qx-step__num">0{index + 1}</span>
+                  <p>{step}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+            <div className="qx-diagram">
+              <div className="qx-diagram__row">[systemd] -&gt; [QELO-X daemon]</div>
+              <div className="qx-diagram__row">[metrics loop] -&gt; [CPU | RAM | sync | peers]</div>
+              <div className="qx-diagram__row">[local IPC] -&gt; [node process control]</div>
+              <div className="qx-diagram__row">[recovery policy] -&gt; [restart | stabilize | alert]</div>
+            </div>
+        </div>
+      </section>
+
+      <section className="qx-section qx-section--alt">
+        <div className="qx-container">
+          <div className="qx-section__header">
+            <div className="qx-section__tag">04 — Comparison</div>
+            <h2 className="qx-section__title">What changes compared with manual node management.</h2>
+          </div>
+
+          <div className="qx-compare">
+            <div className="qx-compare__head">Area</div>
+            <div className="qx-compare__head">Manual approach</div>
+            <div className="qx-compare__head qx-compare__head--highlight">QELO-X</div>
+
+            {comparison.map(([label, manual, product]) => (
+              <Fragment key={label}>
+                <div className="qx-compare__cell qx-compare__cell--label" key={`${label}-label`}>{label}</div>
+                <div className="qx-compare__cell" key={`${label}-manual`}>{manual}</div>
+                <div className="qx-compare__cell qx-compare__cell--highlight" key={`${label}-product`}>{product}</div>
+              </Fragment>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="qx-section">
+        <div className="qx-container">
+          <div className="qx-cta">
+            <div>
+              <div className="qx-section__tag">05 — Licensing</div>
+              <h2 className="qx-section__title">A focused product for operators who need reliable node control.</h2>
+              <p className="qx-cta__text">
+                QELO-X is intended for operators who want a repeatable way to supervise
+                blockchain nodes without relying on ad-hoc scripts and manual recovery.
+              </p>
+            </div>
+
+            <button className="qx-btn qx-btn--primary" onClick={() => setIsModalOpen(true)}>
+              Activate QELO-X
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <CheckoutModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        productName="QELO-X LICENSE"
+        price="199.90"
+      />
+    </div>
+  );
 }

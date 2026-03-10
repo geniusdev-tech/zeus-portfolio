@@ -45,7 +45,7 @@ export function useCursor() {
 
     const onOver = (e) => {
       const interactive = e.target.closest(
-        'a, button, .z-exp-card, .z-stack-item, .z-proj-card, .z-contact-link'
+        'a, button, .z-exp-card, .z-stack-item, .z-proj-card, .z-contact-link, .z-itservices__card'
       );
       if (interactive) {
         cursorRef.current?.classList.add('big');
@@ -55,7 +55,7 @@ export function useCursor() {
 
     const onOut = (e) => {
       const interactive = e.target.closest(
-        'a, button, .z-exp-card, .z-stack-item, .z-proj-card, .z-contact-link'
+        'a, button, .z-exp-card, .z-stack-item, .z-proj-card, .z-contact-link, .z-itservices__card'
       );
       if (interactive) {
         cursorRef.current?.classList.remove('big');

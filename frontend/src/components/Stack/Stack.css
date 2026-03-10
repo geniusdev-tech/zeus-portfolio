@@ -6,8 +6,9 @@
 
 .z-stack__item {
   padding: 26px 22px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
+  background: var(--z-card-bg);
+  border: 1px solid var(--z-card-border);
+  box-shadow: var(--z-card-shadow);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -17,8 +18,10 @@
 }
 
 .z-stack__item:hover {
-  border-color: var(--green-mid);
-  background: var(--bg3);
+  border-color: var(--z-card-border-hover);
+  background: var(--z-card-bg-hover);
+  box-shadow: var(--z-card-shadow-hover);
+  transform: translateY(-3px);
 }
 
 .z-stack__item::before {
@@ -26,16 +29,15 @@
   position: absolute;
   left: 0;
   top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--green);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 0.2s;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--green), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
 }
 
 .z-stack__item:hover::before {
-  transform: scaleY(1);
+  opacity: 1;
 }
 
 .z-stack__name {

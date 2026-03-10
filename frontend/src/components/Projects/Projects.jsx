@@ -9,10 +9,10 @@ export default function Projects() {
     <div className="z-section" id="projects">
       {/* Header */}
       <div className="z-sec-header z-reveal">
-        <div className="z-sec-tag">03 — Featured Projects</div>
+        <div className="z-sec-tag">04 — Projects</div>
         <div className="z-sec-title">
-          Built for the<br />
-          <em>Real World.</em>
+          Selected Work<br />
+          <em>and Active Builds.</em>
         </div>
       </div>
 
@@ -32,7 +32,7 @@ export default function Projects() {
 
             <div className="z-proj__badge">
               {isMaintenance && project.link === '/Quelox' ? (
-                <span style={{ color: '#ffcc00' }}>⚠️ Under Maintenance</span>
+                <span style={{ color: '#ffcc00' }}>Maintenance mode</span>
               ) : (
                 project.badge
               )}
@@ -49,14 +49,14 @@ export default function Projects() {
                   rel="noopener noreferrer"
                   className="z-proj__btn"
                 >
-                  <span>Ver Projeto</span>
+                  <span>Open Project</span>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2.5 7H11.5M7.5 3L11.5 7L7.5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </a>
               ) : (
                 <Link to={project.link} className="z-proj__btn">
-                  <span>Ver Projeto</span>
+                  <span>Open Project</span>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2.5 7H11.5M7.5 3L11.5 7L7.5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>

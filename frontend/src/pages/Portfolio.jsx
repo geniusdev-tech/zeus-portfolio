@@ -3,10 +3,12 @@ import { useCursor, useReveal } from '../hooks';
 import Hero from '../components/Hero';
 import About from '../components/About';
 import Expertise from '../components/Expertise';
+import ITServices from '../components/ITServices';
 import Projects from '../components/Projects';
 import Stack from '../components/Stack';
 import Philosophy from '../components/Philosophy';
 import StatusDashboard from '../components/StatusDashboard';
+import BudgetQuote from '../components/BudgetQuote';
 import Footer from '../components/Footer';
 
 export default function Portfolio() {
@@ -23,6 +25,9 @@ export default function Portfolio() {
             <Expertise />
 
             <div className="z-divider-line" />
+            <ITServices />
+
+            <div className="z-divider-line" />
             <Projects />
 
             <div className="z-divider-line" />
@@ -33,6 +38,9 @@ export default function Portfolio() {
 
             <div className="z-divider-line" />
             <StatusDashboard />
+
+            <div className="z-divider-line" />
+            <BudgetQuote />
 
             <Footer />
         </>

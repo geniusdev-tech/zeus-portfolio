@@ -5,8 +5,9 @@
 /* ── Outer wrapper ── */
 .z-sd {
   position: relative;
-  background: var(--bg1);
-  border: 1px solid var(--border);
+  background: var(--z-card-bg);
+  border: 1px solid var(--z-card-border);
+  box-shadow: var(--z-card-shadow);
   overflow: hidden;
 }
 
@@ -205,9 +206,9 @@
 }
 
 .z-sd__metric-card {
-  background: transparent;
+  background: var(--z-card-bg);
   padding: 22px 20px 18px;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.2s;
   position: relative;
   overflow: hidden;
   border-right: 1px solid var(--border);
@@ -223,11 +224,12 @@
 }
 
 .z-sd__metric-card:hover {
-  background: rgba(0, 255, 140, 0.025);
+  background: var(--z-card-bg-hover);
+  transform: translateY(-2px);
 }
 
 .z-sd__metric-card.cyan:hover {
-  background: rgba(0, 229, 255, 0.025);
+  background: var(--z-card-bg-hover);
 }
 
 .z-sd__metric-card::after {
@@ -314,7 +316,7 @@
 }
 
 .z-sd__service:hover {
-  background: rgba(0, 255, 140, 0.025);
+  background: var(--z-card-bg-hover);
 }
 
 .z-sd__service-left {

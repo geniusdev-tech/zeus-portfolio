@@ -1,28 +1,41 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import './CheckoutModal.css';
 
+const STEPS = ['IDENTIFICATION', 'METHOD_SELECTION', 'PAYMENT'];
+
 export default function CheckoutModal({ isOpen, onClose, productName, price }) {
-    const [step, setStep] = useState('IDENTIFICATION'); // IDENTIFICATION | METHOD_SELECTION | PAYMENT
-    const [paymentMethod, setPaymentMethod] = useState('PIX'); // PIX | CRYPTO
+    const [step, setStep] = useState('IDENTIFICATION');
+    const [paymentMethod, setPaymentMethod] = useState('PIX');
     const [form, setForm] = useState({ name: '', email: '' });
     const [timeLeft, setTimeLeft] = useState(600);
+    const [copied, setCopied] = useState('');
 
     useEffect(() => {
         if (!isOpen) {
             setStep('IDENTIFICATION');
+            setPaymentMethod('PIX');
             setTimeLeft(600);
+            setCopied('');
         }
     }, [isOpen]);
 
     useEffect(() => {
         if (step === 'PAYMENT' && timeLeft > 0) {
-            const timer = setInterval(() => setTimeLeft(t => t - 1), 1000);
+            const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
             return () => clearInterval(timer);
         }
     }, [step, timeLeft]);
 
+    useEffect(() => {
+        if (!copied) return undefined;
+        const timer = setTimeout(() => setCopied(''), 1800);
+        return () => clearTimeout(timer);
+    }, [copied]);
+
     if (!isOpen) return null;
+
+    const currentStep = STEPS.indexOf(step) + 1;
 
     const handleNext = (e) => {
         e.preventDefault();
@@ -42,7 +55,6 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    // CRC16 CCITT Calculation
     const calculateCRC16 = (str) => {
         let crc = 0xFFFF;
         for (let i = 0; i < str.length; i++) {
@@ -66,21 +78,19 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
             return `${id}${len}${valStr}`;
         };
 
-        const merchantInfo =
-            pad('00', 'br.gov.bcb.pix') +
-            pad('01', key);
+        const merchantInfo = pad('00', 'br.gov.bcb.pix') + pad('01', key);
 
         let payload =
-            pad('00', '01') + // Payload Format Indicator
+            pad('00', '01') +
             pad('26', merchantInfo) +
-            pad('52', '0000') + // Merchant Category Code
-            pad('53', '986') + // Currency (BRL)
+            pad('52', '0000') +
+            pad('53', '986') +
             pad('54', amount ? amount.toString() : '0.00') +
-            pad('58', 'BR') + // Country Code
-            pad('59', (name || 'MERCHANT').substring(0, 25)) + // Merchant Name
-            pad('60', (city || 'CITY').substring(0, 15)) + // Merchant City
-            pad('62', pad('05', reference || 'PAY')) + // Additional Data (Reference)
-            '6304'; // CRC16 Indicator
+            pad('58', 'BR') +
+            pad('59', (name || 'MERCHANT').substring(0, 25)) +
+            pad('60', (city || 'CITY').substring(0, 15)) +
+            pad('62', pad('05', reference || 'PAY')) +
+            '6304';
 
         return payload + calculateCRC16(payload);
     };
@@ -98,125 +108,169 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
         'QELOX'
     );
 
-    const handleCopy = (text) => {
-        navigator.clipboard.writeText(text);
-        alert('Copiado para o clipboard!');
+    const paymentValue = paymentMethod === 'PIX' ? pixPayload : usdtAddress;
+    const paymentLabel = paymentMethod === 'PIX' ? 'PIX Copy and Paste' : 'USDT Polygon Address';
+    const paymentHint = paymentMethod === 'PIX'
+        ? 'The system will confirm PIX payment after transfer.'
+        : 'After sending USDT, forward the transaction hash to suporte@zeus.dev.';
+
+    const shortValue = !paymentValue
+        ? 'Configuration pending'
+        : paymentMethod === 'PIX'
+            ? `${paymentValue.substring(0, 30)}...`
+            : paymentValue;
+
+    const handleCopy = async (text) => {
+        if (!text) return;
+        await navigator.clipboard.writeText(text);
+        setCopied(paymentMethod === 'PIX' ? 'PIX code copied' : 'Wallet address copied');
     };
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-container" onClick={e => e.stopPropagation()}>
-                <button className="modal-close" onClick={onClose}>×</button>
+            <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-ambient" />
+                <div className="modal-grid" />
+
+                <button className="modal-close" onClick={onClose} aria-label="Close checkout">
+                    ×
+                </button>
 
                 <div className="modal-header">
                     <div className="header-left">
-                        <span className="modal-tag">// CHECKOUT</span>
+                        <span className="modal-tag">Secure Checkout</span>
                         <h2 className="modal-title">{productName}</h2>
+                        <p className="modal-subtitle">
+                            Operator license checkout with PIX and USDT payment support.
+                        </p>
                     </div>
-                    <div className="modal-price">R$ {price}</div>
+                    <div className="modal-pricebox">
+                        <span className="modal-pricebox__label">Current price</span>
+                        <div className="modal-price">R$ {price}</div>
+                    </div>
+                </div>
+
+                <div className="modal-steps" aria-hidden="true">
+                    {['Identification', 'Method', 'Payment'].map((label, index) => (
+                        <div
+                            key={label}
+                            className={`modal-step${currentStep >= index + 1 ? ' active' : ''}`}
+                        >
+                            <span className="modal-step__num">0{index + 1}</span>
+                            <span className="modal-step__label">{label}</span>
+                        </div>
+                    ))}
                 </div>
 
                 <div className="modal-body">
                     {step === 'IDENTIFICATION' ? (
                         <form className="checkout-form" onSubmit={handleNext}>
                             <div className="form-group">
-                                <label>NOME COMPLETO</label>
+                                <label>Full Name</label>
                                 <input
                                     type="text"
-                                    placeholder="Ex: João Silva"
+                                    placeholder="Ex: Joao Silva"
                                     value={form.name}
-                                    onChange={e => setForm({ ...form, name: e.target.value })}
+                                    onChange={(e) => setForm({ ...form, name: e.target.value })}
                                     required
                                     autoFocus
                                 />
                             </div>
                             <div className="form-group">
-                                <label>E-MAIL PARA RECEBIMENTO</label>
+                                <label>Delivery Email</label>
                                 <input
                                     type="email"
-                                    placeholder="exemplo@email.com"
+                                    placeholder="example@email.com"
                                     value={form.email}
-                                    onChange={e => setForm({ ...form, email: e.target.value })}
+                                    onChange={(e) => setForm({ ...form, email: e.target.value })}
                                     required
                                 />
                             </div>
                             <button type="submit" className="btn-modal-primary">
-                                PRÓXIMO PASSO →
+                                Continue to Payment Method →
                             </button>
                         </form>
                     ) : step === 'METHOD_SELECTION' ? (
                         <div className="method-selection">
-                            <p className="selection-label">ESCOLHA A FORMA DE PAGAMENTO</p>
+                            <p className="selection-label">Select the payment method</p>
                             <div className="method-cards">
-                                <div className="method-card" onClick={() => handleSelectMethod('PIX')}>
-                                    <div className="method-icon">🏦</div>
+                                <button type="button" className="method-card" onClick={() => handleSelectMethod('PIX')}>
+                                    <div className="method-icon">PIX</div>
                                     <div className="method-info">
                                         <span className="method-name">Pix</span>
-                                        <span className="method-desc">Instantâneo e Automático</span>
+                                        <span className="method-desc">Instant payment with automatic confirmation flow.</span>
                                     </div>
                                     <div className="method-arrow">→</div>
-                                </div>
-                                <div className="method-card" onClick={() => handleSelectMethod('CRYPTO')}>
-                                    <div className="method-icon">💎</div>
+                                </button>
+                                <button type="button" className="method-card" onClick={() => handleSelectMethod('CRYPTO')}>
+                                    <div className="method-icon">USDT</div>
                                     <div className="method-info">
                                         <span className="method-name">USDT (Polygon)</span>
-                                        <span className="method-desc">No-KYC / Pagamento Anônimo</span>
+                                        <span className="method-desc">Crypto payment for operators who prefer on-chain transfer.</span>
                                     </div>
                                     <div className="method-arrow">→</div>
-                                </div>
+                                </button>
                             </div>
                         </div>
                     ) : (
                         <div className="payment-step">
                             <div className="payment-status">
                                 <span className="status-dot blink" />
-                                {paymentMethod === 'PIX' ? 'AGUARDANDO PIX...' : 'AGUARDANDO TRANSFERÊNCIA...'}
+                                {paymentMethod === 'PIX' ? 'Awaiting PIX payment' : 'Awaiting wallet transfer'}
                             </div>
-                            <div className="payment-timer">Expira em <span className="highlight">{formatTime(timeLeft)}</span></div>
+                            <div className="payment-timer">
+                                Payment window <span className="highlight">{formatTime(timeLeft)}</span>
+                            </div>
 
-                            <div className="qr-code-wrapper">
-                                <div className="qr-code-container">
-                                    {pixKey || usdtAddress ? (
-                                        <QRCodeSVG
-                                            value={paymentMethod === 'PIX' ? pixPayload : usdtAddress}
-                                            size={220}
-                                            level="H"
-                                            includeMargin={true}
-                                        />
-                                    ) : (
-                                        <div className="qr-error">Configuração Pendente</div>
-                                    )}
+                            <div className="payment-grid">
+                                <div className="qr-code-panel">
+                                    <div className="qr-code-wrapper">
+                                        <div className="qr-code-container">
+                                            {paymentValue ? (
+                                                <QRCodeSVG
+                                                    value={paymentValue}
+                                                    size={210}
+                                                    level="H"
+                                                    includeMargin={true}
+                                                />
+                                            ) : (
+                                                <div className="qr-error">Configuration pending</div>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="pix-copy-section">
-                                <p className="small-label">
-                                    {paymentMethod === 'PIX' ? 'COPIA E COLA PIX' : 'ENDEREÇO USDT (POLYGON)'}
-                                </p>
-                                <div className="copy-box">
-                                    <input readOnly value={paymentMethod === 'PIX' ? (pixPayload ? pixPayload.substring(0, 20) + "..." : "Erro") : (usdtAddress || "Erro")} />
-                                    <button
-                                        onClick={() => handleCopy(paymentMethod === 'PIX' ? pixPayload : usdtAddress)}
-                                        disabled={paymentMethod === 'PIX' ? !pixPayload : !usdtAddress}
-                                    >
-                                        COPIAR
-                                    </button>
+                                <div className="payment-details">
+                                    <div className="payment-detail">
+                                        <span className="small-label">{paymentLabel}</span>
+                                        <div className="copy-box">
+                                            <input readOnly value={shortValue} />
+                                            <button
+                                                type="button"
+                                                onClick={() => handleCopy(paymentValue)}
+                                                disabled={!paymentValue}
+                                            >
+                                                Copy
+                                            </button>
+                                        </div>
+                                        <div className={`copy-feedback${copied ? ' visible' : ''}`}>
+                                            {copied || ' '}
+                                        </div>
+                                    </div>
+
+                                    <div className="payment-detail payment-detail--note">
+                                        <span className="small-label">Instructions</span>
+                                        <p className="payment-note">{paymentHint}</p>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div className="payment-footer">
-                                <span className="footer-loading">
-                                    {paymentMethod === 'PIX'
-                                        ? 'O sistema está verificando seu pagamento em tempo real...'
-                                        : 'Após enviar o USDT, envie o comprovante para suporte@zeus.dev'}
-                                </span>
                             </div>
                         </div>
                     )}
                 </div>
 
                 <div className="modal-footer-brand">
-                    🔒 Checkout seguro e criptografado
+                    <span className="modal-footer-brand__dot" />
+                    Secure checkout surface with encrypted transfer workflow
                 </div>
             </div>
         </div>

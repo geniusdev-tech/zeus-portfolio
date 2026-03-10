@@ -67,9 +67,9 @@ export const stackData = [
 
 export const projectsData = [
   {
-    badge: 'Infrastructure Tool — Active',
+    badge: 'Node Operations Product — Active',
     title: 'QELO-X',
-    desc: 'Lightweight orchestration layer for critical infrastructure services. Provides daemon-based process control, secure UNIX socket IPC, real-time metrics monitoring, graceful shutdown handling, and automatic restart with configurable policies. Built for production bare-metal and containerized environments.',
+    desc: 'Node operations layer for blockchain infrastructure. Provides service supervision, secure UNIX socket IPC, runtime telemetry and automated recovery routines for Linux-based production hosts.',
     link: '/Quelox',
     muted: false,
     comingSoon: false,
@@ -77,7 +77,7 @@ export const projectsData = [
   {
     badge: 'Python · Multi-chain',
     title: 'Crypto Wallet Tracker',
-    desc: 'Modular Python application for monitoring cryptocurrency wallets across multiple blockchains (BTC, LTC, ETH, BSC, TRON, XMR and more). Features automatic chain detection from address format, public API integration for balance and transaction tracking, SQLite persistence, and a Flask + PyWebView desktop GUI.',
+    desc: 'Multi-chain wallet monitoring tool built in Python. Tracks balances and transactions across multiple blockchains with chain detection, API integration, SQLite persistence and desktop UI support.',
     link: 'https://github.com/zeus-cli',
     muted: true,
     comingSoon: true,
@@ -86,7 +86,7 @@ export const projectsData = [
   {
     badge: 'Shell · systemd',
     title: 'Automation Suite',
-    desc: 'Collection of production-grade shell scripts and systemd units for infrastructure automation: log rotation, service health checks, auto-restart policies, and network diagnostics packaged as reusable CLI tools.',
+    desc: 'Set of shell scripts and systemd units for infrastructure automation, including health checks, restart routines, log handling and network diagnostics.',
     link: 'https://github.com/zeus-cli',
     muted: true,
     comingSoon: true,
@@ -98,9 +98,10 @@ export const aboutStats = [
   { label: 'Primary OS', value: 'Linux', cyan: false },
   { label: 'Infrastructure', value: 'Bare-metal + Cloud', cyan: false },
   { label: 'Languages', value: 'Go · Shell · Python', cyan: true },
-  { label: 'Init System', value: 'systemd', cyan: true },
+  { label: 'Security Lens', value: 'Hardening + Observability', cyan: true },
+  { label: 'Blockchain Ops', value: 'Nodes + Monitoring', cyan: false },
   { label: 'Focus', value: 'Stability & Reliability', cyan: false },
-  { label: 'Deployments', value: 'Production-Grade', cyan: false },
+  { label: 'Delivery', value: 'Production-Grade', cyan: false },
   { label: 'Status', value: 'Available', cyan: true },
 ];
 
@@ -108,10 +109,11 @@ export const aboutTags = [
   { label: 'Linux', cyan: false },
   { label: 'Networking', cyan: false },
   { label: 'Infrastructure', cyan: false },
+  { label: 'DevSecOps', cyan: true },
   { label: 'Backend Dev', cyan: true },
   { label: 'Automation', cyan: true },
+  { label: 'Blockchain', cyan: false },
   { label: 'Systems Analysis', cyan: false },
-  { label: 'DevOps', cyan: false },
   { label: 'Production', cyan: true },
 ];
 
@@ -140,4 +142,4 @@ export const contactLinks = [
   { icon: '[in]', label: 'LinkedIn', value: 'linkedin.com/in/seu-perfil', href: 'https://linkedin.com/in/seu-perfil', cyan: true },
 ];
 
-export const navLinks = ['about', 'expertise', 'projects', 'stack', 'status'];
+export const navLinks = ['about', 'expertise', 'services', 'projects', 'stack', 'status', 'quote'];

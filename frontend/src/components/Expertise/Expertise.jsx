@@ -7,10 +7,10 @@ export default function Expertise() {
       <div className="z-section">
         {/* Header */}
         <div className="z-sec-header z-reveal">
-          <div className="z-sec-tag cyan">02 — Areas of Expertise</div>
+          <div className="z-sec-tag cyan">02 — Core Domains</div>
           <div className="z-sec-title cyan">
-            Where I Operate<br />
-            <em>With Depth.</em>
+            Technical Areas<br />
+            <em>I Work In.</em>
           </div>
         </div>
 
@@ -30,7 +30,7 @@ export default function Expertise() {
 
           {/* Placeholder cell */}
           <div className="z-exp__card z-exp__card--empty">
-            <div className="z-exp__empty-label">Expanding continuously</div>
+            <div className="z-exp__empty-label">Additional domains on request</div>
           </div>
         </div>
       </div>

@@ -26,10 +26,10 @@ export default function Stack() {
       <div className="z-section">
         {/* Header */}
         <div className="z-sec-header z-reveal">
-          <div className="z-sec-tag cyan">04 — Technical Stack</div>
+          <div className="z-sec-tag cyan">05 — Technical Stack</div>
           <div className="z-sec-title cyan">
-            Tools of the<br />
-            <em>Trade.</em>
+            Core Tools<br />
+            <em>and Platforms.</em>
           </div>
         </div>
 
@@ -43,4 +43,3 @@ export default function Stack() {
     </div>
   );
 }
-

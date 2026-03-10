@@ -162,9 +162,9 @@ export default function StatusDashboard() {
       <div className="z-section">
         {/* Section header */}
         <div className="z-sec-header z-reveal">
-          <div className="z-sec-tag cyan">05 — System Status</div>
+          <div className="z-sec-tag cyan">07 — System Status</div>
           <div className="z-sec-title cyan">
-            Infrastructure<br /><em>At a Glance.</em>
+            Live Metrics<br /><em>and Service Health.</em>
           </div>
         </div>
 
@@ -174,9 +174,9 @@ export default function StatusDashboard() {
             <div className="z-sd__topbar-left">
               <div className={`z-sd__pulse ${error ? 'error' : 'ok'}`} />
               <span className="z-sd__topbar-label">
-                {error ? 'Backend unreachable'
-                  : isLive ? 'Live · polling every 15s'
-                    : 'Demo mode · polling every 15s'}
+                {error ? 'Backend unavailable'
+                  : isLive ? 'Live data · refresh every 15s'
+                    : 'Demo data · refresh every 15s'}
               </span>
               {!error && !isLive && <span className="z-sd__topbar-pill">sim</span>}
             </div>
@@ -207,7 +207,7 @@ export default function StatusDashboard() {
             </div>
           ) : (
             <div className="z-sd__body">
-              <SectionLabel>Server Metrics</SectionLabel>
+              <SectionLabel>Host Metrics</SectionLabel>
               <div className="z-sd__metrics-grid">
                 <MetricCard label="CPU Usage"
                   value={srv.cpu_usage.toFixed(1)} unit="%"
@@ -227,7 +227,7 @@ export default function StatusDashboard() {
               <div className="z-sd__services-row">
                 {systemSvcs.length > 0 && (
                   <div className="z-sd__services-col">
-                    <SectionLabel>System</SectionLabel>
+                    <SectionLabel>Infrastructure Services</SectionLabel>
                     <div className="z-sd__services">
                       {systemSvcs.map(svc => <ServiceRow key={svc.name} svc={svc} />)}
                     </div>
@@ -235,7 +235,7 @@ export default function StatusDashboard() {
                 )}
                 {siteSvcs.length > 0 && (
                   <div className="z-sd__services-col">
-                    <SectionLabel>Portfolio</SectionLabel>
+                    <SectionLabel>Public Services</SectionLabel>
                     <div className="z-sd__services">
                       {siteSvcs.map(svc => <ServiceRow key={svc.name} svc={svc} />)}
                     </div>
