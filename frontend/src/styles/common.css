@@ -11,9 +11,10 @@
 .z-section {
   position: relative;
   z-index: 1;
-  padding: 100px 56px;
+  padding: 120px 56px;
   max-width: 1400px;
   margin: 0 auto;
+  scroll-margin-top: 140px;
 }
 
 .z-full {
@@ -22,7 +23,8 @@
   background: var(--bg1);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  padding: 100px 0;
+  padding: 120px 0;
+  scroll-margin-top: 140px;
 }
 
 .z-full .z-section {
@@ -180,7 +182,7 @@
 /* ── Responsive ─────────────────────────────────────── */
 @media (max-width: 768px) {
   .z-section {
-    padding: 64px 24px;
+    padding: 96px 24px;
   }
 
   .z-divider-line {
