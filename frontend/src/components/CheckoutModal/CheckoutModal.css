@@ -16,7 +16,7 @@
 }
 
 .modal-container {
-    width: min(760px, 100%);
+    width: min(920px, 100%);
     position: relative;
     overflow: hidden;
     background: rgba(12, 16, 20, 0.96);
@@ -201,6 +201,33 @@
     gap: 18px;
 }
 
+.modal-section-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-section-tag {
+    display: inline-flex;
+    width: fit-content;
+    padding: 6px 10px;
+    border: 1px solid rgba(0, 229, 255, 0.16);
+    background: rgba(0, 229, 255, 0.05);
+    color: var(--cyan);
+    font-family: var(--font-mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.modal-section-intro p,
+.payment-note {
+    color: rgba(221, 228, 236, 0.76);
+    font-size: 0.9rem;
+    line-height: 1.75;
+}
+
 .form-group {
     display: flex;
     flex-direction: column;
@@ -251,6 +278,72 @@
     background: transparent;
     color: var(--green);
     box-shadow: var(--glow-g);
+}
+
+.btn-modal-secondary {
+    min-height: 48px;
+    padding: 0 18px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-modal-secondary:hover {
+    border-color: rgba(0, 229, 255, 0.3);
+    color: var(--cyan);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.modal-actions--inline {
+    margin-top: 0;
+}
+
+.checkout-context {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.checkout-context--compact {
+    grid-template-columns: 1fr;
+    margin-bottom: 0;
+}
+
+.checkout-context__item {
+    padding: 14px 16px;
+    background: rgba(6, 9, 11, 0.78);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.checkout-context__label,
+.qr-code-meta span {
+    color: rgba(221, 228, 236, 0.52);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.checkout-context__item strong,
+.qr-code-meta strong {
+    color: var(--text);
+    font-size: 0.84rem;
+    line-height: 1.55;
 }
 
 .selection-label {
@@ -360,6 +453,14 @@
     margin-bottom: 12px;
 }
 
+.payment-topbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
 .status-dot {
     width: 7px;
     height: 7px;
@@ -375,7 +476,6 @@
 .payment-timer {
     font-size: 0.88rem;
     color: rgba(221, 228, 236, 0.76);
-    margin-bottom: 22px;
     font-family: var(--font-mono);
 }
 
@@ -386,7 +486,7 @@
 
 .payment-grid {
     display: grid;
-    grid-template-columns: 250px 1fr;
+    grid-template-columns: 280px 1fr;
     gap: 22px;
     align-items: start;
 }
@@ -413,6 +513,14 @@
 
 .qr-code-panel {
     padding: 18px;
+}
+
+.qr-code-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 16px;
 }
 
 .qr-code-wrapper {
@@ -451,6 +559,10 @@
 
 .payment-detail--note {
     min-height: 120px;
+}
+
+.payment-detail--summary {
+    background: rgba(8, 11, 13, 0.74);
 }
 
 .small-label {
@@ -517,6 +629,62 @@
 
 .copy-feedback.visible {
     opacity: 1;
+}
+
+.payment-note {
+    margin: 0;
+}
+
+@media (max-width: 840px) {
+    .modal-header {
+        flex-direction: column;
+    }
+
+    .payment-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-topbar,
+    .checkout-context {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 640px) {
+    .modal-overlay {
+        padding: 12px;
+    }
+
+    .modal-header,
+    .modal-body {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .modal-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-step {
+        padding: 12px 20px;
+    }
+
+    .copy-box {
+        flex-direction: column;
+    }
+
+    .copy-box button {
+        width: 100%;
+        min-height: 46px;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
 }
 
 .payment-note {
