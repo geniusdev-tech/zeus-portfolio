@@ -170,7 +170,7 @@ func buildHTML(req ContactRequest) string {
                 <table width="100%%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                   <tr><td style="color:#9ca3af;padding:8px 0;font-size:0.85rem;width:120px;">Name</td><td style="padding:8px 0;font-size:0.85rem;color:#e5e7eb;">%s</td></tr>
                   %s
-                  <tr><td style="color:#9ca3af;padding:8px 0;font-size:0.85rem;">Email</td><td style="padding:8px 0;font-size:0.85rem;"><a href="mailto:%s" style="color:#22d3ee; text-decoration:none;">%s</a></td></tr>
+                  <tr><td style="color:#9ca3af;padding:8px 0;font-size:0.85rem;">Email</td><td style="padding:8px 0;font-size:0.85rem;color:#22d3ee;">%s</td></tr>
                   <tr><td style="color:#9ca3af;padding:8px 0;font-size:0.85rem;">Subject</td><td style="padding:8px 0;font-size:0.85rem;color:#e5e7eb;">%s</td></tr>
                 </table>
 
@@ -182,10 +182,10 @@ func buildHTML(req ContactRequest) string {
                 </div>
 
                 <p style="margin:18px 0 0 0; font-size:0.72rem; color:#6b7280;">
-                  Sent via Zeus_ portfolio. Reply directly to this email to answer the sender.
+                  Sent via Zeus_ portfolio. Use your email client reply action to answer the sender via Reply-To.
                 </p>
               </div>`,
-		name, company, email, email, subject, message)
+		name, company, email, subject, message)
 
 	return fmt.Sprintf(`<!DOCTYPE html>
 <html>
