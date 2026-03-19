@@ -1,64 +1,77 @@
-/* ── Grid ── */
-.z-proj__grid {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr;
-  gap: 22px;
+.z-proj {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(0, 255, 140, 0.07), transparent 28%),
+    radial-gradient(circle at 82% 24%, rgba(0, 229, 255, 0.08), transparent 26%),
+    linear-gradient(180deg, rgba(12, 16, 20, 0.62), rgba(8, 11, 13, 0.68));
 }
 
-/* ── Card ── */
-.z-proj__card {
-  background: var(--z-card-bg);
-  border: 1px solid var(--z-card-border);
-  box-shadow: var(--z-card-shadow);
-  padding: 34px 30px;
+.z-proj__intro {
+  max-width: 680px;
+  margin-top: 16px;
+  color: var(--text2);
+  font-size: 0.98rem;
+  line-height: 1.8;
+}
+
+.z-proj__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 980px);
+  gap: 22px;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.z-proj__card,
+.z-proj__info-card {
   position: relative;
   overflow: hidden;
-  transition: all 0.25s;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.03), transparent 42%),
+    linear-gradient(180deg, rgba(16, 21, 25, 0.82), rgba(10, 13, 16, 0.86));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02),
+    0 18px 30px rgba(0, 0, 0, 0.24);
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.z-proj__card {
+  padding: 34px 30px;
   display: flex;
   flex-direction: column;
 }
 
-.z-proj__card:hover {
-  border-color: var(--z-card-border-hover);
-  background: var(--z-card-bg-hover);
-  box-shadow: var(--z-card-shadow-hover);
-  transform: translateY(-3px);
+.z-proj__card:hover,
+.z-proj__info-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 24px 38px rgba(0, 0, 0, 0.3);
 }
 
-.z-proj__card::after {
+.z-proj__card::before,
+.z-proj__info-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, var(--green), transparent);
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 255, 140, 0.12), transparent 38%);
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.22s ease;
 }
 
-.z-proj__card:hover::after {
+.z-proj__card:hover::before,
+.z-proj__info-card:hover::before {
   opacity: 1;
 }
 
-/* ── Muted / upcoming ── */
-.z-proj__card--muted {
-  border-style: dashed;
-  opacity: 0.55;
+.z-proj__card > *,
+.z-proj__info-card > * {
+  position: relative;
+  z-index: 1;
 }
 
-.z-proj__card--muted:hover {
-  opacity: 0.7;
-  transform: none;
-  box-shadow: var(--z-card-shadow);
-  border-color: var(--border);
-}
-
-.z-proj__card--muted:hover::after {
-  opacity: 0;
-}
-
-/* ── Em Breve overlay ── */
 .z-proj__coming-soon {
   position: absolute;
   inset: 0;
@@ -93,26 +106,20 @@
   white-space: nowrap;
 }
 
-/* ── Badge ── */
 .z-proj__badge {
   font-family: var(--font-mono);
   font-size: 0.55rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  padding: 4px 10px;
-  border: 1px solid var(--border);
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--green);
   display: inline-flex;
   width: fit-content;
   margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.02);
 }
 
-.z-proj__card--muted .z-proj__badge {
-  color: var(--text3);
-  border-color: var(--text3);
-}
-
-/* ── Title ── */
 .z-proj__title {
   font-family: var(--font-display);
   font-size: 2rem;
@@ -121,101 +128,174 @@
   margin-bottom: 12px;
 }
 
-.z-proj__card--muted .z-proj__title {
-  color: var(--text3);
-}
-
-/* ── Desc ── */
 .z-proj__desc {
   font-size: 0.84rem;
   font-weight: 300;
   color: var(--text2);
   line-height: 1.75;
-  flex: 1;
 }
 
-/* ── CTA Button (active card) ── */
+.z-proj__skill-matrix {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.z-proj__skill-row {
+  padding: 14px 14px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.z-proj__skill-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: start;
+}
+
+.z-proj__skill-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.z-proj__skill-area {
+  margin-top: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+
+.z-proj__skill-pct {
+  min-width: 52px;
+  text-align: right;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: 0.05em;
+  color: var(--green);
+}
+
+.z-proj__skill-bar {
+  height: 9px;
+  margin-top: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.z-proj__skill-bar-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), rgba(0, 255, 140, 0.35));
+  box-shadow: 0 0 18px rgba(0, 255, 140, 0.22);
+}
+
+.z-proj__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 22px;
+}
+
+.z-proj__skill-tag {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
 .z-proj__btn {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 28px;
-  padding: 11px 22px;
-  background: transparent;
-  border: 1px solid var(--green);
-  color: var(--green);
+  gap: 14px;
+  margin-top: 30px;
+  padding: 0;
+  color: var(--text);
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
   width: fit-content;
-  transition: background 0.22s, color 0.22s, box-shadow 0.22s, gap 0.2s;
-  position: relative;
-  overflow: hidden;
+  border: 0;
+  background: transparent;
 }
 
-.z-proj__btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--green);
-  transform: translateX(-101%);
-  transition: transform 0.22s ease;
-  z-index: 0;
+.z-proj__btn span {
+  padding: 13px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.03);
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  transition: transform 0.22s ease, border-color 0.22s ease, color 0.22s ease;
 }
 
-.z-proj__btn:hover::before {
-  transform: translateX(0);
-}
-
-.z-proj__btn span,
 .z-proj__btn svg {
-  position: relative;
-  z-index: 1;
-  transition: color 0.22s;
-}
-
-.z-proj__btn:hover {
-  color: var(--bg);
-  box-shadow: var(--glow-g);
-  gap: 16px;
-}
-
-/* ── Old plain link (kept for safety) ── */
-.z-proj__link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  width: 38px;
+  height: 38px;
+  padding: 9px;
+  border: 1px solid rgba(0, 255, 140, 0.22);
   color: var(--green);
-  text-decoration: none;
-  margin-top: 26px;
-  transition: gap 0.2s;
+  background: rgba(0, 255, 140, 0.06);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease;
 }
 
-.z-proj__link:hover {
-  gap: 14px;
+.z-proj__btn:hover span {
+  transform: translateX(4px);
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
-/* ── Responsive ── */
+.z-proj__btn:hover svg {
+  transform: translateX(6px);
+  background: rgba(0, 255, 140, 0.12);
+  border-color: rgba(0, 255, 140, 0.4);
+}
+
 @media (max-width: 1100px) {
   .z-proj__grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .z-proj__grid {
-    grid-template-columns: 1fr;
+  .z-proj__intro {
+    font-size: 0.92rem;
+  }
+
+  .z-proj__card,
+  .z-proj__info-card {
+    clip-path: none;
   }
 
   .z-proj__cs-label {
     font-size: 1.3rem;
     padding: 8px 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .z-proj__card {
+    padding: 26px 20px;
+  }
+
+  .z-proj__skill-head {
+    flex-direction: column;
+  }
+
+  .z-proj__skill-pct {
+    min-width: 0;
+    text-align: left;
+  }
+
+  .z-proj__btn {
+    width: 100%;
+    justify-content: space-between;
   }
 }

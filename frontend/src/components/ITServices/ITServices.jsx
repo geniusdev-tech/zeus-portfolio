@@ -141,14 +141,14 @@ export default function ITServices() {
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="z-sec-tag cyan">03 — Service Scope</div>
+          <div className="z-sec-tag cyan">04 — Service Scope</div>
           <h2 className="z-sec-title cyan">
             IT Infrastructure &amp;<br />
             <em>Technology Services</em>
           </h2>
           <p className="z-itservices__subtitle">
-            Practical support for workstation issues, servers, networks, cloud delivery,
-            blockchain nodes and backend tooling.
+            Focused support across systems, networks, cloud delivery and tooling, without
+            padding the page with generic agency language.
           </p>
         </motion.div>
 

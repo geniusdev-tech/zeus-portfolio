@@ -2,41 +2,46 @@ import { aboutStats, aboutTags } from '../../data';
 import './About.css';
 
 export default function About() {
+  const featuredStats = aboutStats.slice(0, 4);
+  const signalTags = aboutTags.slice(0, 6);
+
   return (
     <div className="z-section" id="about">
-      {/* Header */}
       <div className="z-sec-header z-reveal">
-        <div className="z-sec-tag">01 — About</div>
+        <div className="z-sec-tag">01 — Operational Profile</div>
         <div className="z-sec-title">
-          Infrastructure Work<br />
-          <em>With Operational Focus.</em>
+          Infrastructure,
+          <br />
+          <em>Engineered for Production.</em>
         </div>
       </div>
 
-      {/* Grid */}
       <div className="z-about__grid z-reveal">
-        {/* Text */}
-        <div className="z-about__text">
-          <p>
-            I work across the infrastructure lifecycle, from{' '}
-            <strong>Linux administration and networking</strong> to{' '}
-            <strong>automation, backend tooling and cloud deployment</strong>. My focus is
-            production stability, service visibility and maintainable operations.
-          </p>
-          <p>
-            My scope includes <strong>DevSecOps routines</strong>, infrastructure
-            diagnostics, service supervision, systems analysis and{' '}
-            <strong>blockchain node operations</strong>. The work is oriented to real
-            environments, not showcase builds.
-          </p>
-          <p>
-            When the infrastructure needs software support, I build internal tools, APIs,
-            node orchestration layers and automation flows that remove repetitive manual
-            work and reduce failure points.
+        <div className="z-about__intro">
+          <p className="z-about__lede">
+            I work where infrastructure, security and software delivery meet. The focus is
+            keeping production environments stable, observable and easier to operate.
           </p>
 
+          <div className="z-about__points">
+            <div className="z-about__point">
+              <span className="z-about__point-label">Operational scope</span>
+              <p>
+                Linux administration, networking, DevSecOps routines, cloud deployment and
+                backend tooling for real systems.
+              </p>
+            </div>
+            <div className="z-about__point">
+              <span className="z-about__point-label">Delivery model</span>
+              <p>
+                I design around failure modes, visibility and automation so teams spend less
+                time reacting and more time shipping.
+              </p>
+            </div>
+          </div>
+
           <div className="z-about__tags">
-            {aboutTags.map(({ label, cyan }) => (
+            {signalTags.map(({ label, cyan }) => (
               <span key={label} className={`z-about__tag${cyan ? ' cyan' : ''}`}>
                 {label}
               </span>
@@ -44,14 +49,22 @@ export default function About() {
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="z-about__stats">
-          {aboutStats.map(({ label, value, cyan }) => (
+        <div className="z-about__panel">
+          <div className="z-about__panel-kicker">What you get</div>
+          <h3 className="z-about__panel-title">Less manual work. Fewer blind spots. More control.</h3>
+          <p className="z-about__panel-copy">
+            The work combines platform stability with lightweight internal tooling, so
+            infrastructure decisions remain practical and maintainable over time.
+          </p>
+
+          <div className="z-about__stats">
+            {featuredStats.map(({ label, value, cyan }) => (
             <div key={label} className={`z-about__stat${cyan ? ' cyan' : ''}`}>
               <span className="z-about__stat-label">{label}</span>
               <span className="z-about__stat-value">{value}</span>
             </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

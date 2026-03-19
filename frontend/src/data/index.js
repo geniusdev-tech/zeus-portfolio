@@ -55,14 +55,29 @@ export const expertiseData = [
 ];
 
 export const stackData = [
-  { name: 'Linux', type: 'Operating System', level: 'Expert', years: '5+' },
-  { name: 'Go', type: 'Systems Language', level: 'Proficient', years: '3+' },
-  { name: 'systemd', type: 'Init / Service Manager', level: 'Expert', years: '5+' },
-  { name: 'Shell Scripting', type: 'Automation', level: 'Expert', years: '5+' },
-  { name: 'Networking', type: 'TCP/IP · Routing · DNS', level: 'Proficient', years: '4+' },
-  { name: 'Infra Architecture', type: 'Design & Planning', level: 'Proficient', years: '4+' },
-  { name: 'Monitoring', type: 'Observability', level: 'Proficient', years: '3+' },
-  { name: 'Python', type: 'Scripting / Tools', level: 'Familiar', years: '3+' },
+  { name: 'Linux', type: 'Operating System', pct: 95, years: '5+', accent: 'green' },
+  { name: 'Go', type: 'Systems Language', pct: 82, years: '3+', accent: 'cyan' },
+  { name: 'systemd', type: 'Init / Service Manager', pct: 93, years: '5+', accent: 'green' },
+  { name: 'Shell Scripting', type: 'Automation', pct: 91, years: '5+', accent: 'green' },
+  { name: 'Networking', type: 'TCP/IP · Routing · DNS', pct: 84, years: '4+', accent: 'cyan' },
+  { name: 'Infra Architecture', type: 'Design & Planning', pct: 86, years: '4+', accent: 'cyan' },
+  { name: 'Monitoring', type: 'Observability', pct: 79, years: '3+', accent: 'cyan' },
+  { name: 'Python', type: 'Scripting / Tools', pct: 76, years: '3+', accent: 'green' },
+  { name: 'JavaScript', type: 'Frontend / Backend', pct: 81, years: '3+', accent: 'green' },
+  { name: 'TypeScript', type: 'Typed Web Development', pct: 74, years: '2+', accent: 'cyan' },
+  { name: 'React', type: 'UI Framework', pct: 83, years: '3+', accent: 'cyan' },
+  { name: 'Next.js', type: 'Web Framework', pct: 72, years: '2+', accent: 'green' },
+  { name: 'Node.js', type: 'Runtime / APIs', pct: 80, years: '3+', accent: 'green' },
+  { name: 'Express', type: 'HTTP Services', pct: 77, years: '2+', accent: 'cyan' },
+  { name: 'MongoDB', type: 'Document Database', pct: 71, years: '2+', accent: 'green' },
+  { name: 'MySQL', type: 'Relational Database', pct: 69, years: '2+', accent: 'cyan' },
+  { name: 'Docker', type: 'Containers', pct: 78, years: '3+', accent: 'green' },
+  { name: 'AWS', type: 'Cloud Platform', pct: 70, years: '2+', accent: 'cyan' },
+  { name: 'Azure', type: 'Cloud Services', pct: 64, years: '1+', accent: 'cyan' },
+  { name: 'Java', type: 'General Purpose', pct: 61, years: '2+', accent: 'green' },
+  { name: 'C++', type: 'Systems Foundations', pct: 55, years: '1+', accent: 'green' },
+  { name: 'Tailwind CSS', type: 'UI Styling', pct: 74, years: '2+', accent: 'cyan' },
+  { name: 'Git', type: 'Version Control', pct: 88, years: '5+', accent: 'green' },
 ];
 
 export const projectsData = [
@@ -73,24 +88,58 @@ export const projectsData = [
     link: '/Quelox',
     muted: false,
     comingSoon: false,
+    skills: [
+      { name: 'Go', pct: 88, area: 'Core Runtime' },
+      { name: 'Linux', pct: 94, area: 'Host Environment' },
+      { name: 'systemd', pct: 91, area: 'Service Orchestration' },
+      { name: 'UNIX Sockets', pct: 86, area: 'IPC Layer' },
+      { name: 'Tauri', pct: 72, area: 'Desktop Shell' },
+      { name: 'React', pct: 78, area: 'UI Surface' },
+    ],
+  },
+];
+
+export const githubSkillsCards = [
+  {
+    badge: 'GitHub Profile',
+    title: 'Skills',
+    items: [
+      { name: 'AWS', pct: 70 },
+      { name: 'Azure', pct: 64 },
+      { name: 'Docker', pct: 78 },
+      { name: 'Git', pct: 88 },
+      { name: 'Linux', pct: 95 },
+    ],
   },
   {
-    badge: 'Python · Multi-chain',
-    title: 'Crypto Wallet Tracker',
-    desc: 'Multi-chain wallet monitoring tool built in Python. Tracks balances and transactions across multiple blockchains with chain detection, API integration, SQLite persistence and desktop UI support.',
-    link: 'https://github.com/zeus-cli',
-    muted: true,
-    comingSoon: true,
-    external: true,
+    badge: 'Programming',
+    title: 'Languages',
+    items: [
+      { name: 'Python', pct: 76 },
+      { name: 'JavaScript', pct: 81 },
+      { name: 'TypeScript', pct: 74 },
+      { name: 'Java', pct: 61 },
+      { name: 'C++', pct: 55 },
+    ],
   },
   {
-    badge: 'Shell · systemd',
-    title: 'Automation Suite',
-    desc: 'Set of shell scripts and systemd units for infrastructure automation, including health checks, restart routines, log handling and network diagnostics.',
-    link: 'https://github.com/zeus-cli',
-    muted: true,
-    comingSoon: true,
-    external: true,
+    badge: 'Data Layer',
+    title: 'Databases',
+    items: [
+      { name: 'MongoDB', pct: 71 },
+      { name: 'MySQL', pct: 69 },
+    ],
+  },
+  {
+    badge: 'Web Stack',
+    title: 'Frameworks',
+    items: [
+      { name: 'React', pct: 83 },
+      { name: 'Next.js', pct: 72 },
+      { name: 'Node.js', pct: 80 },
+      { name: 'Express', pct: 77 },
+      { name: 'Tailwind CSS', pct: 74 },
+    ],
   },
 ];
 
@@ -137,9 +186,9 @@ export const philosophyData = [
 
 // TODO: Replace with your real contact info
 export const contactLinks = [
-  { icon: '[@]', label: 'Email', value: 'seu@email.com', href: 'mailto:seu@email.com', cyan: false },
-  { icon: '[gh]', label: 'GitHub', value: 'github.com/seu-usuario', href: 'https://github.com/seu-usuario', cyan: false },
+  { icon: '[@]', label: 'Email', value: 'walletzeus@proton.me', href: 'mailto:walletzeus@proton.me', cyan: false },
+  { icon: '[gh]', label: 'GitHub', value: 'github.com/zeus-cli', href: 'https://github.com/zeus-cli', cyan: false },
   { icon: '[in]', label: 'LinkedIn', value: 'linkedin.com/in/seu-perfil', href: 'https://linkedin.com/in/seu-perfil', cyan: true },
 ];
 
-export const navLinks = ['about', 'expertise', 'services', 'projects', 'stack', 'status', 'quote'];
+export const navLinks = ['about', 'projects', 'stack', 'services', 'contact'];

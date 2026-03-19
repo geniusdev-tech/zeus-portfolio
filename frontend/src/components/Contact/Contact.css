@@ -1,196 +1,303 @@
-.z-contact__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
+.z-contact {
+  background:
+    radial-gradient(circle at 16% 28%, rgba(0, 229, 255, 0.08), transparent 26%),
+    radial-gradient(circle at 84% 20%, rgba(0, 255, 140, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(12, 16, 20, 0.58), rgba(8, 11, 13, 0.64));
 }
 
-.z-contact__intro {
+.z-contact__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.z-contact__header--centered {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+/* ── Email CTA Panel ── */
+.z-contact__cta-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) 280px;
+  gap: 32px;
+  align-items: stretch;
+  padding: 0;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(16, 21, 25, 0.82), rgba(12, 16, 20, 0.84));
+  position: relative;
+  overflow: hidden;
+  max-width: 920px;
+  width: 100%;
+}
+
+.z-contact__cta-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+}
+
+.z-contact__cta-main {
+  padding: 64px 56px;
+  text-align: left;
+}
+
+.z-contact__cta-label {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 20px;
+}
+
+.z-contact__cta-email {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 26px;
+  line-height: 1.7;
+}
+
+.z-contact__cta-desc {
   font-size: 0.95rem;
   font-weight: 300;
   color: var(--text2);
-  line-height: 1.85;
-  margin-bottom: 32px;
-  max-width: 400px;
+  line-height: 1.8;
+  margin-bottom: 40px;
+  max-width: 480px;
 }
 
-/* ── Links ── */
-.z-contact__links {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.z-contact__link {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 18px 22px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.z-contact__link:hover {
-  border-color: var(--green);
-  background: var(--green-lo);
-}
-
-.z-contact__link.cyan:hover {
-  border-color: var(--cyan);
-  background: var(--cyan-lo);
-}
-
-.z-contact__icon {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--green);
-  flex-shrink: 0;
-  width: 28px;
-}
-
-.z-contact__link.cyan .z-contact__icon {
-  color: var(--cyan);
-}
-
-.z-contact__link-label {
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 3px;
-}
-
-.z-contact__link-value {
-  font-size: 0.88rem;
-  color: var(--text);
-}
-
-/* ── Form ── */
 .z-contact__form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  display: grid;
+  gap: 18px;
 }
 
-.z-contact__form-row {
+.z-contact__form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
 }
 
-.z-contact__form-group {
+.z-contact__field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
-.z-contact__label {
+.z-contact__field--full {
+  grid-column: 1 / -1;
+}
+
+.z-contact__field-label {
   font-family: var(--font-mono);
-  font-size: 0.57rem;
-  letter-spacing: 0.15em;
+  font-size: 0.54rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.z-contact__field input,
+.z-contact__field textarea {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  padding: 14px 15px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.z-contact__field textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.z-contact__field input:focus,
+.z-contact__field textarea:focus {
+  border-color: rgba(0, 255, 140, 0.28);
+  background: rgba(0, 255, 140, 0.03);
+  box-shadow: 0 0 0 3px rgba(0, 255, 140, 0.06);
+}
+
+.z-contact__meta {
+  padding: 64px 32px;
+  border-left: 1px solid var(--border);
+  background: rgba(8, 11, 13, 0.28);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.z-contact__meta-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.z-contact__meta-label {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--text3);
 }
 
-.z-contact__input,
-.z-contact__textarea {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  padding: 13px 16px;
+.z-contact__meta-value {
   color: var(--text);
-  font-size: 0.9rem;
-  font-weight: 300;
-  outline: none;
-  transition: border-color 0.2s;
-  width: 100%;
+  font-size: 0.92rem;
+  line-height: 1.6;
 }
 
-.z-contact__input:focus,
-.z-contact__textarea:focus {
-  border-color: var(--green);
+.z-contact__links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.z-contact__textarea {
-  resize: vertical;
-  min-height: 110px;
+.z-contact__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  text-decoration: none;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
 }
 
-.z-contact__submit {
-  width: 100%;
-  padding: 15px;
+.z-contact__link:hover {
+  color: var(--green);
+}
+
+/* ── CTA Button ── */
+.z-contact__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 36px;
   background: transparent;
   border: 1px solid var(--green);
   color: var(--green);
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  transition: all 0.2s;
-  margin-top: 6px;
+  text-decoration: none;
+  width: fit-content;
+  transition: all 0.22s;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 }
 
-.z-contact__submit:hover {
+.z-contact__cta-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   background: var(--green);
-  color: #030a05;
+  transform: translateX(-101%);
+  transition: transform 0.22s ease;
+  z-index: 0;
+}
+
+.z-contact__cta-btn:hover::before {
+  transform: translateX(0);
+}
+
+.z-contact__cta-btn span,
+.z-contact__cta-btn svg {
+  position: relative;
+  z-index: 1;
+  transition: color 0.22s;
+}
+
+.z-contact__cta-btn:hover {
+  color: var(--bg);
   box-shadow: var(--glow-g);
 }
 
-/* ── Error state ── */
-.z-contact__error {
+.z-contact__cta-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.z-contact__status {
+  min-height: 20px;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: #ff4d6a;
-  border: 1px solid rgba(255, 77, 106, 0.2);
-  padding: 10px 14px;
-  background: rgba(255, 77, 106, 0.04);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--text3);
 }
 
-.z-contact__submit.sending {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-/* ── Success state ── */
-.z-contact__success {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  height: 100%;
-  min-height: 240px;
-  border: 1px solid rgba(0, 255, 140, 0.2);
-  padding: 48px;
-  background: rgba(0, 255, 140, 0.03);
-  text-align: center;
-}
-
-.z-contact__success-badge {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+.z-contact__status.success {
   color: var(--green);
 }
 
-.z-contact__success p {
-  font-size: 0.9rem;
-  color: var(--text2);
-  line-height: 1.7;
+.z-contact__status.error {
+  color: #ff8a9b;
+}
+
+.z-contact__cta-hint {
+  margin-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--text3);
 }
 
 /* ── Responsive ── */
-@media (max-width: 1100px) {
-  .z-contact__grid {
+@media (max-width: 768px) {
+  .z-contact__form-grid {
     grid-template-columns: 1fr;
-    gap: 48px;
+  }
+
+  .z-contact__cta-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .z-contact__cta-main,
+  .z-contact__meta {
+    padding: 40px 28px;
+  }
+
+  .z-contact__meta {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .z-contact__cta-email {
+    font-size: 1.1rem;
   }
 }
 
-@media (max-width: 480px) {
-  .z-contact__form-row {
-    grid-template-columns: 1fr;
+@media (max-width: 640px) {
+  .z-contact__cta-main,
+  .z-contact__meta {
+    padding: 32px 20px;
+  }
+
+  .z-contact__cta-btn {
+    width: 100%;
+  }
+
+  .z-contact__cta-email {
+    font-size: 0.94rem;
+    line-height: 1.8;
   }
 }

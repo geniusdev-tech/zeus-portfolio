@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"strings"
 	"sync"
 	"time"
 )
@@ -20,15 +21,19 @@ func Chain(h http.Handler, mw ...func(http.Handler) http.Handler) http.Handler {
 // ── CORS ─────────────────────────────────────────────
 
 func CORS(next http.Handler) http.Handler {
-	origin := os.Getenv("ALLOWED_ORIGIN")
-	if origin == "" {
-		origin = "*" // dev default — tighten in production
-	}
+	allowedOrigins := parseAllowedOrigins(os.Getenv("ALLOWED_ORIGIN"))
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin",  origin)
+		origin := r.Header.Get("Origin")
+		allowedOrigin := matchAllowedOrigin(origin, allowedOrigins)
+		if allowedOrigin == "" {
+			allowedOrigin = "*" // dev default — tighten in production
+		}
+
+		w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Set("Vary", "Origin")
 
 		if r.Method == http.MethodOptions {
 			w.WriteHeader(http.StatusNoContent)
@@ -36,6 +41,35 @@ func CORS(next http.Handler) http.Handler {
 		}
 		next.ServeHTTP(w, r)
 	})
+}
+
+func parseAllowedOrigins(raw string) []string {
+	if strings.TrimSpace(raw) == "" {
+		return nil
+	}
+
+	parts := strings.Split(raw, ",")
+	origins := make([]string, 0, len(parts))
+	for _, part := range parts {
+		origin := strings.TrimSpace(part)
+		if origin != "" {
+			origins = append(origins, origin)
+		}
+	}
+	return origins
+}
+
+func matchAllowedOrigin(origin string, allowed []string) string {
+	if len(allowed) == 0 {
+		return ""
+	}
+
+	for _, candidate := range allowed {
+		if candidate == origin {
+			return candidate
+		}
+	}
+	return ""
 }
 
 // ── Logger ───────────────────────────────────────────

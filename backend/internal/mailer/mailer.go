@@ -86,6 +86,7 @@ type resendPayload struct {
 func send(req ContactRequest) error {
 	apiKey := os.Getenv("RESEND_API_KEY")
 	toEmail := os.Getenv("CONTACT_TO_EMAIL")
+	fromEmail := strings.TrimSpace(os.Getenv("EMAIL_FROM"))
 
 	// Dev mode — just log
 	if apiKey == "" || toEmail == "" {
@@ -94,8 +95,12 @@ func send(req ContactRequest) error {
 		return nil
 	}
 
+	if fromEmail == "" {
+		fromEmail = "Portfolio <onboarding@resend.dev>"
+	}
+
 	payload := resendPayload{
-		From:    "Portfolio <onboarding@resend.dev>",
+		From:    fromEmail,
 		To:      []string{toEmail},
 		ReplyTo: req.Email,
 		Subject: subject(req),
@@ -142,30 +147,75 @@ func buildHTML(req ContactRequest) string {
 
 	company := ""
 	if req.Company != "" {
-		company = fmt.Sprintf(`<tr><td style="color:#8a95a3;padding:6px 0;font-size:0.85rem;">Company</td><td style="padding:6px 0;font-size:0.85rem;">%s</td></tr>`, companyValue)
+		company = fmt.Sprintf(`<tr><td style="color:#9ca3af;padding:8px 0;font-size:0.85rem;width:120px;">Company</td><td style="padding:8px 0;font-size:0.85rem;color:#e5e7eb;">%s</td></tr>`, companyValue)
 	}
-	return fmt.Sprintf(`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background:#080b0d;font-family:monospace;">
-<div style="max-width:560px;margin:40px auto;border:1px solid rgba(0,255,140,0.2);background:#0c1014;">
-  <div style="padding:20px 28px;border-bottom:1px solid rgba(0,255,140,0.15);background:linear-gradient(90deg,rgba(0,255,140,0.08),transparent);">
-    <span style="color:#00ff8c;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;">● New Contact — zeus.dev</span>
-  </div>
-  <div style="padding:28px;">
-    <table style="width:100%%;border-collapse:collapse;color:#dde4ec;">
-      <tr><td style="color:#8a95a3;padding:6px 0;font-size:0.85rem;width:100px;">Name</td><td style="padding:6px 0;font-size:0.85rem;">%s</td></tr>
-      %s
-      <tr><td style="color:#8a95a3;padding:6px 0;font-size:0.85rem;">Email</td><td style="padding:6px 0;font-size:0.85rem;"><a href="mailto:%s" style="color:#00e5ff;">%s</a></td></tr>
-      <tr><td style="color:#8a95a3;padding:6px 0;font-size:0.85rem;">Subject</td><td style="padding:6px 0;font-size:0.85rem;">%s</td></tr>
-    </table>
-    <div style="margin-top:24px;padding:18px;background:#080b0d;border-left:2px solid #00ff8c;">
-      <p style="color:#8a95a3;font-size:0.85rem;line-height:1.7;margin:0;">%s</p>
-    </div>
-    <p style="margin-top:20px;font-size:0.7rem;color:#4e5b68;">Sent via zeus.dev portfolio · Reply directly to this email</p>
-  </div>
-</div>
-</body></html>`,
+	header := `<tr>
+            <td style="padding:22px 30px; background:linear-gradient(90deg,#111827,#0f172a); border-bottom:1px solid rgba(255,255,255,0.06);">
+              <div style="font-family:monospace; font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:#34d399;">
+                New Contact - zeus.dev
+              </div>
+            </td>
+          </tr>`
+
+	animation := `<tr>
+            <td style="padding:0 30px 0 30px;">
+              <div style="height:4px; background:linear-gradient(90deg,#22c55e 0%%,#06b6d4 50%%,#22c55e 100%%); box-shadow:0 0 18px rgba(34,197,94,0.25);"></div>
+            </td>
+          </tr>`
+
+	content := fmt.Sprintf(`
+              <div style="font-family:Arial,sans-serif; color:#e5e7eb;">
+                <h2 style="margin:0 0 18px 0; font-size:1.25rem; font-weight:600; color:#f9fafb;">Project Inquiry Received</h2>
+
+                <table width="100%%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                  <tr><td style="color:#9ca3af;padding:8px 0;font-size:0.85rem;width:120px;">Name</td><td style="padding:8px 0;font-size:0.85rem;color:#e5e7eb;">%s</td></tr>
+                  %s
+                  <tr><td style="color:#9ca3af;padding:8px 0;font-size:0.85rem;">Email</td><td style="padding:8px 0;font-size:0.85rem;"><a href="mailto:%s" style="color:#22d3ee; text-decoration:none;">%s</a></td></tr>
+                  <tr><td style="color:#9ca3af;padding:8px 0;font-size:0.85rem;">Subject</td><td style="padding:8px 0;font-size:0.85rem;color:#e5e7eb;">%s</td></tr>
+                </table>
+
+                <div style="margin-top:24px; padding:18px 20px; background:#0b1220; border:1px solid rgba(255,255,255,0.06); border-left:3px solid #34d399; border-radius:10px;">
+                  <div style="font-family:monospace; font-size:0.64rem; letter-spacing:0.16em; text-transform:uppercase; color:#9ca3af; margin-bottom:10px;">
+                    Message
+                  </div>
+                  <p style="margin:0; color:#d1d5db; font-size:0.92rem; line-height:1.8;">%s</p>
+                </div>
+
+                <p style="margin:18px 0 0 0; font-size:0.72rem; color:#6b7280;">
+                  Sent via zeus.dev portfolio. Reply directly to this email to answer the sender.
+                </p>
+              </div>`,
 		name, company, email, email, subject, message)
+
+	return fmt.Sprintf(`<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body style="background:#0b0f1a; margin:0; padding:24px 0;">
+    <table width="100%%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+      <tr>
+        <td align="center">
+          <table width="600" cellpadding="0" cellspacing="0" style="width:100%%; max-width:600px; background:#111827; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.06);">
+            %s
+            %s
+            <tr>
+              <td style="padding:30px;">
+                %s
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:center; padding:20px; color:#9ca3af; font-family:Arial,sans-serif; font-size:0.78rem;">
+                &copy; Zeus Protocol
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`, header, animation, content)
 }
 
 func writeErr(w http.ResponseWriter, code int, msg string) {

@@ -2,11 +2,12 @@
     "name": "zeus-portfolio-root",
     "private": true,
     "scripts": {
-        "dev": "npm run dev --prefix frontend",
-        "build": "npm run build --prefix frontend",
-        "preview": "npm run preview --prefix frontend",
-        "deploy": "npm run build && vercel --prod",
-        "deploy:preview": "npm run build && vercel",
-        "install:all": "npm install && npm install --prefix frontend"
-    }
+    "dev": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "preview": "npm run preview --prefix frontend",
+    "deploy": "npm run build && vercel --prod",
+    "deploy:firebase": "npm run deploy:firebase --prefix frontend",
+    "deploy:preview": "npm run build && vercel",
+    "install:all": "npm install && npm install --prefix frontend"
+  }
 }

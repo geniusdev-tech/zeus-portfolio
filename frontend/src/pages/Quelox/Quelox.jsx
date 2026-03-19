@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import TuiSimulator from '../../components/TuiSimulator/TuiSimulator';
 import CheckoutModal from '../../components/CheckoutModal/CheckoutModal';
+import Footer from '../../components/Footer';
 import './Quelox.css';
 
 const pillars = [
@@ -227,6 +228,8 @@ export default function Quelox() {
         productName="QELO-X LICENSE"
         price="199.90"
       />
+
+      <Footer />
     </div>
   );
 }

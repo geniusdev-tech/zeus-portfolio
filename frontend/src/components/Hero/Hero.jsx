@@ -47,8 +47,8 @@ export default function Hero() {
           </p>
 
           <div className="z-hero__cta">
-            <a href="#services" className="z-btn z-btn-g">View Services →</a>
-            <a href="#quote" className="z-btn z-btn-o">Request Quote</a>
+            <a href="#projects" className="z-btn z-btn-g">View Projects →</a>
+            <a href="#contact" className="z-btn z-btn-o">Start a Project</a>
           </div>
 
           <div className="z-hero__metrics">

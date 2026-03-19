@@ -52,7 +52,7 @@ RESEND_API_KEY        = re_your_key_here
 CONTACT_TO_EMAIL      = zeus@yourdomain.com
 GITHUB_USERNAME       = your-github-username
 GITHUB_TOKEN          = (optional, for higher rate limit)
-ALLOWED_ORIGIN        = https://zeus.dev
+ALLOWED_ORIGIN        = https://zeus.dev,https://www.zeus.dev,https://tech-bot-d4cb6.web.app
 PORTFOLIO_URL         = https://zeus.dev
 SELF_URL              = https://your-app.railway.app
 ```
@@ -121,7 +121,7 @@ With a token: **5,000 requests/hour**.
 | `CONTACT_TO_EMAIL` | Yes | Your email address |
 | `GITHUB_USERNAME` | Yes | Your GitHub username |
 | `GITHUB_TOKEN` | No | GitHub PAT for higher rate limit |
-| `ALLOWED_ORIGIN` | Yes | Your frontend URL (for CORS) |
+| `ALLOWED_ORIGIN` | Yes | One or more frontend URLs for CORS, separated by commas |
 | `PORTFOLIO_URL` | No | Health check URL for portfolio |
 | `QELOX_HEALTH_URL` | No | Health check URL for QELO-X |
 | `SELF_URL` | No | Backend's own URL (for self health check) |

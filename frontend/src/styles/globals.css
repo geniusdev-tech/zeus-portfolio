@@ -54,6 +54,17 @@ body {
   overflow-x: hidden;
 }
 
+#root,
+.zeus-app {
+  position: relative;
+  min-height: 100vh;
+}
+
+.zeus-app > *:not(.neural-bg) {
+  position: relative;
+  z-index: 1;
+}
+
 input,
 textarea,
 select,
