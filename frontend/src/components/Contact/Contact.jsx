@@ -72,6 +72,13 @@ export default function Contact() {
         <div className="z-contact__container z-reveal">
           <div className="z-contact__cta-panel">
             <div className="z-contact__cta-main">
+              <div className="z-contact__signalbar">
+                <div className="z-contact__signalbar-brand z-brand">
+                  <span className="z-brand__text">Zeus</span>
+                  <span className="z-brand__cursor">_</span>
+                </div>
+                <div className="z-contact__signalbar-status">Neural contact relay active</div>
+              </div>
               <div className="z-contact__cta-label">Project Inquiry Form</div>
               <div className="z-contact__cta-email">Send scope, blockers or the environment you need help with.</div>
               <p className="z-contact__cta-desc">

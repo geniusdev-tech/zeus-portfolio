@@ -41,7 +41,10 @@ export default function Nav() {
       {/* Brand */}
       <Link to="/" className="z-nav__brand" onClick={close}>
         <span className="z-nav__brand-dot" />
-        <span className="z-nav__brand-name">Zeus</span>
+        <span className="z-nav__brand-name z-brand">
+          <span className="z-brand__text">Zeus</span>
+          <span className="z-brand__cursor">_</span>
+        </span>
       </Link>
 
       {/* Desktop links — centered */}
@@ -80,7 +83,10 @@ export default function Nav() {
       {/* Mobile drawer */}
       <div className={`z-nav__drawer${menuOpen ? ' active' : ''}`}>
         <div className="z-nav__drawer-header">
-          <span className="z-nav__brand-name">Zeus</span>
+          <span className="z-nav__brand-name z-brand">
+            <span className="z-brand__text">Zeus</span>
+            <span className="z-brand__cursor">_</span>
+          </span>
         </div>
         <ul className="z-nav__drawer-links">
           {navLinks.map((sec, i) => (

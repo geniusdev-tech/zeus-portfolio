@@ -64,7 +64,7 @@ var projects = []project{
 	},
 	{
 		Name:        "portfolio",
-		DisplayName: "zeus.dev",
+		DisplayName: "Zeus_",
 		HealthURL:   os.Getenv("PORTFOLIO_URL"),
 	},
 	{

@@ -135,7 +135,7 @@ func subject(req ContactRequest) string {
 	if strings.TrimSpace(req.Company) != "" {
 		company = " @ " + req.Company
 	}
-	return fmt.Sprintf("[zeus.dev] %s — %s%s", s, req.Name, company)
+	return fmt.Sprintf("[Zeus_] %s — %s%s", s, req.Name, company)
 }
 
 func buildHTML(req ContactRequest) string {
@@ -152,7 +152,7 @@ func buildHTML(req ContactRequest) string {
 	header := `<tr>
             <td style="padding:22px 30px; background:linear-gradient(90deg,#111827,#0f172a); border-bottom:1px solid rgba(255,255,255,0.06);">
               <div style="font-family:monospace; font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:#34d399;">
-                New Contact - zeus.dev
+                New Contact - Zeus_
               </div>
             </td>
           </tr>`
@@ -182,7 +182,7 @@ func buildHTML(req ContactRequest) string {
                 </div>
 
                 <p style="margin:18px 0 0 0; font-size:0.72rem; color:#6b7280;">
-                  Sent via zeus.dev portfolio. Reply directly to this email to answer the sender.
+                  Sent via Zeus_ portfolio. Reply directly to this email to answer the sender.
                 </p>
               </div>`,
 		name, company, email, email, subject, message)

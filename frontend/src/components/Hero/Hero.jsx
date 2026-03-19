@@ -32,7 +32,10 @@ export default function Hero() {
         <div className="z-hero__left">
           <div className="z-hero__tag">IT Infrastructure Specialist — DevSecOps, Networks and Blockchain Operations</div>
 
-          <div className="z-hero__name">Zeus</div>
+          <div className="z-hero__name z-brand">
+            <span className="z-brand__text">Zeus</span>
+            <span className="z-brand__cursor">_</span>
+          </div>
 
           <h1 className="z-hero__h1">
             Systems built for
