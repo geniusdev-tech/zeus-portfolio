@@ -12,6 +12,8 @@ services:
         sync: false
       - key: CONTACT_TO_EMAIL
         sync: false
+      - key: QELOX_DOWNLOAD_URL
+        sync: false
       - key: GITHUB_USERNAME
         sync: false
       - key: GITHUB_TOKEN

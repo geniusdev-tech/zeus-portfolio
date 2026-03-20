@@ -1,10 +1,14 @@
 import { useState } from 'react';
+import BrandLogo from '../BrandLogo/BrandLogo';
 import './BudgetQuote.css';
 
 const cleanUrl = (url) => {
-  if (!url) return 'http://localhost:8080';
+  const fallback = import.meta.env.DEV
+    ? 'http://localhost:8080'
+    : 'https://zeus-backend-production-ee33.up.railway.app';
+  if (!url) return fallback;
   const match = url.match(/https?:\/\/[^/\s]+/);
-  return match ? match[0] : url;
+  return match ? match[0] : fallback;
 };
 
 const API_URL = cleanUrl(import.meta.env.VITE_API_URL);
@@ -13,7 +17,7 @@ const initialForm = {
   name: '',
   company: '',
   email: '',
-  service: 'Cloud & DevOps',
+  service: 'Cloud Automation',
   budget: 'To define',
   timeline: '',
   message: '',
@@ -31,7 +35,7 @@ export default function BudgetQuote() {
   };
 
   const messagePreview = [
-    'Project briefing',
+    'Project brief',
     '',
     `Service requested: ${form.service}`,
     `Budget range: ${form.budget}`,
@@ -46,7 +50,7 @@ export default function BudgetQuote() {
     setError('');
 
     if (!canSubmit) {
-      setError('Fill in name, email and project summary before sending.');
+      setError('Fill in name, email and brief summary before sending.');
       return;
     }
 
@@ -60,21 +64,21 @@ export default function BudgetQuote() {
           name: form.name,
           company: form.company,
           email: form.email,
-          subject: `Budget Request · ${form.service}`,
+          subject: `Quote Request · ${form.service}`,
           message: messagePreview,
         }),
       });
 
       const data = await response.json();
       if (!response.ok || !data.success) {
-        throw new Error(data.message || 'Failed to send your request.');
+        throw new Error(data.message || 'Failed to send your brief.');
       }
 
       setStatus('sent');
       setForm(initialForm);
     } catch (err) {
       setStatus('error');
-      setError(err.message || 'Failed to send your request.');
+      setError(err.message || 'Failed to send your brief.');
     }
   };
 
@@ -82,58 +86,62 @@ export default function BudgetQuote() {
     <section className="z-full z-quote" id="quote">
       <div className="z-section">
         <div className="z-sec-header z-reveal">
-          <div className="z-sec-tag">08 — Budget Request</div>
+          <div className="z-sec-tag">08 — Quote Intake</div>
           <div className="z-sec-title">
-            Start the conversation<br />
-            <em>without leaving the page.</em>
+            Qualify the request<br />
+            <em>without friction.</em>
           </div>
         </div>
 
         <div className="z-quote__grid z-reveal">
           <div className="z-quote__intro">
             <p>
-              Share the initial brief here and the request is delivered directly to your
-              inbox workflow. This section is intended for infrastructure projects,
-              cloud work, technical support, blockchain operations and backend development.
+              Share the brief here and route the request straight into the intake flow.
+              This section is built for systems work, automation, cloud delivery,
+              node operations and backend development.
             </p>
 
             <div className="z-quote__highlights">
               <div className="z-quote__highlight">
                 <span className="z-quote__highlight-label">Flow</span>
-                <span className="z-quote__highlight-value">The request is sent directly from the site, with no WhatsApp redirect.</span>
+                <span className="z-quote__highlight-value">The request is sent directly from the site into the ZEUS intake channel.</span>
               </div>
               <div className="z-quote__highlight">
                 <span className="z-quote__highlight-label">Best fit</span>
-                <span className="z-quote__highlight-value">Infrastructure, DevSecOps, blockchain and backend work.</span>
+                <span className="z-quote__highlight-value">Systems, automation, cloud, blockchain and backend work.</span>
               </div>
               <div className="z-quote__highlight">
                 <span className="z-quote__highlight-label">Expected input</span>
-                <span className="z-quote__highlight-value">Scope, budget range, timeline and project context.</span>
+                <span className="z-quote__highlight-value">Scope, budget range, timeline and operational context.</span>
               </div>
             </div>
 
             <div className="z-quote__preview">
-              <div className="z-quote__preview-label">Message preview</div>
+              <div className="z-quote__preview-label">Brief preview</div>
               <pre className="z-quote__preview-body">{messagePreview}</pre>
             </div>
           </div>
 
           {status === 'sent' ? (
             <div className="z-quote__success">
-              <div className="z-quote__success-badge">Request delivered</div>
-              <p>Your briefing was sent successfully. The conversation can continue by email without taking the visitor out of the portfolio.</p>
+              <div className="z-quote__success-badge">Brief delivered</div>
+              <p>Your request was sent successfully. The conversation can continue by email without breaking the flow.</p>
               <button className="z-quote__submit z-quote__submit--ghost" type="button" onClick={() => setStatus('idle')}>
-                Send another request
+                Send another brief
               </button>
             </div>
           ) : (
             <form className="z-quote__form" onSubmit={handleSubmit}>
               <div className="z-quote__form-header">
                 <div>
-                  <div className="z-quote__form-kicker">Direct intake</div>
-                  <h3>Project intake form</h3>
+                  <div className="z-quote__form-brand">
+                    <BrandLogo variant="mark" size="sm" className="z-quote__brand-logo" />
+                    <span className="z-quote__form-brand-label">Zeus intake</span>
+                  </div>
+                  <div className="z-quote__form-kicker">Lead intake</div>
+                  <h3>Intake brief form</h3>
                 </div>
-                <div className="z-quote__form-note">Response routed via API</div>
+                <div className="z-quote__form-note">Routed through ZEUS intake channel</div>
               </div>
 
               <div className="z-quote__row">
@@ -155,12 +163,12 @@ export default function BudgetQuote() {
                 <div className="z-quote__group">
                   <label className="z-quote__label">Service</label>
                   <select className="z-quote__input" value={form.service} onChange={setField('service')} disabled={status === 'sending'}>
-                    <option>Technical Support</option>
-                    <option>System Administration</option>
-                    <option>Networking & Infrastructure</option>
-                    <option>Cloud & DevOps</option>
-                    <option>Blockchain Infrastructure</option>
-                    <option>Software Development</option>
+                    <option>Systems Support</option>
+                    <option>Platform Operations</option>
+                    <option>Network Engineering</option>
+                    <option>Cloud Automation</option>
+                    <option>Node Infrastructure</option>
+                    <option>Custom Systems</option>
                   </select>
                 </div>
               </div>
@@ -202,7 +210,7 @@ export default function BudgetQuote() {
               {error && <div className="z-quote__error">{error}</div>}
 
               <button className={`z-quote__submit${status === 'sending' ? ' is-loading' : ''}`} type="submit" disabled={status === 'sending'}>
-                {status === 'sending' ? 'Sending request...' : 'Send Project Request'}
+                {status === 'sending' ? 'Sending brief...' : 'Request Quote'}
               </button>
             </form>
           )}

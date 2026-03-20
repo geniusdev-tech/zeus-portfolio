@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { projectsData } from '../../data';
+import BrandLogo from '../BrandLogo/BrandLogo';
 import './Projects.css';
 
 export default function Projects() {
@@ -10,15 +11,15 @@ export default function Projects() {
     <section className="z-full z-proj" id="projects">
       <div className="z-section">
         <div className="z-sec-header z-reveal">
-          <div className="z-sec-tag">02 — Projects</div>
-          <div className="z-sec-title">
-            Main Project
+          <div className="z-sec-tag">02 — Active Build</div>
+          <h2 className="z-sec-title">
+            Current Build
             <br />
             <em>in Active Development.</em>
-          </div>
+          </h2>
           <p className="z-proj__intro">
-            A focused view of the main build, with its core stack and the skill weight
-            behind each area of the product.
+            A focused view of the live build, with the stack and delivery weight behind each
+            layer of the product.
           </p>
         </div>
 
@@ -29,36 +30,53 @@ export default function Projects() {
           >
             {featuredProject.comingSoon && (
               <div className="z-proj__coming-soon">
-                <span className="z-proj__cs-label">EM BREVE</span>
+                <span className="z-proj__cs-label">COMING SOON</span>
               </div>
             )}
 
+            <div className="z-proj__brand-row">
+              <BrandLogo variant="mark" size="sm" className="z-proj__brand-logo" />
+              <div className="z-proj__brand-copy">
+                <span className="z-proj__brand-label">Zeus Protocol</span>
+                <span className="z-proj__brand-note">Live case and delivery surface</span>
+              </div>
+            </div>
+
             <div className="z-proj__badge">
               {isMaintenance && featuredProject.link === '/Quelox' ? (
-                <span style={{ color: '#ffcc00' }}>Maintenance mode</span>
+                <span style={{ color: '#ffcc00' }}>MAINTENANCE ACTIVE</span>
               ) : (
                 featuredProject.badge
               )}
             </div>
-            <div className="z-proj__title">{featuredProject.title}</div>
+            <h3 className="z-proj__title">{featuredProject.title}</h3>
             <div className="z-proj__desc">{featuredProject.desc}</div>
 
             {featuredProject.skills && featuredProject.skills.length > 0 && (
-              <div className="z-proj__skill-matrix">
-                {featuredProject.skills.map((skill) => (
-                  <div key={skill.name} className="z-proj__skill-row">
-                    <div className="z-proj__skill-head">
-                      <div>
-                        <div className="z-proj__skill-name">{skill.name}</div>
-                        <div className="z-proj__skill-area">{skill.area}</div>
+              <div className="z-proj__skill-matrix-container">
+                <div className="z-proj__skill-matrix-content">
+                  {featuredProject.skills.map((skill) => (
+                    <div key={skill.name} className="z-proj__skill-row">
+                      <div className="z-proj__skill-head">
+                        <div>
+                          <div className="z-proj__skill-name">{skill.name}</div>
+                          <div className="z-proj__skill-area">{skill.area}</div>
+                        </div>
+                        <span className="z-proj__skill-pct">{skill.pct}%</span>
                       </div>
-                      <span className="z-proj__skill-pct">{skill.pct}%</span>
+                      <div
+                        className="z-proj__skill-bar"
+                        role="progressbar"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        aria-valuenow={skill.pct}
+                        aria-label={`${skill.name} proficiency`}
+                      >
+                        <span className="z-proj__skill-bar-fill" style={{ width: `${skill.pct}%` }} />
+                      </div>
                     </div>
-                    <div className="z-proj__skill-bar">
-                      <span className="z-proj__skill-bar-fill" style={{ width: `${skill.pct}%` }} />
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
 
@@ -78,14 +96,14 @@ export default function Projects() {
                   rel="noopener noreferrer"
                   className="z-proj__btn"
                 >
-                  <span>Open Project</span>
+                  <span>Open Case</span>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2.5 7H11.5M7.5 3L11.5 7L7.5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </a>
               ) : (
                 <Link to={featuredProject.link} className="z-proj__btn">
-                  <span>Open Project</span>
+                  <span>Open Case</span>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2.5 7H11.5M7.5 3L11.5 7L7.5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>

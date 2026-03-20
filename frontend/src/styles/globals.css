@@ -14,7 +14,7 @@
   --border-c: rgba(0, 229, 255, 0.10);
   --text: #dde4ec;
   --text2: #8a95a3;
-  --text3: #4e5b68;
+  --text3: #7c8c9c;
   --glow-g: 0 0 24px rgba(0, 255, 140, 0.35), 0 0 80px rgba(0, 255, 140, 0.1);
   --glow-c: 0 0 24px rgba(0, 229, 255, 0.35), 0 0 80px rgba(0, 229, 255, 0.1);
   --font-mono: 'JetBrains Mono', monospace;
@@ -32,6 +32,7 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: dark;
 }
 
 ::-webkit-scrollbar {
@@ -52,6 +53,7 @@ body {
   color: var(--text);
   font-family: var(--font-body);
   overflow-x: hidden;
+  line-height: 1.5;
 }
 
 #root,
@@ -70,6 +72,19 @@ textarea,
 select,
 button {
   font-family: var(--font-body);
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(0, 229, 255, 0.65);
+  outline-offset: 3px;
 }
 
 @keyframes zblink {
@@ -105,5 +120,64 @@ button {
 
   50% {
     opacity: 0.2;
+  }
+}
+
+/* ── Neon Scrollbar Utility ────────────────────────── */
+.z-neon-scroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--green) transparent;
+}
+
+.z-neon-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.z-neon-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.z-neon-scroll::-webkit-scrollbar-thumb {
+  background: var(--green);
+  border-radius: 2px;
+  box-shadow: 0 0 10px var(--green);
+}
+
+/* ── Vertical Marquee ──────────────────────────────── */
+@keyframes z-marquee-vertical {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.z-marquee-vertical-container {
+  height: 400px;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+}
+
+.z-marquee-vertical-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: z-marquee-vertical 20s linear infinite;
+}
+
+.z-marquee-vertical-content:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

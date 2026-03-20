@@ -1,0 +1,8 @@
+[build]
+buildCommand = "npm install"
+
+[deploy]
+startCommand = "npm run start"
+healthcheckPath = "/health"
+healthcheckTimeout = 60
+restartPolicyType = "ON_FAILURE"

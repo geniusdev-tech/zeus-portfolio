@@ -1,48 +1,48 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Blocks, Cloud, Code, Network, Server, Wrench } from 'lucide-react';
 import './ITServices.css';
 
 const services = [
   {
-    title: 'Technical Support',
+    title: 'Systems Support',
     description:
-      'Troubleshooting, system setup, malware removal, backups and IT support.',
+      'Troubleshooting, maintenance, backups and recovery for production environments.',
     icon: Wrench,
     accent: 'green',
   },
   {
-    title: 'System Administration',
+    title: 'Platform Operations',
     description:
-      'Linux and Windows server management, automation and system monitoring.',
+      'Linux and Windows server management, automation and monitoring for steady delivery.',
     icon: Server,
     accent: 'cyan',
   },
   {
-    title: 'Networking & Infrastructure',
+    title: 'Network Engineering',
     description:
-      'LAN configuration, firewall management, VPN setup and infrastructure diagnostics.',
+      'LAN, firewall, VPN and infrastructure diagnostics tuned for control.',
     icon: Network,
     accent: 'green',
   },
   {
-    title: 'Cloud & DevOps',
+    title: 'Cloud Automation',
     description:
-      'Cloud deployments, CI/CD pipelines, containerization and scalable systems.',
+      'Cloud deployments, CI/CD pipelines, containerization and scalable delivery.',
     icon: Cloud,
     accent: 'cyan',
   },
   {
-    title: 'Blockchain Infrastructure',
+    title: 'Node Infrastructure',
     description:
-      'Blockchain node deployment, monitoring, automation and infrastructure tools.',
+      'Blockchain node deployment, telemetry and recovery workflows.',
     icon: Blocks,
     accent: 'green',
   },
   {
-    title: 'Software Development',
+    title: 'Custom Systems',
     description:
-      'Backend systems, APIs, desktop tools and automation platforms.',
+      'Backend systems, APIs, desktop tools and automation built around your workflow.',
     icon: Code,
     accent: 'cyan',
   },
@@ -51,8 +51,22 @@ const services = [
 function ServiceCard({ service, index }) {
   const [tiltStyle, setTiltStyle] = useState({});
   const Icon = service.icon;
+  const [canTilt, setCanTilt] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const media = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const sync = () => setCanTilt(media.matches);
+    sync();
+
+    media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
 
   const handleMove = (event) => {
+    if (!canTilt) return;
+
     const rect = event.currentTarget.getBoundingClientRect();
     const px = (event.clientX - rect.left) / rect.width;
     const py = (event.clientY - rect.top) / rect.height;
@@ -65,6 +79,8 @@ function ServiceCard({ service, index }) {
   };
 
   const resetTilt = () => {
+    if (!canTilt) return;
+
     setTiltStyle({
       transform: 'perspective(1400px) rotateX(0deg) rotateY(0deg) translateY(0px)',
     });
@@ -143,19 +159,20 @@ export default function ITServices() {
         >
           <div className="z-sec-tag cyan">04 — Service Scope</div>
           <h2 className="z-sec-title cyan">
-            IT Infrastructure &amp;<br />
-            <em>Technology Services</em>
+            Systems &amp; Automation<br />
+            <em>Service Stack</em>
           </h2>
           <p className="z-itservices__subtitle">
-            Focused support across systems, networks, cloud delivery and tooling, without
-            padding the page with generic agency language.
+            Focused delivery across systems, automation, cloud and node operations.
           </p>
         </motion.div>
 
-        <div className="z-itservices__cards relative">
-          {services.map((service, index) => (
-            <ServiceCard key={service.title} service={service} index={index} />
-          ))}
+        <div className="z-itservices__cards-container">
+          <div className="z-itservices__cards-content">
+            {services.map((service, index) => (
+              <ServiceCard key={service.title} service={service} index={index} />
+            ))}
+          </div>
         </div>
       </div>
     </section>

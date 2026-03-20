@@ -9,7 +9,7 @@ export default function Philosophy() {
         <div className="z-sec-tag">06 — Engineering Principles</div>
         <div className="z-sec-title">
           How I Make<br />
-          <em>Technical Decisions.</em>
+          <em>Production Decisions.</em>
         </div>
       </div>
 
@@ -31,8 +31,7 @@ export default function Philosophy() {
         <div className="z-philo__quote">
           <div className="z-philo__quote-deco">"</div>
           <p className="z-philo__quote-text">
-            Infrastructure defines how software behaves under real conditions.
-            Treat it as part of the product, not as a deployment afterthought.
+            If the system is not readable under pressure, it is not ready.
           </p>
           <div className="z-philo__quote-attr">— Zeus</div>
         </div>

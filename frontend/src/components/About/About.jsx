@@ -8,27 +8,27 @@ export default function About() {
   return (
     <div className="z-section" id="about">
       <div className="z-sec-header z-reveal">
-        <div className="z-sec-tag">01 — Operational Profile</div>
-        <div className="z-sec-title">
-          Infrastructure,
+        <div className="z-sec-tag">01 — System Profile</div>
+        <h2 className="z-sec-title">
+          Systems,
           <br />
           <em>Engineered for Production.</em>
-        </div>
+        </h2>
       </div>
 
       <div className="z-about__grid z-reveal">
         <div className="z-about__intro">
           <p className="z-about__lede">
-            I work where infrastructure, security and software delivery meet. The focus is
-            keeping production environments stable, observable and easier to operate.
+            I work where infrastructure, automation and software delivery meet. The focus is
+            keeping production systems stable, observable and easier to operate.
           </p>
 
           <div className="z-about__points">
             <div className="z-about__point">
               <span className="z-about__point-label">Operational scope</span>
               <p>
-                Linux administration, networking, DevSecOps routines, cloud deployment and
-                backend tooling for real systems.
+                Linux administration, networking, DevSecOps routines, cloud delivery and
+                backend tooling for production systems.
               </p>
             </div>
             <div className="z-about__point">
@@ -51,19 +51,21 @@ export default function About() {
 
         <div className="z-about__panel">
           <div className="z-about__panel-kicker">What you get</div>
-          <h3 className="z-about__panel-title">Less manual work. Fewer blind spots. More control.</h3>
+          <h3 className="z-about__panel-title">Less drift. More signal. More control.</h3>
           <p className="z-about__panel-copy">
-            The work combines platform stability with lightweight internal tooling, so
-            infrastructure decisions remain practical and maintainable over time.
+            The work combines platform stability with lightweight automation, so
+            infrastructure decisions stay practical and maintainable over time.
           </p>
 
-          <div className="z-about__stats">
-            {featuredStats.map(({ label, value, cyan }) => (
-            <div key={label} className={`z-about__stat${cyan ? ' cyan' : ''}`}>
-              <span className="z-about__stat-label">{label}</span>
-              <span className="z-about__stat-value">{value}</span>
+          <div className="z-about__stats-container">
+            <div className="z-about__stats-content">
+              {featuredStats.map(({ label, value, cyan }) => (
+                <div key={label} className={`z-about__stat${cyan ? ' cyan' : ''}`}>
+                  <span className="z-about__stat-label">{label}</span>
+                  <span className="z-about__stat-value">{value}</span>
+                </div>
+              ))}
             </div>
-            ))}
           </div>
         </div>
       </div>

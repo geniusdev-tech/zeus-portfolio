@@ -2,6 +2,11 @@
     "installCommand": "npm run install:all",
     "buildCommand": "npm run build",
     "outputDirectory": "frontend/dist",
+    "functions": {
+        "api/chat.js": {
+            "maxDuration": 60
+        }
+    },
     "rewrites": [
         {
             "source": "/(.*)",

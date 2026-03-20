@@ -8,6 +8,7 @@ Handles contact form emails (Resend) and serves live status + GitHub activity.
 | Method | Path | Description |
 |--------|------|-------------|
 | `POST` | `/api/contact` | Sends contact form email via Resend |
+| `POST` | `/api/qelox/purchase-confirmation` | Sends QELO-X thank-you email with download link |
 | `GET`  | `/api/status` | Server metrics + project health checks |
 | `GET`  | `/api/github/activity` | Real GitHub public events feed |
 | `GET`  | `/api/health` | Health check (used by Railway/Render) |
@@ -119,6 +120,7 @@ With a token: **5,000 requests/hour**.
 | `PORT` | Auto | Set by Railway/Render automatically |
 | `RESEND_API_KEY` | Yes | Resend API key for sending emails |
 | `CONTACT_TO_EMAIL` | Yes | Your email address |
+| `QELOX_DOWNLOAD_URL` | Yes for purchase emails | Download URL sent after QELO-X purchase confirmation |
 | `GITHUB_USERNAME` | Yes | Your GitHub username |
 | `GITHUB_TOKEN` | No | GitHub PAT for higher rate limit |
 | `ALLOWED_ORIGIN` | Yes | One or more frontend URLs for CORS, separated by commas |

@@ -59,6 +59,12 @@ const stats = [
   { label: 'Environment', value: 'Linux / systemd / production hosts' },
 ];
 
+const highlights = [
+  'Local-first control plane',
+  'Continuous node telemetry',
+  'Recovery routines for production incidents',
+];
+
 export default function Quelox() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -83,9 +89,15 @@ export default function Quelox() {
               failures and keep control local to the host.
             </p>
 
+            <div className="qx-highlights" aria-label="QELO-X highlights">
+              {highlights.map((item) => (
+                <span className="qx-highlight" key={item}>{item}</span>
+              ))}
+            </div>
+
             <div className="qx-actions">
               <button className="qx-btn qx-btn--primary" onClick={() => setIsModalOpen(true)}>
-                Activate QELO-X
+                Request Access
               </button>
               <a className="qx-btn qx-btn--ghost" href="#architecture">
                 View Architecture
@@ -104,13 +116,13 @@ export default function Quelox() {
 
           <div className="qx-hero__visual">
             <div className="qx-pricebox">
-              <span className="qx-pricebox__label">Current license</span>
+              <span className="qx-pricebox__label">Current access</span>
               <div className="qx-pricebox__main">
                 <span className="qx-pricebox__current">R$ 199,90</span>
                 <span className="qx-pricebox__anchor">R$ 297,00</span>
               </div>
               <p className="qx-pricebox__copy">
-                Single license for the current release cycle.
+                Single release access for the current cycle.
               </p>
             </div>
 
@@ -124,6 +136,10 @@ export default function Quelox() {
           <div className="qx-section__header">
             <div className="qx-section__tag">01 — Product Role</div>
             <h2 className="qx-section__title">Built for nodes that need stable operation and clear telemetry.</h2>
+            <p className="qx-section__intro">
+              QELO-X sits between the host, the node process and the operator workflow so
+              runtime visibility and recovery are part of the system, not an afterthought.
+            </p>
           </div>
 
           <div className="qx-pillars">
@@ -142,6 +158,10 @@ export default function Quelox() {
           <div className="qx-section__header">
             <div className="qx-section__tag">02 — Architecture</div>
             <h2 className="qx-section__title">A runtime model designed for Linux-based node operations.</h2>
+            <p className="qx-section__intro">
+              The architecture favors supervised services, low-friction host integration and
+              monitoring that speaks the language of real node operations.
+            </p>
           </div>
 
           <div className="qx-architecture">
@@ -155,11 +175,15 @@ export default function Quelox() {
         </div>
       </section>
 
-      <section className="qx-section">
+      <section className="qx-section qx-section--workflow">
         <div className="qx-container qx-workflow">
           <div>
             <div className="qx-section__tag">03 — Workflow</div>
             <h2 className="qx-section__title">How QELO-X fits into the node lifecycle.</h2>
+            <p className="qx-section__intro qx-section__intro--narrow">
+              The product is meant to slot into an operator routine quickly, with a short
+              path from deployment to visibility and recovery automation.
+            </p>
 
             <div className="qx-steps">
               {workflow.map((step, index) => (
@@ -172,6 +196,7 @@ export default function Quelox() {
           </div>
 
             <div className="qx-diagram">
+              <div className="qx-diagram__label">Operational path</div>
               <div className="qx-diagram__row">[systemd] -&gt; [QELO-X daemon]</div>
               <div className="qx-diagram__row">[metrics loop] -&gt; [CPU | RAM | sync | peers]</div>
               <div className="qx-diagram__row">[local IPC] -&gt; [node process control]</div>
@@ -185,6 +210,10 @@ export default function Quelox() {
           <div className="qx-section__header">
             <div className="qx-section__tag">04 — Comparison</div>
             <h2 className="qx-section__title">What changes compared with manual node management.</h2>
+            <p className="qx-section__intro">
+              The difference is less about adding another dashboard and more about turning
+              node operations into a repeatable operational surface.
+            </p>
           </div>
 
           <div className="qx-compare">
@@ -207,7 +236,7 @@ export default function Quelox() {
         <div className="qx-container">
           <div className="qx-cta">
             <div>
-              <div className="qx-section__tag">05 — Licensing</div>
+              <div className="qx-section__tag">05 — Access</div>
               <h2 className="qx-section__title">A focused product for operators who need reliable node control.</h2>
               <p className="qx-cta__text">
                 QELO-X is intended for operators who want a repeatable way to supervise
@@ -215,9 +244,15 @@ export default function Quelox() {
               </p>
             </div>
 
-            <button className="qx-btn qx-btn--primary" onClick={() => setIsModalOpen(true)}>
-              Activate QELO-X
-            </button>
+            <div className="qx-cta__actions">
+              <div className="qx-cta__price">
+                <span className="qx-cta__price-label">Current release access</span>
+                <strong>R$ 199,90</strong>
+              </div>
+              <button className="qx-btn qx-btn--primary" onClick={() => setIsModalOpen(true)}>
+                Request Access
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -225,7 +260,7 @@ export default function Quelox() {
       <CheckoutModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        productName="QELO-X LICENSE"
+        productName="QELO-X ACCESS"
         price="199.90"
       />
 

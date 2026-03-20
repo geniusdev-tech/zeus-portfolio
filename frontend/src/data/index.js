@@ -1,7 +1,7 @@
 export const expertiseData = [
   {
     num: '01 / INFRASTRUCTURE',
-    title: 'Infrastructure & Servers',
+    title: 'Infrastructure Operations',
     items: [
       'Linux administration',
       'Service orchestration',
@@ -12,7 +12,7 @@ export const expertiseData = [
   },
   {
     num: '02 / NETWORKING',
-    title: 'Networking',
+    title: 'Network Operations',
     items: [
       'TCP/IP fundamentals',
       'Routing concepts',
@@ -25,7 +25,7 @@ export const expertiseData = [
     num: '03 / ANALYSIS',
     title: 'Systems Analysis',
     items: [
-      'Requirements analysis',
+      'Requirements intake',
       'Process modeling',
       'Architecture planning',
       'Technical documentation',
@@ -33,7 +33,7 @@ export const expertiseData = [
   },
   {
     num: '04 / DEVELOPMENT',
-    title: 'Software Development',
+    title: 'Systems Development',
     items: [
       'Backend development',
       'CLI tools',
@@ -44,7 +44,7 @@ export const expertiseData = [
   },
   {
     num: '05 / DEVOPS',
-    title: 'Automation & DevOps',
+    title: 'Automation & Delivery',
     items: [
       'systemd configuration',
       'Monitoring solutions',
@@ -82,9 +82,9 @@ export const stackData = [
 
 export const projectsData = [
   {
-    badge: 'Node Operations Product — Active',
+    badge: 'NODE OPS / ACTIVE',
     title: 'QELO-X',
-    desc: 'Node operations layer for blockchain infrastructure. Provides service supervision, secure UNIX socket IPC, runtime telemetry and automated recovery routines for Linux-based production hosts.',
+    desc: 'Node operations layer for blockchain infrastructure. Supervises services, keeps control local, surfaces runtime telemetry and automates recovery on Linux production hosts.',
     link: '/Quelox',
     muted: false,
     comingSoon: false,
@@ -170,17 +170,17 @@ export const philosophyData = [
   {
     n: '01',
     title: 'Stability First',
-    text: 'Production systems must not fail silently. Every service I build or manage is designed with failure modes in mind — observable, recoverable, and predictable.',
+    text: 'Production systems must fail in visible ways, recover quickly and stay bounded when they do.',
   },
   {
     n: '02',
     title: 'Efficiency Without Waste',
-    text: 'Lightweight tools outperform bloated frameworks. I favor minimal, well-understood components over convenience abstractions — especially in constrained environments.',
+    text: 'Use the smallest reliable set of components that can do the job without adding noise.',
   },
   {
     n: '03',
     title: 'Engineering for Outcomes',
-    text: 'The best solution is the one that works reliably in production — not the most elegant in theory. Clean architecture, practical results, zero workarounds.',
+    text: 'If it does not improve reliability, speed or clarity, it does not ship.',
   },
 ];
 

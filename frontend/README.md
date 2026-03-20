@@ -34,6 +34,7 @@ zeus-portfolio/
         ├── Stack/            # Technical stack with animated bars
         ├── Philosophy/       # Principles list + pull quote
         ├── Contact/          # Contact links + form with success state
+        ├── Terminal/         # Full-screen ZEUS AI terminal interaction page
         └── Footer/           # Footer with live status indicator
 ```
 
@@ -48,3 +49,5 @@ Each component folder contains:
 - **Colors / fonts** → edit `src/styles/globals.css` (CSS variables)
 - **Layout** → edit per-component CSS files
 - **Sections** → add/remove in `src/App.jsx`
+- **Google Analytics** → set `VITE_GA_MEASUREMENT_ID` in `.env` or `.env.local`; tracking is initialized by `src/components/GoogleAnalytics.jsx`
+- **AI Chat** → the widget is mounted from `src/components/AIChatWidget/` and should point to the public Vercel API, for example `https://zeus-portfolio-iota.vercel.app/api`

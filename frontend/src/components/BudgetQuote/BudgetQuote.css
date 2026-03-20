@@ -113,6 +113,27 @@
   padding-bottom: 8px;
 }
 
+.z-quote__form-brand {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.z-quote__brand-logo {
+  flex: 0 0 auto;
+  filter: drop-shadow(0 0 16px rgba(0, 255, 140, 0.24)) drop-shadow(0 0 28px rgba(0, 229, 255, 0.08));
+}
+
+.z-quote__form-brand-label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
 .z-quote__form-kicker {
   color: var(--green);
   margin-bottom: 10px;
@@ -259,6 +280,10 @@
 
   .z-quote__form-header {
     flex-direction: column;
+  }
+
+  .z-quote__form-brand {
+    margin-bottom: 10px;
   }
 
   .z-quote__form-header h3 {

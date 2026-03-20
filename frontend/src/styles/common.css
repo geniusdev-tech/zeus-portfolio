@@ -11,7 +11,7 @@
 .z-section {
   position: relative;
   z-index: 1;
-  padding: 120px 56px;
+  padding: clamp(80px, 10vh, 120px) clamp(20px, 5vw, 56px);
   max-width: 1400px;
   margin: 0 auto;
   scroll-margin-top: 140px;
@@ -39,7 +39,7 @@
   z-index: 1;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--border), transparent);
-  margin: 0 56px;
+  margin: 0 clamp(20px, 5vw, 56px);
 }
 
 /* ── Section Header ─────────────────────────────────── */
@@ -125,8 +125,28 @@
   text-transform: uppercase;
   text-decoration: none;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
   clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
   transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.z-btn:focus-visible {
+  outline-offset: 4px;
+}
+
+.z-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.14), transparent 80%);
+  transform: translateX(-120%);
+  transition: transform 0.45s ease;
+  pointer-events: none;
+}
+
+.z-btn:hover::before {
+  transform: translateX(120%);
 }
 
 .z-btn-g {
@@ -143,6 +163,10 @@
     linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 36%),
     rgba(0, 255, 140, 0.18);
   box-shadow: 0 16px 26px rgba(0, 0, 0, 0.22), var(--glow-g);
+}
+
+.z-btn:active {
+  transform: translateY(0);
 }
 
 .z-btn-o {
@@ -213,19 +237,19 @@
 }
 
 /* ── Responsive ─────────────────────────────────────── */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .z-section {
-    padding: 96px 24px;
+    padding: clamp(60px, 8vh, 96px) clamp(16px, 4vw, 24px);
   }
 
   .z-divider-line {
-    margin: 0 24px;
+    margin: 0 clamp(16px, 4vw, 24px);
   }
 }
 
 @media (max-width: 640px) {
   .z-section {
-    padding: 84px 20px;
+    padding: 64px 20px;
   }
 
   .z-divider-line {

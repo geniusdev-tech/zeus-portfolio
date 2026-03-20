@@ -59,7 +59,11 @@
   line-height: 1.7;
 }
 
-.z-itservices__cards {
+.z-itservices__cards-container {
+  display: block;
+}
+
+.z-itservices__cards-content {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
@@ -70,6 +74,11 @@
 .z-itservices__card-shell {
   will-change: transform;
   animation: z-itservices-card-float 7s ease-in-out infinite;
+  transition: filter 0.24s ease;
+}
+
+.z-itservices__card-shell:hover {
+  filter: saturate(1.08);
 }
 
 .z-itservices__card {
@@ -184,11 +193,17 @@
   background: rgba(0, 255, 140, 0.04);
   border: 1px solid rgba(0, 255, 140, 0.16);
   box-shadow: none;
+  transition: transform 0.24s ease, border-color 0.24s ease, background 0.24s ease, box-shadow 0.24s ease;
 }
 
 .z-itservices__card--cyan .z-itservices__icon-wrap {
   background: rgba(0, 229, 255, 0.04);
   border-color: rgba(0, 229, 255, 0.16);
+}
+
+.z-itservices__card:hover .z-itservices__icon-wrap {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
 }
 
 .z-itservices__icon {
@@ -288,7 +303,7 @@
 }
 
 @media (max-width: 1100px) {
-  .z-itservices__cards {
+  .z-itservices__cards-content {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -298,13 +313,40 @@
     font-size: 0.94rem;
   }
 
-  .z-itservices__cards {
+  .z-itservices__cards-container {
+    margin-top: 28px;
+    max-height: 560px;
+    padding: 12px;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(8, 11, 13, 0.24);
+    mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);
+    scrollbar-width: thin;
+    scrollbar-color: var(--green) transparent;
+    scroll-snap-type: y proximity;
+  }
+
+  .z-itservices__cards-content {
     grid-template-columns: 1fr;
     gap: 18px;
   }
 
+  .z-itservices__cards-content > * {
+    scroll-snap-align: start;
+  }
+
+  .z-itservices__cards-container::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .z-itservices__cards-container::-webkit-scrollbar-thumb {
+    background: var(--green);
+    border-radius: 999px;
+    box-shadow: 0 0 10px rgba(0, 255, 140, 0.35);
+  }
+
   .z-itservices__card {
-    min-height: 240px;
+    min-height: 220px;
     padding: 24px;
   }
 }

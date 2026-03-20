@@ -1,8 +1,18 @@
 import { useEffect, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
+import { contactLinks } from '../../data';
+import BrandLogo from '../BrandLogo/BrandLogo';
 import './CheckoutModal.css';
 
 const STEPS = ['IDENTIFICATION', 'METHOD_SELECTION', 'PAYMENT'];
+const cleanUrl = (url) => {
+    if (!url) return 'http://localhost:8080';
+    const match = url.match(/https?:\/\/[^/\s]+/);
+    return match ? match[0] : url;
+};
+
+const API_URL = cleanUrl(import.meta.env.VITE_API_URL);
+const supportEmail = contactLinks.find((link) => link.label === 'Email')?.value || 'walletzeus@proton.me';
 
 export default function CheckoutModal({ isOpen, onClose, productName, price }) {
     const [step, setStep] = useState('IDENTIFICATION');
@@ -10,6 +20,8 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
     const [form, setForm] = useState({ name: '', email: '' });
     const [timeLeft, setTimeLeft] = useState(600);
     const [copied, setCopied] = useState('');
+    const [purchaseState, setPurchaseState] = useState({ type: '', message: '' });
+    const [purchaseSending, setPurchaseSending] = useState(false);
 
     useEffect(() => {
         if (!isOpen) {
@@ -17,6 +29,8 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
             setPaymentMethod('PIX');
             setTimeLeft(600);
             setCopied('');
+            setPurchaseState({ type: '', message: '' });
+            setPurchaseSending(false);
         }
     }, [isOpen]);
 
@@ -46,6 +60,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
 
     const handleSelectMethod = (method) => {
         setPaymentMethod(method);
+        setPurchaseState({ type: '', message: '' });
         setStep('PAYMENT');
     };
 
@@ -121,8 +136,9 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
     const paymentValue = paymentMethod === 'PIX' ? pixPayload : usdtAddress;
     const paymentLabel = paymentMethod === 'PIX' ? 'PIX Copy and Paste' : 'USDT Polygon Address';
     const paymentHint = paymentMethod === 'PIX'
-        ? 'The system will confirm PIX payment after transfer.'
-        : 'After sending USDT, forward the transaction hash to suporte@zeus.dev.';
+        ? 'PIX confirmation is handled automatically after transfer.'
+        : `After sending USDT, forward the transaction hash to ${supportEmail}.`;
+    const paymentMethodLabel = paymentMethod === 'PIX' ? 'Pix instant transfer' : 'USDT on Polygon';
 
     const shortValue = !paymentValue
         ? 'Configuration pending'
@@ -134,6 +150,41 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
         if (!text) return;
         await navigator.clipboard.writeText(text);
         setCopied(paymentMethod === 'PIX' ? 'PIX code copied' : 'Wallet address copied');
+    };
+
+    const handlePurchaseConfirmation = async () => {
+        setPurchaseSending(true);
+        setPurchaseState({ type: '', message: '' });
+
+        try {
+            const response = await fetch(`${API_URL}/api/qelox/purchase-confirmation`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: form.name,
+                    email: form.email,
+                    productName,
+                    paymentMethod,
+                }),
+            });
+
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || `HTTP ${response.status}`);
+            }
+
+            setPurchaseState({
+                type: 'success',
+                message: 'Delivery email sent with the QELO-X access link.',
+            });
+        } catch (error) {
+            setPurchaseState({
+                type: 'error',
+                message: error.message || 'Failed to send the delivery email.',
+            });
+        } finally {
+            setPurchaseSending(false);
+        }
     };
 
     return (
@@ -148,15 +199,25 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
 
                 <div className="modal-header">
                     <div className="header-left">
-                        <span className="modal-tag">Secure Checkout</span>
+                        <div className="modal-brand-row">
+                            <BrandLogo variant="inline" size="sm" className="modal-brand-logo" />
+                            <span className="modal-brand-row__label">Checkout intake channel</span>
+                        </div>
+                        <span className="modal-tag">Operator Checkout</span>
                         <h2 className="modal-title">{productName}</h2>
                         <p className="modal-subtitle">
-                            Guided payment flow for operator licensing with PIX and USDT support.
+                            Guided payment flow for operator access with PIX and USDT support.
                         </p>
+                        <div className="modal-header__chips" aria-label="Checkout highlights">
+                            <span className="modal-chip">Access delivery by email</span>
+                            <span className="modal-chip">PIX and crypto support</span>
+                            <span className="modal-chip">Operator intake checkout</span>
+                        </div>
                     </div>
                     <div className="modal-pricebox">
-                        <span className="modal-pricebox__label">Current price</span>
+                        <span className="modal-pricebox__label">Current access</span>
                         <div className="modal-price">R$ {price}</div>
+                        <span className="modal-pricebox__hint">Single release access</span>
                     </div>
                 </div>
 
@@ -177,7 +238,11 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                         <form className="checkout-form" onSubmit={handleNext}>
                             <div className="modal-section-intro">
                                 <span className="modal-section-tag">Step 01</span>
-                                <p>Enter the delivery contact so the license and payment follow-up go to the correct inbox.</p>
+                                <p>Enter the delivery contact so access and payment follow-up land in the correct inbox.</p>
+                            </div>
+                            <div className="checkout-hintbar">
+                                <span className="checkout-hintbar__item">Used for access delivery</span>
+                                <span className="checkout-hintbar__item">Used for payment follow-up</span>
                             </div>
                             <div className="form-group">
                                 <label>Full Name</label>
@@ -188,6 +253,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                                     required
                                     autoFocus
+                                    autoComplete="name"
                                 />
                             </div>
                             <div className="form-group">
@@ -198,6 +264,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                     value={form.email}
                                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                                     required
+                                    autoComplete="email"
                                 />
                             </div>
                             <div className="modal-actions">
@@ -210,7 +277,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                         <div className="method-selection">
                             <div className="modal-section-intro">
                                 <span className="modal-section-tag">Step 02</span>
-                                <p>Select the transfer rail you want to use for this order.</p>
+                                <p>Select the payment rail you want to use for this order.</p>
                             </div>
                             <div className="checkout-context">
                                 <div className="checkout-context__item">
@@ -228,7 +295,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                     <div className="method-icon">PIX</div>
                                     <div className="method-info">
                                         <span className="method-name">Pix</span>
-                                        <span className="method-desc">Instant payment with automatic confirmation flow.</span>
+                                        <span className="method-desc">Instant payment with automatic confirmation.</span>
                                     </div>
                                     <div className="method-arrow">→</div>
                                 </button>
@@ -251,7 +318,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                         <div className="payment-step">
                             <div className="modal-section-intro">
                                 <span className="modal-section-tag">Step 03</span>
-                                <p>Use the QR code or copy field below to complete the transfer and keep the order active within the time window.</p>
+                                <p>Use the QR code or copy field below to complete payment and keep the order active within the time window.</p>
                             </div>
 
                             <div className="payment-topbar">
@@ -262,6 +329,11 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                 <div className="payment-timer">
                                     Payment window <span className="highlight">{formatTime(timeLeft)}</span>
                                 </div>
+                            </div>
+
+                            <div className="payment-method-banner">
+                                <span className="payment-method-banner__label">Selected rail</span>
+                                <strong>{paymentMethodLabel}</strong>
                             </div>
 
                             <div className="payment-grid">
@@ -288,7 +360,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
 
                                 <div className="payment-details">
                                     <div className="payment-detail payment-detail--summary">
-                                        <span className="small-label">Order summary</span>
+                                        <span className="small-label">Access summary</span>
                                         <div className="checkout-context checkout-context--compact">
                                             <div className="checkout-context__item">
                                                 <span className="checkout-context__label">Product</span>
@@ -319,11 +391,35 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                         <div className={`copy-feedback${copied ? ' visible' : ''}`}>
                                             {copied || ' '}
                                         </div>
+                                        <p className="copy-support">
+                                            {paymentMethod === 'PIX'
+                                                ? 'If scanning fails, use the copy-and-paste field.'
+                                                : 'If your wallet does not scan QR codes, copy the address directly.'}
+                                        </p>
                                     </div>
 
                                     <div className="payment-detail payment-detail--note">
                                         <span className="small-label">Instructions</span>
                                         <p className="payment-note">{paymentHint}</p>
+                                    </div>
+                                    <div className="payment-detail payment-detail--confirmation">
+                                        <span className="small-label">Finalize delivery email</span>
+                                        <p className="payment-note">
+                                            After completing the transfer, confirm below to send the delivery email with the QELO-X access link to {form.email}.
+                                        </p>
+                                        <div className="modal-actions modal-actions--stack">
+                                            <button
+                                                type="button"
+                                                className="btn-modal-primary"
+                                                onClick={handlePurchaseConfirmation}
+                                                disabled={purchaseSending}
+                                            >
+                                                {purchaseSending ? 'Sending delivery email...' : 'I completed payment'}
+                                            </button>
+                                            <div className={`purchase-feedback${purchaseState.type ? ` ${purchaseState.type}` : ''}`} aria-live="polite">
+                                                {purchaseState.message || ' '}
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="modal-actions modal-actions--inline">
                                         <button type="button" className="btn-modal-secondary" onClick={goBack}>
@@ -337,8 +433,8 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                 </div>
 
                 <div className="modal-footer-brand">
-                    <span className="modal-footer-brand__dot" />
-                    Secure checkout surface with encrypted transfer workflow
+                    <BrandLogo variant="mark" size="sm" className="modal-footer-brand__logo" />
+                    <span>Secure checkout surface for operator access workflow</span>
                 </div>
             </div>
         </div>

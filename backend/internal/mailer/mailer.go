@@ -25,6 +25,13 @@ type ContactResponse struct {
 	Message string `json:"message"`
 }
 
+type PurchaseRequest struct {
+	Name          string `json:"name"`
+	Email         string `json:"email"`
+	ProductName   string `json:"productName"`
+	PaymentMethod string `json:"paymentMethod"`
+}
+
 // HandleContact validates the form payload and sends an email via Resend.
 func HandleContact(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[mailer] incoming request from %s", r.RemoteAddr)
@@ -51,6 +58,32 @@ func HandleContact(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(ContactResponse{Success: true, Message: "Message sent successfully."})
 }
 
+// HandlePurchaseConfirmation sends the QELO-X thank-you email with the download link.
+func HandlePurchaseConfirmation(w http.ResponseWriter, r *http.Request) {
+	log.Printf("[mailer] purchase confirmation request from %s", r.RemoteAddr)
+	w.Header().Set("Content-Type", "application/json")
+
+	var req PurchaseRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeErr(w, http.StatusBadRequest, "Invalid request body.")
+		return
+	}
+
+	if err := validatePurchase(req); err != nil {
+		writeErr(w, http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+
+	if err := sendPurchase(req); err != nil {
+		log.Printf("[mailer] FAILED purchase email for %s: %v", req.Email, err)
+		writeErr(w, http.StatusInternalServerError, "Failed to send purchase email. Please try again later.")
+		return
+	}
+
+	log.Printf("[mailer] purchase email sent — to %s <%s>", req.Name, req.Email)
+	json.NewEncoder(w).Encode(ContactResponse{Success: true, Message: "Purchase email sent successfully."})
+}
+
 // ── Validation ───────────────────────────────────────
 
 func validate(r ContactRequest) error {
@@ -69,6 +102,24 @@ func validate(r ContactRequest) error {
 	}
 	if len(r.Message) > 5000 {
 		return fmt.Errorf("message too long (max 5000 chars)")
+	}
+	return nil
+}
+
+func validatePurchase(r PurchaseRequest) error {
+	if strings.TrimSpace(r.Name) == "" {
+		return fmt.Errorf("name is required")
+	}
+	email := strings.TrimSpace(r.Email)
+	if email == "" || !strings.Contains(email, "@") || !strings.Contains(email, ".") {
+		return fmt.Errorf("valid email is required")
+	}
+	if strings.TrimSpace(r.ProductName) == "" {
+		return fmt.Errorf("product name is required")
+	}
+	method := strings.TrimSpace(strings.ToUpper(r.PaymentMethod))
+	if method != "PIX" && method != "CRYPTO" {
+		return fmt.Errorf("payment method is invalid")
 	}
 	return nil
 }
@@ -107,6 +158,41 @@ func send(req ContactRequest) error {
 		Html:    buildHTML(req),
 	}
 
+	return deliver(apiKey, payload)
+}
+
+func sendPurchase(req PurchaseRequest) error {
+	apiKey := os.Getenv("RESEND_API_KEY")
+	replyEmail := strings.TrimSpace(os.Getenv("CONTACT_TO_EMAIL"))
+	fromEmail := strings.TrimSpace(os.Getenv("EMAIL_FROM"))
+	downloadURL := strings.TrimSpace(os.Getenv("QELOX_DOWNLOAD_URL"))
+
+	if apiKey == "" {
+		log.Printf("[mailer] DEV MODE — would send purchase email:\n  To: %s\n  Product: %s\n  Method: %s\n  Download: %s",
+			req.Email, req.ProductName, req.PaymentMethod, downloadURL)
+		return nil
+	}
+
+	if downloadURL == "" {
+		return fmt.Errorf("QELOX_DOWNLOAD_URL is not configured")
+	}
+
+	if fromEmail == "" {
+		fromEmail = "Portfolio <onboarding@resend.dev>"
+	}
+
+	payload := resendPayload{
+		From:    fromEmail,
+		To:      []string{strings.TrimSpace(req.Email)},
+		ReplyTo: replyEmail,
+		Subject: purchaseSubject(req),
+		Html:    buildPurchaseHTML(req, downloadURL),
+	}
+
+	return deliver(apiKey, payload)
+}
+
+func deliver(apiKey string, payload resendPayload) error {
 	body, _ := json.Marshal(payload)
 	client := &http.Client{Timeout: 10 * time.Second}
 
@@ -216,6 +302,80 @@ func buildHTML(req ContactRequest) string {
     </table>
   </body>
 </html>`, header, animation, content)
+}
+
+func purchaseSubject(req PurchaseRequest) string {
+	return fmt.Sprintf("[Zeus_] %s purchase confirmed", strings.TrimSpace(req.ProductName))
+}
+
+func buildPurchaseHTML(req PurchaseRequest, downloadURL string) string {
+	name := html.EscapeString(req.Name)
+	email := html.EscapeString(req.Email)
+	productName := html.EscapeString(req.ProductName)
+	method := html.EscapeString(strings.ToUpper(req.PaymentMethod))
+	link := html.EscapeString(downloadURL)
+
+	return fmt.Sprintf(`<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body style="background:#0b0f1a; margin:0; padding:24px 0;">
+    <table width="100%%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+      <tr>
+        <td align="center">
+          <table width="600" cellpadding="0" cellspacing="0" style="width:100%%; max-width:600px; background:#111827; border:1px solid rgba(255,255,255,0.06);">
+            <tr>
+              <td style="padding:22px 30px; background:linear-gradient(90deg,#111827,#0f172a); border-bottom:1px solid rgba(255,255,255,0.06);">
+                <div style="font-family:monospace; font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase; color:#34d399;">
+                  QELO-X purchase confirmed
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0 30px;">
+                <div style="height:4px; background:linear-gradient(90deg,#22c55e 0%%,#06b6d4 50%%,#22c55e 100%%); box-shadow:0 0 18px rgba(34,197,94,0.25);"></div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:30px; font-family:Arial,sans-serif; color:#e5e7eb;">
+                <h2 style="margin:0 0 16px 0; font-size:1.35rem; font-weight:600; color:#f9fafb;">Thank you for purchasing %s</h2>
+                <p style="margin:0 0 18px 0; font-size:0.95rem; line-height:1.8; color:#d1d5db;">
+                  Hi %s, your order has been registered successfully. Your access details and download link are below.
+                </p>
+
+                <table width="100%%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin-bottom:22px;">
+                  <tr><td style="color:#9ca3af;padding:8px 0;font-size:0.85rem;width:140px;">Product</td><td style="padding:8px 0;font-size:0.85rem;color:#e5e7eb;">%s</td></tr>
+                  <tr><td style="color:#9ca3af;padding:8px 0;font-size:0.85rem;">Email</td><td style="padding:8px 0;font-size:0.85rem;color:#22d3ee;">%s</td></tr>
+                  <tr><td style="color:#9ca3af;padding:8px 0;font-size:0.85rem;">Payment method</td><td style="padding:8px 0;font-size:0.85rem;color:#e5e7eb;">%s</td></tr>
+                </table>
+
+                <div style="padding:18px 20px; background:#0b1220; border:1px solid rgba(255,255,255,0.06); border-left:3px solid #34d399; margin-bottom:22px;">
+                  <div style="font-family:monospace; font-size:0.64rem; letter-spacing:0.16em; text-transform:uppercase; color:#9ca3af; margin-bottom:10px;">Download</div>
+                  <a href="%s" style="display:inline-block; padding:12px 18px; background:#22c55e; color:#031008; text-decoration:none; font-weight:700; font-size:0.86rem;">Download QELO-X</a>
+                  <p style="margin:12px 0 0 0; color:#9ca3af; font-size:0.82rem; line-height:1.7;">
+                    If the button does not open, copy this link into your browser:<br>
+                    <span style="color:#22d3ee; word-break:break-all;">%s</span>
+                  </p>
+                </div>
+
+                <p style="margin:0; font-size:0.82rem; line-height:1.7; color:#9ca3af;">
+                  Thank you for supporting the project. If you need help with activation or delivery, reply to this email.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:center; padding:20px; color:#9ca3af; font-family:Arial,sans-serif; font-size:0.78rem;">
+                &copy; Zeus Protocol
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`, productName, name, productName, email, method, link, link)
 }
 
 func writeErr(w http.ResponseWriter, code int, msg string) {

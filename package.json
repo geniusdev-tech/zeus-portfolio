@@ -1,13 +1,18 @@
 {
     "name": "zeus-portfolio-root",
     "private": true,
-    "scripts": {
+    "dependencies": {
+    "mongoose": "^8.10.0"
+  },
+  "scripts": {
     "dev": "npm run dev --prefix frontend",
     "build": "npm run build --prefix frontend",
     "preview": "npm run preview --prefix frontend",
+    "chat:dev": "npm run dev --prefix ai-chat",
+    "chat:start": "npm run start --prefix ai-chat",
     "deploy": "npm run build && vercel --prod",
     "deploy:firebase": "npm run deploy:firebase --prefix frontend",
     "deploy:preview": "npm run build && vercel",
-    "install:all": "npm install && npm install --prefix frontend"
+    "install:all": "npm install && npm install --prefix frontend && npm install --prefix ai-chat"
   }
 }

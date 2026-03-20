@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">ZeusProtocol.cloud social preview</title>
+  <desc id="desc">Dark neon preview image with ZeusProtocol.cloud logo, systems, automation and CRM messaging.</desc>
+
+  <defs>
+    <linearGradient id="ogGrad" x1="95" y1="70" x2="430" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00ff8c" />
+      <stop offset="100%" stop-color="#00e5ff" />
+    </linearGradient>
+    <radialGradient id="bgGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(605 315) rotate(90) scale(530 770)">
+      <stop offset="0%" stop-color="#0a1715" />
+      <stop offset="54%" stop-color="#081012" />
+      <stop offset="100%" stop-color="#040608" />
+    </radialGradient>
+    <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+      <feColorMatrix in="blur" type="matrix" values="
+        1 0 0 0 0
+        0 1 0 0 0.12
+        0 0 1 0 0.06
+        0 0 0 1 0" result="tinted" />
+      <feMerge>
+        <feMergeNode in="tinted" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="innerGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18" result="blur" />
+      <feFlood flood-color="#00ff8c" flood-opacity="0.1" />
+      <feComposite in2="blur" operator="in" result="glow" />
+      <feMerge>
+        <feMergeNode in="glow" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="52" height="52" patternUnits="userSpaceOnUse">
+      <path d="M 52 0 L 0 0 0 52" fill="none" stroke="rgba(0,255,140,0.06)" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bgGlow)" />
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.28" />
+
+  <circle cx="1050" cy="110" r="240" fill="#00ff8c" opacity="0.06" filter="url(#innerGlow)" />
+  <circle cx="120" cy="560" r="180" fill="#00e5ff" opacity="0.05" filter="url(#innerGlow)" />
+  <rect x="48" y="42" width="1104" height="546" rx="34" fill="none" stroke="rgba(0,255,140,0.12)" />
+
+  <g filter="url(#softGlow)" transform="translate(72 84)">
+    <circle cx="124" cy="132" r="92" fill="none" stroke="url(#ogGrad)" stroke-width="11" stroke-linecap="round" stroke-dasharray="24 14" />
+    <circle cx="124" cy="132" r="106" fill="none" stroke="rgba(0,255,140,0.12)" stroke-width="2" />
+
+    <path d="M124 20C153 24 178 39 196 63" stroke="url(#ogGrad)" stroke-width="6" stroke-linecap="round" />
+    <path d="M210 128C210 107 203 89 191 74" stroke="url(#ogGrad)" stroke-width="6" stroke-linecap="round" />
+    <path d="M52 173C66 194 87 210 112 218" stroke="url(#ogGrad)" stroke-width="6" stroke-linecap="round" />
+    <path d="M34 125C34 103 42 84 54 68" stroke="url(#ogGrad)" stroke-width="6" stroke-linecap="round" />
+
+    <path d="M126 18L69 137H112L94 236L181 117H140L126 18Z" fill="url(#ogGrad)" />
+
+    <circle cx="36" cy="126" r="6" fill="#00ff8c" />
+    <circle cx="54" cy="65" r="6" fill="#00ff8c" />
+    <circle cx="193" cy="63" r="6" fill="#00ff8c" />
+    <circle cx="210" cy="126" r="6" fill="#00ff8c" />
+    <circle cx="187" cy="205" r="6" fill="#00ff8c" />
+    <circle cx="106" cy="236" r="6" fill="#00ff8c" />
+
+    <path d="M84 114H66" stroke="rgba(0,255,140,0.65)" stroke-width="4" stroke-linecap="round" />
+    <path d="M158 154H182" stroke="rgba(0,229,255,0.72)" stroke-width="4" stroke-linecap="round" />
+  </g>
+
+  <g transform="translate(380 145)">
+    <text x="0" y="0" fill="#00ff8c" font-family="DejaVu Sans, Liberation Sans, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="4">
+      ZEUS PROTOCOL
+    </text>
+
+    <text x="0" y="128" font-family="DejaVu Sans, Liberation Sans, Arial, sans-serif" font-size="72" font-weight="700" letter-spacing="-1.4" fill="#e8f0eb">
+      <tspan fill="#00ff8c">ZeusProtocol</tspan><tspan fill="#00e5ff">.cloud</tspan>
+    </text>
+
+    <text x="2" y="194" fill="#8ea39b" font-family="DejaVu Sans, Liberation Sans, Arial, sans-serif" font-size="28" font-weight="400" letter-spacing="0.2">
+      <tspan x="2" y="194">Systems, automation &amp; CRM</tspan>
+      <tspan x="2" dy="38">for production-ready projects.</tspan>
+    </text>
+
+    <g transform="translate(0 262)">
+      <rect x="0" y="0" width="180" height="44" rx="22" fill="rgba(0,255,140,0.08)" stroke="rgba(0,255,140,0.22)" />
+      <text x="26" y="29" fill="#00ff8c" font-family="DejaVu Sans, Liberation Sans, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="1.8">
+        LEAD INTAKE
+      </text>
+
+      <rect x="196" y="0" width="196" height="44" rx="22" fill="rgba(0,229,255,0.07)" stroke="rgba(0,229,255,0.18)" />
+      <text x="228" y="29" fill="#00e5ff" font-family="DejaVu Sans, Liberation Sans, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="1.8">
+        CLOUD DELIVERY
+      </text>
+
+      <rect x="410" y="0" width="152" height="44" rx="22" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" />
+      <text x="444" y="29" fill="#c8d4cf" font-family="DejaVu Sans, Liberation Sans, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="1.8">
+        DEVOPS
+      </text>
+    </g>
+
+    <text x="2" y="374" fill="#667670" font-family="DejaVu Sans, Liberation Sans, Arial, sans-serif" font-size="18" font-weight="400" letter-spacing="2.4">
+      ZEUSPROTOCOL.CLOUD / LIVE / ONLINE
+    </text>
+  </g>
+</svg>

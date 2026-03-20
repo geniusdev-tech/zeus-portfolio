@@ -69,17 +69,25 @@ function StackItem({ name, type, pct, years, accent }) {
       </div>
       <div className="z-stack__head">
         <div>
-          <div className="z-stack__name">{name}</div>
+          <h3 className="z-stack__name">{name}</h3>
           <div className="z-stack__type">{type}</div>
         </div>
         <span className="z-stack__pct">{pct}%</span>
       </div>
       <div className="z-stack__bar">
-        <span className="z-stack__bar-fill" style={{ width: `${pct}%` }} />
+        <span
+          className="z-stack__bar-fill"
+          style={{ width: `${pct}%` }}
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow={pct}
+          aria-label={`${name} proficiency`}
+        />
       </div>
       <div className="z-stack__footer">
         <span className="z-stack__years">{years} yrs</span>
-        <span className="z-stack__meta">GitHub + production</span>
+        <span className="z-stack__meta">Live systems + GitHub</span>
       </div>
     </div>
   );
@@ -101,22 +109,21 @@ export default function Stack() {
     <section className="z-stack" id="stack">
       <div className="z-section">
         <div className="z-sec-header z-reveal">
-          <div className="z-sec-tag cyan">03 — Technical Stack</div>
-          <div className="z-sec-title cyan">
-            Core Tools
+          <div className="z-sec-tag cyan">03 — Operating Surface</div>
+          <h2 className="z-sec-title cyan">
+            Core Stack
             <br />
-            <em>and Operating Surface.</em>
-          </div>
+            <em>for production systems.</em>
+          </h2>
           <p className="z-stack__intro">
-            The stack is intentionally compact: infrastructure-first tools, practical
-            languages and platforms that hold up in production. This section now mixes
-            core tools with the technologies shown on GitHub, all with a direct percentage view.
+            Compact tooling for systems, automation and delivery. The mix stays practical:
+            the languages, runtimes and platforms I actually use to ship and keep services observable.
           </p>
         </div>
 
         <div className="z-stack__carousel z-reveal">
           <div className="z-stack__carousel-topbar">
-            <span className="z-stack__carousel-label">Slide through the stack manually</span>
+            <span className="z-stack__carousel-label">Browse the stack modules</span>
             <div className="z-stack__controls">
               <button type="button" className="z-stack__arrow" onClick={handlePrev} aria-label="Previous stack page">
                 <ArrowLeft size={18} />
@@ -160,6 +167,14 @@ export default function Stack() {
                 ))}
               </motion.div>
             </AnimatePresence>
+          </div>
+
+          <div className="z-stack__mobile-list">
+            <div className="z-stack__mobile-list-content">
+              {stackData.map((item) => (
+                <StackItem key={item.name} {...item} />
+              ))}
+            </div>
           </div>
         </div>
       </div>

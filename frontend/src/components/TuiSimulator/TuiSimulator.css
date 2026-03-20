@@ -1,18 +1,38 @@
 .tui-box {
-    background: var(--bg-dark);
-    border: 1px solid rgba(26, 255, 122, 0.2);
-    border-radius: 4px;
+    background:
+        radial-gradient(circle at top right, rgba(0, 229, 255, 0.08), transparent 28%),
+        linear-gradient(180deg, rgba(16, 21, 25, 0.98), rgba(10, 13, 16, 0.98));
+    border: 1px solid rgba(0, 255, 140, 0.16);
+    border-radius: 0;
     overflow: hidden;
-    font-family: 'JetBrains Mono', monospace;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    font-family: var(--font-mono);
+    box-shadow: 0 20px 36px rgba(0, 0, 0, 0.34);
     max-width: 450px;
     width: 100%;
+    position: relative;
+    transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+}
+
+.tui-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--green), var(--cyan), transparent);
+}
+
+.tui-box:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 255, 140, 0.24);
+    box-shadow: 0 26px 42px rgba(0, 0, 0, 0.4);
 }
 
 .tui-header {
-    background: rgba(26, 255, 122, 0.05);
+    background: rgba(255, 255, 255, 0.02);
     padding: 10px 15px;
-    border-bottom: 1px solid rgba(26, 255, 122, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
     align-items: center;
     gap: 10px;
@@ -21,16 +41,16 @@
 .tui-dot {
     width: 8px;
     height: 8px;
-    background: var(--neon-green);
+    background: var(--green);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--neon-green);
+    box-shadow: 0 0 10px rgba(0, 255, 140, 0.6);
     animation: blink 2s infinite;
 }
 
 .tui-title {
-    color: var(--neon-green);
+    color: var(--green);
     font-size: 0.7rem;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.14em;
 }
 
 .tui-content {
@@ -45,15 +65,15 @@
 }
 
 .tui-label {
-    color: var(--text-muted);
+    color: var(--text3);
 }
 
 .tui-value {
-    color: var(--text-light);
+    color: var(--text);
 }
 
 .status-running {
-    color: var(--neon-green);
+    color: var(--green);
     font-weight: bold;
 }
 
@@ -66,7 +86,7 @@
 }
 
 .tui-separator {
-    color: rgba(26, 255, 122, 0.1);
+    color: rgba(0, 255, 140, 0.12);
     margin: 15px 0;
     text-align: center;
 }
@@ -85,16 +105,17 @@
 }
 
 .tui-bar-bg {
-    height: 4px;
-    background: rgba(26, 255, 122, 0.05);
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 2px;
     overflow: hidden;
 }
 
 .tui-bar-fill {
     height: 100%;
-    background: var(--neon-green);
+    background: linear-gradient(90deg, var(--green), rgba(0, 255, 140, 0.35));
     transition: width 1s ease;
+    box-shadow: 0 0 12px rgba(0, 255, 140, 0.24);
 }
 
 .small {
@@ -107,11 +128,11 @@
     display: flex;
     gap: 10px;
     font-size: 0.7rem;
-    color: var(--text-muted);
+    color: var(--text3);
 }
 
 .tui-cursor {
-    color: var(--neon-green);
+    color: var(--green);
     animation: blink 1s infinite;
 }
 

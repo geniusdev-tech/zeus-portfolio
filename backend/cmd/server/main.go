@@ -26,6 +26,7 @@ func main() {
 
 	// ── Routes ──────────────────────────────────────────
 	mux.HandleFunc("POST /api/contact", mailer.HandleContact)
+	mux.HandleFunc("POST /api/qelox/purchase-confirmation", mailer.HandlePurchaseConfirmation)
 	mux.HandleFunc("GET /api/status", status.HandleStatus)
 	mux.HandleFunc("GET /api/github/activity", github.HandleActivity)
 	mux.HandleFunc("GET /api/health", handleHealth)

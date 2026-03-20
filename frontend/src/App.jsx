@@ -1,40 +1,48 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useCursor } from './hooks';
-
-import Cursor from './components/Cursor';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Nav from './components/Nav';
 import Portfolio from './pages/Portfolio';
 import Quelox from './pages/Quelox/Quelox';
 import Maintenance from './pages/Maintenance/Maintenance';
+import Terminal from './pages/Terminal/Terminal';
+import AIChatWidget from './components/AIChatWidget';
 import NeuralBackground from './components/NeuralBackground/NeuralBackground';
+import GoogleAnalytics from './components/GoogleAnalytics';
 
 import './styles/globals.css';
 import './styles/common.css';
 
-export default function App() {
-  const { cursorRef, ringRef } = useCursor();
+function AppShell() {
+  const location = useLocation();
   const isMaintenance = import.meta.env.VITE_MAINTENANCE_MODE === 'true';
+  const isTerminal = location.pathname === '/terminal';
 
   return (
-    <Router>
-      <div className="zeus-app">
-        <NeuralBackground />
+    <div className="zeus-app">
+      <NeuralBackground />
 
-        {/* Fixed navbar */}
-        <Nav />
+      {!isTerminal ? <Nav /> : null}
 
-        {/* Routes */}
+      <main className="z-main-content">
         <Routes>
           <Route path="/" element={<Portfolio />} />
+          <Route path="/terminal" element={<Terminal />} />
           <Route
             path="/Quelox"
             element={isMaintenance ? <Maintenance /> : <Quelox />}
           />
         </Routes>
+      </main>
 
-        {/* Custom cursor */}
-        <Cursor cursorRef={cursorRef} ringRef={ringRef} />
-      </div>
+      {!isTerminal ? <AIChatWidget /> : null}
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <GoogleAnalytics />
+      <AppShell />
     </Router>
   );
 }

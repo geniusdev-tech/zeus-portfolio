@@ -31,6 +31,12 @@
   gap: 10px;
   text-decoration: none;
   flex-shrink: 0;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.z-nav__brand:hover {
+  transform: translateY(-1px);
 }
 
 .z-nav__brand-dot {
@@ -76,13 +82,22 @@
   color: var(--text3);
   padding: 6px 12px;
   border-radius: 2px;
-  transition: color 0.2s, background 0.2s;
+  transition: color 0.2s, background 0.2s, transform 0.2s;
   position: relative;
 }
 
 .z-nav__link:hover {
   color: var(--text);
   background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-1px);
+}
+
+.z-nav__link:focus-visible,
+.z-nav__drawer-link:focus-visible,
+.z-nav__hamburger:focus-visible,
+.z-nav__brand:focus-visible {
+  outline: 2px solid rgba(0, 229, 255, 0.6);
+  outline-offset: 3px;
 }
 
 .z-nav__link.active {
@@ -103,14 +118,14 @@
 .z-nav__link-num {
   font-size: 0.55rem;
   color: var(--text3);
-  opacity: 0.5;
+  opacity: 0.72;
   letter-spacing: 0;
   transition: color 0.2s, opacity 0.2s;
 }
 
 .z-nav__link.active .z-nav__link-num {
   color: var(--cyan);
-  opacity: 0.7;
+  opacity: 0.95;
 }
 
 /* ── Right side ── */
@@ -134,6 +149,13 @@
   border: 1px solid rgba(0, 255, 140, 0.2);
   padding: 5px 12px;
   background: rgba(0, 255, 140, 0.03);
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.z-nav__status:hover {
+  border-color: rgba(0, 255, 140, 0.32);
+  background: rgba(0, 255, 140, 0.06);
+  box-shadow: 0 0 18px rgba(0, 255, 140, 0.1);
 }
 
 .z-nav__status-dot {
@@ -161,6 +183,14 @@
   gap: 5px;
   padding: 7px 8px;
   z-index: 102;
+  color: var(--text);
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.z-nav__hamburger:hover {
+  transform: translateY(-1px);
+  border-color: rgba(0, 229, 255, 0.24);
+  background: rgba(0, 229, 255, 0.04);
 }
 
 .z-nav__hamburger span {
@@ -191,16 +221,19 @@
   right: 0;
   bottom: 0;
   width: 260px;
-  background: rgba(6, 9, 11, 0.98);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
+  background: #000000 !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   border-left: 1px solid var(--border);
+  box-shadow: -10px 0 50px rgba(0, 0, 0, 0.9);
   display: flex;
   flex-direction: column;
   padding: 0;
   transform: translateX(100%);
   transition: transform 0.4s cubic-bezier(0.85, 0, 0.15, 1);
-  z-index: 101;
+  z-index: 5000;
+  opacity: 1 !important;
 }
 
 .z-nav__drawer.active {
@@ -233,21 +266,27 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--text3);
+  color: var(--text2);
   padding: 14px 24px;
-  transition: color 0.2s, background 0.2s;
+  transition: color 0.2s, background 0.2s, border-color 0.2s, padding-left 0.2s;
   border-left: 2px solid transparent;
 }
 
 .z-nav__drawer-link:hover {
   color: var(--text);
   background: rgba(255, 255, 255, 0.03);
+  padding-left: 28px;
 }
 
 .z-nav__drawer-link.active {
   color: var(--cyan);
   border-left-color: var(--cyan);
   background: rgba(0, 229, 255, 0.04);
+}
+
+.z-nav__drawer-link {
+  min-height: 48px;
+  align-items: center;
 }
 
 .z-nav__drawer-footer {
@@ -260,9 +299,13 @@
 .z-nav__backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 4000;
   cursor: pointer;
+}
+
+body.z-menu-open {
+  overflow: hidden;
 }
 
 /* ── Visibility helpers ── */
@@ -294,12 +337,17 @@
     display: flex;
   }
 
-  /* Fundo 100% sólido no mobile — sem efeito vidro */
   .z-nav {
     background: rgb(6, 9, 11) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.9);
+  }
+
+  .z-nav__drawer {
+    width: min(320px, 80vw);
+    background: #000000 !important;
+    opacity: 1 !important;
   }
 }
 
@@ -311,8 +359,14 @@
   .z-nav__drawer {
     width: 100%;
     border-left: none;
-    background: rgb(6, 9, 11);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    background: #000000 !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none;
+  }
+
+  .z-nav__brand-name {
+    font-size: 0.78rem;
   }
 }

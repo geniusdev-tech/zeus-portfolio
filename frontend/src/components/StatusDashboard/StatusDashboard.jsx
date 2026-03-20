@@ -2,9 +2,12 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import './StatusDashboard.css';
 
 const cleanUrl = (url) => {
-  if (!url) return 'http://localhost:8080';
+  const fallback = import.meta.env.DEV
+    ? 'http://localhost:8080'
+    : 'https://zeus-backend-production-ee33.up.railway.app';
+  if (!url) return fallback;
   const match = url.match(/https?:\/\/[^/\s]+/);
-  return match ? match[0] : url;
+  return match ? match[0] : fallback;
 };
 
 const API_URL = cleanUrl(import.meta.env.VITE_API_URL);
@@ -171,12 +174,12 @@ export default function StatusDashboard() {
         <div className="z-sd z-reveal">
           {/* Top bar */}
           <div className="z-sd__topbar">
-            <div className="z-sd__topbar-left">
+          <div className="z-sd__topbar-left">
               <div className={`z-sd__pulse ${error ? 'error' : 'ok'}`} />
               <span className="z-sd__topbar-label">
-                {error ? 'Backend unavailable'
-                  : isLive ? 'Live data · refresh every 15s'
-                    : 'Demo data · refresh every 15s'}
+                {error ? 'Control plane unavailable'
+                  : isLive ? 'Live telemetry · refresh every 15s'
+                    : 'Simulated telemetry · refresh every 15s'}
               </span>
               {!error && !isLive && <span className="z-sd__topbar-pill">sim</span>}
             </div>
@@ -227,7 +230,7 @@ export default function StatusDashboard() {
               <div className="z-sd__services-row">
                 {systemSvcs.length > 0 && (
                   <div className="z-sd__services-col">
-                    <SectionLabel>Infrastructure Services</SectionLabel>
+                    <SectionLabel>System Services</SectionLabel>
                     <div className="z-sd__services">
                       {systemSvcs.map(svc => <ServiceRow key={svc.name} svc={svc} />)}
                     </div>
@@ -235,7 +238,7 @@ export default function StatusDashboard() {
                 )}
                 {siteSvcs.length > 0 && (
                   <div className="z-sd__services-col">
-                    <SectionLabel>Public Services</SectionLabel>
+                    <SectionLabel>Site Services</SectionLabel>
                     <div className="z-sd__services">
                       {siteSvcs.map(svc => <ServiceRow key={svc.name} svc={svc} />)}
                     </div>

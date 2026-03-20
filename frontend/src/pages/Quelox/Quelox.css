@@ -27,6 +27,7 @@
 
 .qx-hero {
   padding: 138px 0 96px;
+  position: relative;
 }
 
 .qx-hero__grid {
@@ -74,6 +75,32 @@
   line-height: 1.9;
 }
 
+.qx-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.qx-highlight {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.qx-highlight:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 229, 255, 0.18);
+  color: var(--cyan);
+  background: rgba(0, 229, 255, 0.05);
+}
+
 .qx-actions {
   display: flex;
   gap: 14px;
@@ -93,7 +120,23 @@
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.qx-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.14), transparent 80%);
+  transform: translateX(-120%);
+  transition: transform 0.45s ease;
+  pointer-events: none;
+}
+
+.qx-btn:hover::before {
+  transform: translateX(120%);
 }
 
 .qx-btn--primary {
@@ -103,6 +146,7 @@
 }
 
 .qx-btn--primary:hover {
+  transform: translateY(-2px);
   background: transparent;
   color: var(--green);
   box-shadow: var(--glow-g);
@@ -114,6 +158,7 @@
 }
 
 .qx-btn--ghost:hover {
+  transform: translateY(-2px);
   border-color: var(--cyan);
   color: var(--cyan);
 }
@@ -155,6 +200,7 @@
 
 .qx-stat {
   padding: 18px 18px 16px;
+  position: relative;
 }
 
 .qx-stat__label {
@@ -172,11 +218,16 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+  position: sticky;
+  top: 88px;
 }
 
 .qx-pricebox {
   padding: 22px 22px 20px;
   position: relative;
+  background:
+    radial-gradient(circle at top right, rgba(0, 229, 255, 0.08), transparent 35%),
+    linear-gradient(180deg, rgba(16, 21, 25, 0.98), rgba(12, 16, 20, 0.98));
 }
 
 .qx-pricebox::before,
@@ -245,6 +296,17 @@
   margin-bottom: 42px;
 }
 
+.qx-section__intro {
+  margin-top: 16px;
+  color: var(--text2);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.qx-section__intro--narrow {
+  max-width: 620px;
+}
+
 .qx-section__tag {
   color: var(--green);
   margin-bottom: 12px;
@@ -278,6 +340,8 @@
 
 .qx-panel {
   padding: 24px 22px;
+  background:
+    linear-gradient(180deg, rgba(16, 21, 25, 0.92), rgba(12, 16, 20, 0.96));
 }
 
 .qx-panel__tag {
@@ -296,6 +360,9 @@
 
 .qx-architecture__card {
   padding: 28px 24px;
+  background:
+    radial-gradient(circle at top right, rgba(0, 229, 255, 0.06), transparent 34%),
+    linear-gradient(180deg, rgba(16, 21, 25, 0.94), rgba(12, 16, 20, 0.98));
 }
 
 .qx-architecture__card h3 {
@@ -309,6 +376,10 @@
   grid-template-columns: 1fr 1fr;
   gap: 36px;
   align-items: start;
+}
+
+.qx-section--workflow {
+  overflow: hidden;
 }
 
 .qx-steps {
@@ -333,6 +404,16 @@
 .qx-diagram {
   padding: 26px 24px;
   font-family: var(--font-mono);
+  background:
+    linear-gradient(180deg, rgba(16, 21, 25, 0.94), rgba(12, 16, 20, 0.98));
+}
+
+.qx-diagram__label {
+  margin-bottom: 14px;
+  color: var(--cyan);
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .qx-diagram__row {
@@ -347,6 +428,7 @@
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
+  overflow: hidden;
 }
 
 .qx-compare__head,
@@ -384,6 +466,37 @@
   justify-content: space-between;
   gap: 28px;
   padding: 34px 30px;
+  background:
+    radial-gradient(circle at top right, rgba(0, 255, 140, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(16, 21, 25, 0.96), rgba(12, 16, 20, 0.98));
+}
+
+.qx-cta__actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.qx-cta__price {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+}
+
+.qx-cta__price-label {
+  font-family: var(--font-mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+
+.qx-cta__price strong {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 0.04em;
+  color: var(--text);
 }
 
 @media (max-width: 1100px) {
@@ -404,6 +517,15 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .qx-hero__visual {
+    position: static;
+  }
+
+  .qx-cta__actions {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 
 @media (max-width: 768px) {
@@ -417,5 +539,47 @@
 
   .qx-step {
     grid-template-columns: 1fr;
+  }
+
+  .qx-container {
+    padding: 0 20px;
+  }
+
+  .qx-section {
+    padding: 72px 0;
+  }
+
+  .qx-compare {
+    border: 0;
+    background: transparent;
+    gap: 12px;
+  }
+
+  .qx-compare__head {
+    display: none;
+  }
+
+  .qx-compare__cell {
+    padding: 16px 18px;
+    background: var(--z-card-bg);
+    border: 1px solid var(--z-card-border);
+    box-shadow: var(--z-card-shadow);
+  }
+
+  .qx-compare__cell--label {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .qx-cta__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .qx-cta__price {
+    min-width: 0;
+  }
+
+  .qx-btn {
+    width: 100%;
   }
 }
