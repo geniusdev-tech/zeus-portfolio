@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useI18n } from '../../i18n';
 import './StatusDashboard.css';
 
 const cleanUrl = (url) => {
@@ -51,11 +52,12 @@ function GaugeBar({ value, warn = 70, critical = 90 }) {
 }
 
 function StatusBadge({ status }) {
+  const { content } = useI18n();
   const cfg = {
-    running: ['online', 'green'],
-    stopped: ['offline', 'red'],
-    maintenance: ['maintenance', 'yellow'],
-    unknown: ['unknown', 'dim']
+    running: [content.status.badgeLabels.running, 'green'],
+    stopped: [content.status.badgeLabels.stopped, 'red'],
+    maintenance: [content.status.badgeLabels.maintenance, 'yellow'],
+    unknown: [content.status.badgeLabels.unknown, 'dim'],
   };
   const [label, cls] = cfg[status] || cfg.unknown;
   return <span className={`z-sd__badge z-sd__badge--${cls}`}>● {label}</span>;
@@ -90,8 +92,13 @@ function Skeleton() {
 // ── Service Row ───────────────────────────────────────
 
 function ServiceRow({ svc }) {
+  const { locale } = useI18n();
   const isMaintenance = import.meta.env.VITE_MAINTENANCE_MODE === 'true';
   const displayStatus = (isMaintenance && svc.name === 'qelox') ? 'maintenance' : svc.status;
+  const timeFormatter = new Intl.DateTimeFormat(locale, {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
   return (
     <div className="z-sd__service">
@@ -109,7 +116,7 @@ function ServiceRow({ svc }) {
           <span className="z-sd__service-meta">{svc.latency}ms</span>
         )}
         <span className="z-sd__service-time">
-          {new Date(svc.checked_at).toLocaleTimeString()}
+          {timeFormatter.format(new Date(svc.checked_at))}
         </span>
       </div>
     </div>
@@ -120,6 +127,8 @@ function ServiceRow({ svc }) {
 // ── Main ─────────────────────────────────────────────
 
 export default function StatusDashboard() {
+  const { locale, content } = useI18n();
+  const { status } = content;
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -165,9 +174,9 @@ export default function StatusDashboard() {
       <div className="z-section">
         {/* Section header */}
         <div className="z-sec-header z-reveal">
-          <div className="z-sec-tag cyan">07 — System Status</div>
+          <div className="z-sec-tag cyan">{status.sectionTag}</div>
           <div className="z-sec-title cyan">
-            Live Metrics<br /><em>and Service Health.</em>
+            {status.titlePrefix}<br /><em>{status.titleEmphasis}</em>
           </div>
         </div>
 
@@ -177,21 +186,23 @@ export default function StatusDashboard() {
           <div className="z-sd__topbar-left">
               <div className={`z-sd__pulse ${error ? 'error' : 'ok'}`} />
               <span className="z-sd__topbar-label">
-                {error ? 'Control plane unavailable'
-                  : isLive ? 'Live telemetry · refresh every 15s'
-                    : 'Simulated telemetry · refresh every 15s'}
+                {error ? status.topbarUnavailable
+                  : isLive ? status.topbarLive
+                    : status.topbarSimulated}
               </span>
-              {!error && !isLive && <span className="z-sd__topbar-pill">sim</span>}
+              {!error && !isLive && <span className="z-sd__topbar-pill">{status.simPill}</span>}
             </div>
             <div className="z-sd__topbar-right">
               {lastOk && (
-                <span className="z-sd__updated">Updated {lastOk.toLocaleTimeString()}</span>
+                <span className="z-sd__updated">
+                  {status.updated} {new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' }).format(lastOk)}
+                </span>
               )}
               <button
                 className={`z-sd__refresh${refreshing ? ' spinning' : ''}`}
                 onClick={handleRefresh}
                 disabled={refreshing}
-                title="Refresh"
+                title={status.refresh}
               >↻</button>
             </div>
           </div>
@@ -203,34 +214,36 @@ export default function StatusDashboard() {
             <div className="z-sd__error">
               <span className="z-sd__error-icon">⚠</span>
               <div>
-                <div className="z-sd__error-title">Cannot reach backend</div>
+                <div className="z-sd__error-title">{status.errorTitle}</div>
                 <div className="z-sd__error-msg">{error}</div>
-                <div className="z-sd__error-hint">Deploy the Go backend — see <code>README.md</code>.</div>
+                <div className="z-sd__error-hint">
+                  {status.errorHintBeforeCode} <code>README.md</code>{status.errorHintAfterCode}
+                </div>
               </div>
             </div>
           ) : (
             <div className="z-sd__body">
-              <SectionLabel>Host Metrics</SectionLabel>
+              <SectionLabel>{status.hostMetrics}</SectionLabel>
               <div className="z-sd__metrics-grid">
-                <MetricCard label="CPU Usage"
+                <MetricCard label={status.metricLabels.cpu}
                   value={srv.cpu_usage.toFixed(1)} unit="%"
                   gauge={srv.cpu_usage} warn={70} critical={90} />
-                <MetricCard label="Memory"
+                <MetricCard label={status.metricLabels.memory}
                   value={`${srv.mem_used_mb} / ${srv.mem_total_mb}`} unit=" MB"
                   gauge={srv.mem_pct} warn={75} critical={90} cyan />
-                <MetricCard label="Disk"
+                <MetricCard label={status.metricLabels.disk}
                   value={`${srv.disk_used_gb} / ${srv.disk_total_gb}`} unit=" GB"
                   gauge={srv.disk_pct} warn={70} critical={85} />
-                <MetricCard label="Load Avg" value={srv.load_avg} cyan />
-                <MetricCard label="Region" value={srv.region || 'cloud'} />
-                <MetricCard label="Uptime" value={uptime?.raw ?? 'N/A'} cyan />
+                <MetricCard label={status.metricLabels.load} value={srv.load_avg} cyan />
+                <MetricCard label={status.metricLabels.region} value={srv.region || 'cloud'} />
+                <MetricCard label={status.metricLabels.uptime} value={uptime?.raw ?? 'N/A'} cyan />
               </div>
 
               {/* Services row */}
               <div className="z-sd__services-row">
                 {systemSvcs.length > 0 && (
                   <div className="z-sd__services-col">
-                    <SectionLabel>System Services</SectionLabel>
+                    <SectionLabel>{status.systemServices}</SectionLabel>
                     <div className="z-sd__services">
                       {systemSvcs.map(svc => <ServiceRow key={svc.name} svc={svc} />)}
                     </div>
@@ -238,7 +251,7 @@ export default function StatusDashboard() {
                 )}
                 {siteSvcs.length > 0 && (
                   <div className="z-sd__services-col">
-                    <SectionLabel>Site Services</SectionLabel>
+                    <SectionLabel>{status.siteServices}</SectionLabel>
                     <div className="z-sd__services">
                       {siteSvcs.map(svc => <ServiceRow key={svc.name} svc={svc} />)}
                     </div>

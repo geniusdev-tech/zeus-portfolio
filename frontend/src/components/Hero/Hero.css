@@ -191,6 +191,19 @@
   line-height: 1.85;
 }
 
+.z-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.z-hero__action {
+  min-width: 180px;
+  justify-content: center;
+}
+
 .z-hero__metrics {
   display: grid;
   grid-template-columns: 1fr;
@@ -658,6 +671,16 @@
   .z-hero__sub {
     font-size: 0.94rem;
     line-height: 1.75;
+  }
+
+  .z-hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .z-hero__action {
+    width: 100%;
+    min-width: 0;
   }
 
   .z-hero__metrics,

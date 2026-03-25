@@ -1,33 +1,36 @@
+import { useI18n } from '../../i18n';
 import './Maintenance.css';
 
 const Maintenance = () => {
+    const { content } = useI18n();
+    const { maintenance } = content;
+
     return (
         <div className="maintenance-container">
             <div className="maintenance-content">
                 <div className="maintenance-header">
                     <div className="status-dot" />
-                    <span className="status-text">[ STATUS: MAINTENANCE ]</span>
+                    <span className="status-text">{maintenance.status}</span>
                 </div>
 
-                <div className="maintenance-kicker">ZEUS // QELO-X ACCESS PAUSED</div>
-                <h1 className="maintenance-title">System Maintenance</h1>
+                <div className="maintenance-kicker">{maintenance.kicker}</div>
+                <h1 className="maintenance-title">{maintenance.title}</h1>
 
                 <p className="maintenance-message">
-                    Scheduled upgrades are running. QELO-X access is paused while the environment
-                    is stabilized, hardened and prepared for the next release cycle.
+                    {maintenance.message}
                 </p>
 
                 <div className="maintenance-highlights">
-                    <span className="maintenance-chip">Hardening</span>
-                    <span className="maintenance-chip">Runtime tuning</span>
-                    <span className="maintenance-chip">Release prep</span>
+                    {maintenance.highlights.map((item) => (
+                        <span className="maintenance-chip" key={item}>{item}</span>
+                    ))}
                 </div>
 
                 <div className="maintenance-footer">
                     <div className="tech-stack">
-                        <span>CORE_ENGINE: GO_1.22</span>
-                        <span>UI_LAYER: REACT_VITE</span>
-                        <span>STATUS: STABILIZING</span>
+                        {maintenance.footer.map((item) => (
+                            <span key={item}>{item}</span>
+                        ))}
                     </div>
                 </div>
             </div>

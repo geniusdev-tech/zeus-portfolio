@@ -46,6 +46,14 @@
         box-shadow: var(--shadow);
       }
 
+      .hero__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
       .hero__eyebrow {
         display: inline-flex;
         padding: 6px 12px;
@@ -55,6 +63,43 @@
         text-transform: uppercase;
         background: rgba(90, 169, 255, 0.14);
         color: #b8d5ff;
+      }
+
+      .locale-switcher {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px;
+        border-radius: 999px;
+        border: 1px solid rgba(120, 164, 255, 0.18);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .locale-switcher__button {
+        min-width: 42px;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--muted);
+        font-family: inherit;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 8px 10px;
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+      }
+
+      .locale-switcher__button:hover {
+        color: var(--text);
+        transform: translateY(-1px);
+      }
+
+      .locale-switcher__button.is-active {
+        color: var(--text);
+        border-color: rgba(90, 169, 255, 0.24);
+        background: rgba(90, 169, 255, 0.16);
       }
 
       .hero h1 {
@@ -270,6 +315,10 @@
           border-radius: 22px;
         }
 
+        .hero__top {
+          align-items: flex-start;
+        }
+
         .hero__grid {
           grid-template-columns: 1fr;
         }
@@ -295,25 +344,25 @@
   <body>
     <main class="page">
       <section class="hero">
-        <span class="hero__eyebrow">Zeus Protocol</span>
-        <h1>Chat com IA local para qualificar e converter leads.</h1>
-        <p>
-          Este exemplo entrega um widget flutuante com visual SaaS, historico local,
-          integracao com Ollama e captura automatica de intencao comercial para MongoDB.
-        </p>
+        <div class="hero__top">
+          <span class="hero__eyebrow" id="heroEyebrow">Zeus Protocol</span>
+          <div class="locale-switcher" id="languageSwitcher" role="group" aria-label="Language"></div>
+        </div>
+        <h1 id="heroTitle"></h1>
+        <p id="heroDescription"></p>
 
         <div class="hero__grid">
           <article class="hero__card">
-            <strong>Desenvolvimento de sites</strong>
-            <span>Landing pages, websites institucionais e experiencias web com foco em performance e conversao.</span>
+            <strong id="heroCard1Title"></strong>
+            <span id="heroCard1Text"></span>
           </article>
           <article class="hero__card">
-            <strong>Automacao</strong>
-            <span>Fluxos operacionais, integrações e redução de tarefas repetitivas com foco em ganho real de tempo.</span>
+            <strong id="heroCard2Title"></strong>
+            <span id="heroCard2Text"></span>
           </article>
           <article class="hero__card">
-            <strong>DevOps e infraestrutura</strong>
-            <span>Deploy, monitoramento, conteinerizacao e organizacao de ambientes com seguranca e previsibilidade.</span>
+            <strong id="heroCard3Title"></strong>
+            <span id="heroCard3Text"></span>
           </article>
         </div>
       </section>
@@ -322,10 +371,10 @@
     <aside class="chat-widget" id="chatWidget" aria-live="polite">
       <header class="chat-header">
         <div class="chat-header__title">
-          <strong>Zeus Protocol AI</strong>
-          <span>Qualificacao comercial com IA local via Ollama</span>
+          <strong id="chatTitle">Zeus Protocol AI</strong>
+          <span id="chatSubtitle"></span>
         </div>
-        <span class="status">Online</span>
+        <span class="status" id="chatStatus">Online</span>
       </header>
 
       <section class="chat-messages" id="chatMessages"></section>
@@ -335,7 +384,7 @@
           id="chatInput"
           class="chat-input"
           rows="2"
-          placeholder="Descreva seu projeto, prazo e contato."
+          placeholder=""
           required
         ></textarea>
         <button class="send-button" id="sendButton" type="submit">Enviar</button>
@@ -345,50 +394,286 @@
     <button class="chat-toggle" id="chatToggle" aria-label="Abrir chat">AI</button>
 
     <script>
+      const LOCALE_STORAGE_KEY = 'zeus-protocol-locale';
+      const HISTORY_STORAGE_KEY = 'zeus-protocol-chat-history';
+      const LOCALE_ORDER = ['en-US', 'pt-BR', 'es-ES'];
+      const LOCALE_META = {
+        'en-US': { shortLabel: 'EN', label: 'English' },
+        'pt-BR': { shortLabel: 'PT', label: 'Português' },
+        'es-ES': { shortLabel: 'ES', label: 'Español' },
+      };
+      const COPY = {
+        'en-US': {
+          pageTitle: 'Zeus Protocol AI Chat',
+          languageLabel: 'Language',
+          heroEyebrow: 'Zeus Protocol',
+          heroTitle: 'Local AI chat to qualify and convert leads.',
+          heroDescription:
+            'This example ships a floating widget with a SaaS visual language, local history, Ollama integration and automatic lead-intent capture for MongoDB.',
+          cards: [
+            {
+              title: 'Website development',
+              text: 'Landing pages, institutional sites and web experiences focused on performance and conversion.',
+            },
+            {
+              title: 'Automation',
+              text: 'Operational flows, integrations and reduction of repetitive tasks with a real time gain.',
+            },
+            {
+              title: 'DevOps and infrastructure',
+              text: 'Deploy, monitoring, containerization and environment organization with security and predictability.',
+            },
+          ],
+          chatTitle: 'Zeus Protocol AI',
+          chatSubtitle: 'Commercial qualification with local AI via Ollama',
+          chatStatus: 'Online',
+          placeholder: 'Describe your project, deadline and contact.',
+          send: 'Send',
+          sending: 'Sending...',
+          toggleOpen: 'Open Zeus AI chat',
+          toggleClose: 'Close Zeus AI chat',
+          initialHistory: [
+            {
+              role: 'bot',
+              text: 'ZEUS AI online. Send scope, stack, deadline and contact to start intake.',
+              meta: 'LIVE | CRM',
+            },
+          ],
+          fallbackMessage:
+            'ZEUS AI offline. Send scope, stack, deadline and contact and I will route it when the link returns.',
+          messageMeta: {
+            userSent: 'Message sent',
+            intent: 'Intent',
+            email: 'Email',
+            phone: 'Phone',
+            leadSaved: 'Lead saved',
+            fallbackActive: 'Fallback active',
+            replyDelivered: 'Reply delivered',
+            error: 'Chat error',
+          },
+        },
+        'pt-BR': {
+          pageTitle: 'Zeus Protocol AI Chat',
+          languageLabel: 'Idioma',
+          heroEyebrow: 'Zeus Protocol',
+          heroTitle: 'Chat com IA local para qualificar e converter leads.',
+          heroDescription:
+            'Este exemplo entrega um widget flutuante com visual SaaS, historico local, integracao com Ollama e captura automatica de intencao comercial para MongoDB.',
+          cards: [
+            {
+              title: 'Desenvolvimento de sites',
+              text: 'Landing pages, websites institucionais e experiencias web com foco em performance e conversao.',
+            },
+            {
+              title: 'Automacao',
+              text: 'Fluxos operacionais, integrações e redução de tarefas repetitivas com foco em ganho real de tempo.',
+            },
+            {
+              title: 'DevOps e infraestrutura',
+              text: 'Deploy, monitoramento, conteinerizacao e organizacao de ambientes com seguranca e previsibilidade.',
+            },
+          ],
+          chatTitle: 'Zeus Protocol AI',
+          chatSubtitle: 'Qualificacao comercial com IA local via Ollama',
+          chatStatus: 'Online',
+          placeholder: 'Descreva seu projeto, prazo e contato.',
+          send: 'Enviar',
+          sending: 'Enviando...',
+          toggleOpen: 'Abrir chat ZEUS AI',
+          toggleClose: 'Fechar chat ZEUS AI',
+          initialHistory: [
+            {
+              role: 'bot',
+              text: 'ZEUS AI online. Envie escopo, stack, prazo e contato para iniciar a captacao.',
+              meta: 'AO VIVO | CRM',
+            },
+          ],
+          fallbackMessage:
+            'ZEUS AI offline. Envie escopo, stack, prazo e contato e eu roteio assim que a conexao voltar.',
+          messageMeta: {
+            userSent: 'Mensagem enviada',
+            intent: 'Intencao',
+            email: 'Email',
+            phone: 'Telefone',
+            leadSaved: 'Lead salvo',
+            fallbackActive: 'Fallback ativo',
+            replyDelivered: 'Resposta entregue',
+            error: 'Erro no chat',
+          },
+        },
+        'es-ES': {
+          pageTitle: 'Zeus Protocol AI Chat',
+          languageLabel: 'Idioma',
+          heroEyebrow: 'Zeus Protocol',
+          heroTitle: 'Chat con IA local para calificar y convertir leads.',
+          heroDescription:
+            'Este ejemplo ofrece un widget flotante con estetica SaaS, historial local, integracion con Ollama y captura automatica de intencion comercial para MongoDB.',
+          cards: [
+            {
+              title: 'Desarrollo de sitios',
+              text: 'Landing pages, sitios institucionales y experiencias web enfocadas en rendimiento y conversion.',
+            },
+            {
+              title: 'Automatizacion',
+              text: 'Flujos operativos, integraciones y reduccion de tareas repetitivas con ahorro real de tiempo.',
+            },
+            {
+              title: 'DevOps e infraestructura',
+              text: 'Despliegue, monitoreo, contenedorizacion y organizacion de entornos con seguridad y previsibilidad.',
+            },
+          ],
+          chatTitle: 'Zeus Protocol AI',
+          chatSubtitle: 'Calificacion comercial con IA local via Ollama',
+          chatStatus: 'En línea',
+          placeholder: 'Describe tu proyecto, plazo y contacto.',
+          send: 'Enviar',
+          sending: 'Enviando...',
+          toggleOpen: 'Abrir chat ZEUS AI',
+          toggleClose: 'Cerrar chat ZEUS AI',
+          initialHistory: [
+            {
+              role: 'bot',
+              text: 'ZEUS AI en linea. Envía alcance, stack, plazo y contacto para iniciar la captacion.',
+              meta: 'EN VIVO | CRM',
+            },
+          ],
+          fallbackMessage:
+            'ZEUS AI esta offline. Envía alcance, stack, plazo y contacto y yo lo enrutaré cuando vuelva la conexion.',
+          messageMeta: {
+            userSent: 'Mensaje enviado',
+            intent: 'Intencion',
+            email: 'Email',
+            phone: 'Telefono',
+            leadSaved: 'Lead guardado',
+            fallbackActive: 'Fallback activo',
+            replyDelivered: 'Respuesta enviada',
+            error: 'Error del chat',
+          },
+        },
+      };
+      const legacyWelcomeRegex =
+        /assistente da Zeus Protocol|assistente da Zeus|Posso te ajudar com site, automacao|Sou o ZEUS AI\. Posso te ajudar com sistemas, automacoes, DevOps e infraestrutura\.|ZEUS AI online\. Send scope, stack, deadline and contact to start intake\.|ZEUS AI online\. Envie escopo, stack, prazo e contato para iniciar a captacao\.|ZEUS AI en linea\. Envía alcance, stack, plazo y contacto para iniciar la captacion\./i;
+
       const widget = document.getElementById('chatWidget');
       const toggle = document.getElementById('chatToggle');
       const form = document.getElementById('chatForm');
       const input = document.getElementById('chatInput');
       const sendButton = document.getElementById('sendButton');
-      const messages = document.getElementById('chatMessages');
-      const storageKey = 'zeus-protocol-chat-history';
-      const legacyWelcomeRegex =
-        /assistente da Zeus Protocol|assistente da Zeus|Posso te ajudar com site, automacao|Sou o ZEUS AI\. Posso te ajudar com sistemas, automacoes, DevOps e infraestrutura\./i;
+      const messageList = document.getElementById('chatMessages');
+      const languageSwitcher = document.getElementById('languageSwitcher');
+      const heroEyebrow = document.getElementById('heroEyebrow');
+      const heroTitle = document.getElementById('heroTitle');
+      const heroDescription = document.getElementById('heroDescription');
+      const heroCard1Title = document.getElementById('heroCard1Title');
+      const heroCard1Text = document.getElementById('heroCard1Text');
+      const heroCard2Title = document.getElementById('heroCard2Title');
+      const heroCard2Text = document.getElementById('heroCard2Text');
+      const heroCard3Title = document.getElementById('heroCard3Title');
+      const heroCard3Text = document.getElementById('heroCard3Text');
+      const chatTitle = document.getElementById('chatTitle');
+      const chatSubtitle = document.getElementById('chatSubtitle');
+      const chatStatus = document.getElementById('chatStatus');
 
-      const initialHistory = [
-        {
-          role: 'bot',
-          text: 'Sou o ZEUS AI. Posso te ajudar com sistemas, automacoes, orcamentos e suporte comercial. Me diga nome, tipo de projeto, prazo e contato para eu qualificar.',
-          meta: 'online | crm',
-        },
-      ];
+      let locale = detectLocale();
+      let copy = getCopy(locale);
+      let history = loadHistory(locale);
+      let isSending = false;
 
-      function getHistory() {
+      function normalizeLocale(value) {
+        if (!value) {
+          return 'en-US';
+        }
+
+        const normalized = String(value).toLowerCase();
+        if (normalized.startsWith('pt')) {
+          return 'pt-BR';
+        }
+
+        if (normalized.startsWith('es')) {
+          return 'es-ES';
+        }
+
+        return 'en-US';
+      }
+
+      function detectLocale() {
         try {
-          const saved = JSON.parse(localStorage.getItem(storageKey));
-          if (!Array.isArray(saved) || !saved.length) {
-            return initialHistory;
+          const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
+          if (stored) {
+            return normalizeLocale(stored);
           }
 
-          const history = saved.map(normalizeMessage);
-          const firstMessage = history[0];
-          if (firstMessage && firstMessage.role === 'bot' && legacyWelcomeRegex.test(firstMessage.text || '')) {
-            history[0] = initialHistory[0];
-          }
-
-          return history;
+          const browser = (navigator.language || (navigator.languages && navigator.languages[0]) || 'en-US');
+          return normalizeLocale(browser);
         } catch (error) {
-          return initialHistory;
+          return 'en-US';
         }
       }
 
-      function saveHistory(history) {
-        localStorage.setItem(storageKey, JSON.stringify(history));
+      function getCopy(value) {
+        return COPY[normalizeLocale(value)] || COPY['en-US'];
+      }
+
+      function historyKey(activeLocale) {
+        return `${HISTORY_STORAGE_KEY}:${activeLocale}`;
+      }
+
+      function normalizeMessage(message) {
+        return {
+          ...message,
+          meta: typeof message.meta === 'string' ? message.meta : '',
+          createdAt: message.createdAt || new Date().toISOString(),
+        };
+      }
+
+      function loadHistory(activeLocale) {
+        try {
+          const raw = localStorage.getItem(historyKey(activeLocale));
+          const legacy = localStorage.getItem(HISTORY_STORAGE_KEY);
+          const saved = raw ? JSON.parse(raw) : legacy ? JSON.parse(legacy) : null;
+
+          if (!Array.isArray(saved) || !saved.length) {
+            return getCopy(activeLocale).initialHistory.slice();
+          }
+
+          const loaded = saved.map(normalizeMessage);
+          const firstMessage = loaded[0];
+          if (firstMessage && firstMessage.role === 'bot' && legacyWelcomeRegex.test(firstMessage.text || '')) {
+            loaded[0] = getCopy(activeLocale).initialHistory[0];
+          }
+
+          return loaded;
+        } catch (error) {
+          return getCopy(activeLocale).initialHistory.slice();
+        }
+      }
+
+      function saveHistory(activeLocale, nextHistory) {
+        localStorage.setItem(historyKey(activeLocale), JSON.stringify(nextHistory));
+      }
+
+      function renderLanguageSwitcher() {
+        languageSwitcher.innerHTML = '';
+        languageSwitcher.setAttribute('aria-label', copy.languageLabel);
+
+        LOCALE_ORDER.forEach((code) => {
+          const meta = LOCALE_META[code];
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = `locale-switcher__button${locale === code ? ' is-active' : ''}`;
+          button.setAttribute('aria-pressed', locale === code ? 'true' : 'false');
+          button.setAttribute('title', meta.label);
+          button.setAttribute('lang', code);
+          button.textContent = meta.shortLabel;
+          button.addEventListener('click', () => {
+            setLocale(code);
+          });
+          languageSwitcher.appendChild(button);
+        });
       }
 
       function renderHistory() {
-        const history = getHistory();
-        messages.innerHTML = '';
+        messageList.innerHTML = '';
 
         history.forEach((item) => {
           const message = document.createElement('article');
@@ -401,27 +686,68 @@
             message.appendChild(meta);
           }
 
-          messages.appendChild(message);
+          messageList.appendChild(message);
         });
 
-        messages.scrollTop = messages.scrollHeight;
+        messageList.scrollTop = messageList.scrollHeight;
       }
 
-      function pushMessage(role, text, meta) {
-        const history = getHistory();
-        history.push({ role, text, meta });
-        saveHistory(history);
+      function setSending(nextState) {
+        isSending = nextState;
+        sendButton.disabled = nextState;
+        sendButton.textContent = nextState ? copy.sending : copy.send;
+      }
+
+      function renderCopy() {
+        document.title = copy.pageTitle;
+        heroEyebrow.textContent = copy.heroEyebrow;
+        heroTitle.textContent = copy.heroTitle;
+        heroDescription.textContent = copy.heroDescription;
+        heroCard1Title.textContent = copy.cards[0].title;
+        heroCard1Text.textContent = copy.cards[0].text;
+        heroCard2Title.textContent = copy.cards[1].title;
+        heroCard2Text.textContent = copy.cards[1].text;
+        heroCard3Title.textContent = copy.cards[2].title;
+        heroCard3Text.textContent = copy.cards[2].text;
+        chatTitle.textContent = copy.chatTitle;
+        chatSubtitle.textContent = copy.chatSubtitle;
+        chatStatus.textContent = copy.chatStatus;
+        input.placeholder = copy.placeholder;
+        toggle.setAttribute('aria-label', widget.classList.contains('is-open') ? copy.toggleClose : copy.toggleOpen);
+        renderLanguageSwitcher();
+        setSending(isSending);
+      }
+
+      function setLocale(nextLocale) {
+        const normalized = normalizeLocale(nextLocale);
+        if (normalized === locale) {
+          return;
+        }
+
+        locale = normalized;
+        copy = getCopy(locale);
+        history = loadHistory(locale);
+
+        try {
+          localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+        } catch (error) {}
+
+        document.documentElement.lang = locale;
+        renderCopy();
         renderHistory();
       }
 
-      function setSending(isSending) {
-        sendButton.disabled = isSending;
-        sendButton.textContent = isSending ? 'Enviando...' : 'Enviar';
+      function pushMessage(role, text, meta) {
+        history = [...history, { role, text, meta }];
+        saveHistory(locale, history);
+        renderHistory();
       }
 
       toggle.addEventListener('click', () => {
-        widget.classList.toggle('is-open');
-        if (widget.classList.contains('is-open')) {
+        const isOpen = widget.classList.toggle('is-open');
+        toggle.setAttribute('aria-label', isOpen ? copy.toggleClose : copy.toggleOpen);
+
+        if (isOpen) {
           input.focus();
           renderHistory();
         }
@@ -431,11 +757,18 @@
         event.preventDefault();
 
         const text = input.value.trim();
-        if (!text) {
+        if (!text || isSending) {
           return;
         }
 
-        pushMessage('user', text, 'Mensagem enviada');
+        const requestLocale = locale;
+        const requestCopy = copy;
+        const requestHistory = history.map((item) => ({
+          role: item.role === 'user' ? 'user' : 'assistant',
+          content: item.text,
+        }));
+
+        pushMessage('user', text, requestCopy.messageMeta.userSent);
         input.value = '';
         setSending(true);
 
@@ -445,7 +778,11 @@
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ message: text }),
+            body: JSON.stringify({
+              message: text,
+              locale: requestLocale,
+              history: requestHistory,
+            }),
           });
 
           const data = await response.json();
@@ -455,30 +792,35 @@
 
           const details = [];
           if (data.meta?.intention && data.meta.intention !== 'general') {
-            details.push(`Intencao: ${data.meta.intention}`);
+            details.push(`${requestCopy.messageMeta.intent}: ${data.meta.intention}`);
           }
           if (data.meta?.leadSaved) {
-            details.push('Lead salvo');
+            details.push(requestCopy.messageMeta.leadSaved);
           }
           if (data.meta?.email) {
-            details.push(`Email detectado: ${data.meta.email}`);
+            details.push(`${requestCopy.messageMeta.email}: ${data.meta.email}`);
+          }
+          if (data.meta?.phone) {
+            details.push(`${requestCopy.messageMeta.phone}: ${data.meta.phone}`);
           }
           if (!data.meta?.aiAvailable) {
-            details.push('Fallback ativado');
+            details.push(requestCopy.messageMeta.fallbackActive);
           }
 
-          pushMessage('bot', data.reply, details.join(' | '));
+          pushMessage('bot', data.reply || requestCopy.fallbackMessage, details.join(' | ') || requestCopy.messageMeta.replyDelivered);
         } catch (error) {
-          pushMessage(
-            'bot',
-            'Nao consegui falar com a IA agora. Me envie nome, projeto, prazo e contato para a Zeus Protocol seguir com o direcionamento.',
-            'Resposta de contingencia'
-          );
+          pushMessage('bot', requestCopy.fallbackMessage, error.message || requestCopy.messageMeta.error);
         } finally {
           setSending(false);
         }
       });
 
+      try {
+        localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+      } catch (error) {}
+
+      document.documentElement.lang = locale;
+      renderCopy();
       renderHistory();
     </script>
   </body>

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const {
   buildAIMLMessages,
+  normalizeLocale,
   sanitizeHistory,
 } = require('../shared/chatPrompt');
 
@@ -8,16 +9,34 @@ const MONGODB_URI = process.env.MONGODB_URI || '';
 const AIMLAPI_API_KEY = process.env.AIMLAPI_API_KEY || process.env.GEMINI_API_KEY || '';
 const AIMLAPI_MODEL = process.env.AIMLAPI_MODEL || 'google/gemma-3-4b-it';
 
-const FALLBACK_RESPONSE = [
-  'No momento o ZEUS AI nao respondeu, mas a Zeus Protocol pode te ajudar com sistemas, automacoes e infraestrutura.',
-  'Se quiser, envie nome, projeto, prazo e contato para registrarmos seu lead e seguir com direcionamento.',
-].join(' ');
-
 let cachedConnection = null;
 let LeadModel = null;
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 12;
 const rateLimitStore = new Map();
+
+function getFallbackResponse(locale) {
+  const normalized = normalizeLocale(locale);
+
+  if (normalized === 'en-US') {
+    return [
+      'ZEUS AI is offline at the moment, but Zeus Protocol can help with systems, automation and infrastructure.',
+      'If you want, send name, project, deadline and contact so we can register the lead and keep the intake moving.',
+    ].join(' ');
+  }
+
+  if (normalized === 'es-ES') {
+    return [
+      'ZEUS AI no esta disponible en este momento, pero Zeus Protocol puede ayudarte con sistemas, automatizacion e infraestructura.',
+      'Si quieres, envía nombre, proyecto, plazo y contacto para registrar el lead y seguir con la captacion.',
+    ].join(' ');
+  }
+
+  return [
+    'No momento o ZEUS AI nao respondeu, mas a Zeus Protocol pode te ajudar com sistemas, automacoes e infraestrutura.',
+    'Se quiser, envie nome, projeto, prazo e contato para registrarmos seu lead e seguir com direcionamento.',
+  ].join(' ');
+}
 
 function getClientIp(req) {
   const forwarded = req.headers['x-forwarded-for'];
@@ -68,27 +87,27 @@ function extractPhone(text) {
 function detectIntention(text) {
   const content = text.toLowerCase();
 
-  if (/(quero orcamento|quero orçamento|preciso de orcamento|preciso de orçamento|tenho um projeto)/i.test(content)) {
+  if (/(quero orcamento|quero orçamento|preciso de orcamento|preciso de orçamento|tenho um projeto|quiero presupuesto|necesito presupuesto|tengo un proyecto)/i.test(content)) {
     return 'quote';
   }
 
-  if (/(orcamento|orçamento|preco|preço|valor|quanto custa|investimento)/i.test(content)) {
+  if (/(orcamento|orçamento|preco|preço|valor|quanto custa|investimento|presupuesto|precio|cuanto cuesta|inversion)/i.test(content)) {
     return 'pricing';
   }
 
-  if (/(contratar|fechar projeto|quero voces|quero vocês|proposta|vamos conversar|vamos fechar)/i.test(content)) {
+  if (/(contratar|fechar projeto|quero voces|quero vocês|proposta|vamos conversar|vamos fechar|contratar|cerrar proyecto|propuesta|vamos hablar|vamos a cerrar)/i.test(content)) {
     return 'hire';
   }
 
-  if (/(site|landing page|e-commerce|portfolio|portfólio)/i.test(content)) {
+  if (/(site|landing page|e-commerce|portfolio|portfólio|sitio|pagina|portafolio)/i.test(content)) {
     return 'website';
   }
 
-  if (/(automacao|automação|bot|integra[cç][aã]o|workflow|crm)/i.test(content)) {
+  if (/(automacao|automação|bot|integra[cç][aã]o|workflow|crm|automatizacion|bot|integracion|flujo)/i.test(content)) {
     return 'automation';
   }
 
-  if (/(devops|infra|infraestrutura|docker|deploy|cloud|servidor|monitoramento|ci\/cd)/i.test(content)) {
+  if (/(devops|infra|infraestrutura|docker|deploy|cloud|servidor|monitoramento|ci\/cd|despliegue|nube|monitoreo)/i.test(content)) {
     return 'devops';
   }
 
@@ -175,13 +194,13 @@ async function saveLeadIfNeeded({ message, email, phone, intention }) {
   }
 }
 
-async function generateWithAimlApi(message, history = []) {
+async function generateWithAimlApi(message, history = [], locale) {
   if (!AIMLAPI_API_KEY) {
     throw new Error('AIMLAPI_API_KEY not configured');
   }
 
   const endpoint = 'https://api.aimlapi.com/v1/chat/completions';
-  const messages = buildAIMLMessages(message, history);
+  const messages = buildAIMLMessages(message, history, locale);
 
   const response = await fetch(endpoint, {
     method: 'POST',
@@ -225,6 +244,7 @@ module.exports = async function handler(req, res) {
   const rawMessage = typeof req.body?.message === 'string' ? req.body.message : '';
   const message = rawMessage.trim();
   const history = sanitizeHistory(req.body?.history);
+  const locale = normalizeLocale(req.body?.locale);
   const clientIp = getClientIp(req);
 
   if (!message) {
@@ -252,11 +272,11 @@ module.exports = async function handler(req, res) {
   const phone = extractPhone(message);
   const intention = detectIntention(message);
 
-  let reply = FALLBACK_RESPONSE;
+  let reply = getFallbackResponse(locale);
   let aiAvailable = false;
 
   try {
-    const aiReply = await generateWithAimlApi(message, history);
+    const aiReply = await generateWithAimlApi(message, history, locale);
     if (aiReply) {
       reply = aiReply;
       aiAvailable = true;

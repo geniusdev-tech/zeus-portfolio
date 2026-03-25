@@ -1,42 +1,35 @@
-import { aboutStats, aboutTags } from '../../data';
+import { useI18n } from '../../i18n';
 import './About.css';
 
 export default function About() {
-  const featuredStats = aboutStats.slice(0, 4);
-  const signalTags = aboutTags.slice(0, 6);
+  const { content } = useI18n();
+  const { about } = content;
+  const featuredStats = about.stats.slice(0, 4);
+  const signalTags = about.tags.slice(0, 6);
 
   return (
     <div className="z-section" id="about">
       <div className="z-sec-header z-reveal">
-        <div className="z-sec-tag">01 — System Profile</div>
+        <div className="z-sec-tag">{about.sectionTag}</div>
         <h2 className="z-sec-title">
-          Systems,
+          {about.titlePrefix}
           <br />
-          <em>Engineered for Production.</em>
+          <em>{about.titleEmphasis}</em>
         </h2>
       </div>
 
       <div className="z-about__grid z-reveal">
         <div className="z-about__intro">
-          <p className="z-about__lede">
-            I work where infrastructure, automation and software delivery meet. The focus is
-            keeping production systems stable, observable and easier to operate.
-          </p>
+          <p className="z-about__lede">{about.lede}</p>
 
           <div className="z-about__points">
             <div className="z-about__point">
-              <span className="z-about__point-label">Operational scope</span>
-              <p>
-                Linux administration, networking, DevSecOps routines, cloud delivery and
-                backend tooling for production systems.
-              </p>
+              <span className="z-about__point-label">{about.scopeLabel}</span>
+              <p>{about.scopeText}</p>
             </div>
             <div className="z-about__point">
-              <span className="z-about__point-label">Delivery model</span>
-              <p>
-                I design around failure modes, visibility and automation so teams spend less
-                time reacting and more time shipping.
-              </p>
+              <span className="z-about__point-label">{about.deliveryLabel}</span>
+              <p>{about.deliveryText}</p>
             </div>
           </div>
 
@@ -50,12 +43,9 @@ export default function About() {
         </div>
 
         <div className="z-about__panel">
-          <div className="z-about__panel-kicker">What you get</div>
-          <h3 className="z-about__panel-title">Less drift. More signal. More control.</h3>
-          <p className="z-about__panel-copy">
-            The work combines platform stability with lightweight automation, so
-            infrastructure decisions stay practical and maintainable over time.
-          </p>
+          <div className="z-about__panel-kicker">{about.panelKicker}</div>
+          <h3 className="z-about__panel-title">{about.panelTitle}</h3>
+          <p className="z-about__panel-copy">{about.panelCopy}</p>
 
           <div className="z-about__stats-container">
             <div className="z-about__stats-content">

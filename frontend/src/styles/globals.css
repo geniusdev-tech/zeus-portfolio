@@ -56,6 +56,11 @@ body {
   line-height: 1.5;
 }
 
+body.z-menu-open,
+body.z-modal-open {
+  overflow: hidden;
+}
+
 #root,
 .zeus-app {
   position: relative;

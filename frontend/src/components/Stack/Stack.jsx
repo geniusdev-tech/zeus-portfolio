@@ -18,7 +18,7 @@ import {
   TerminalSquare,
   Waypoints,
 } from 'lucide-react';
-import { stackData } from '../../data';
+import { useI18n } from '../../i18n';
 import './Stack.css';
 
 const ICON_MAP = {
@@ -60,6 +60,8 @@ function chunkStack(items) {
 }
 
 function StackItem({ name, type, pct, years, accent }) {
+  const { content } = useI18n();
+  const { stack } = content;
   const Icon = ICON_MAP[name] ?? Code2;
 
   return (
@@ -82,19 +84,21 @@ function StackItem({ name, type, pct, years, accent }) {
           aria-valuemin="0"
           aria-valuemax="100"
           aria-valuenow={pct}
-          aria-label={`${name} proficiency`}
+          aria-label={stack.proficiencyLabel(name)}
         />
       </div>
       <div className="z-stack__footer">
-        <span className="z-stack__years">{years} yrs</span>
-        <span className="z-stack__meta">Live systems + GitHub</span>
+        <span className="z-stack__years">{years} {stack.yearsSuffix}</span>
+        <span className="z-stack__meta">{stack.meta}</span>
       </div>
     </div>
   );
 }
 
 export default function Stack() {
-  const pages = useMemo(() => chunkStack(stackData), []);
+  const { content } = useI18n();
+  const { stack } = content;
+  const pages = useMemo(() => chunkStack(stack.items), [stack.items]);
   const [pageIndex, setPageIndex] = useState(0);
 
   const handlePrev = () => {
@@ -109,23 +113,20 @@ export default function Stack() {
     <section className="z-stack" id="stack">
       <div className="z-section">
         <div className="z-sec-header z-reveal">
-          <div className="z-sec-tag cyan">03 — Operating Surface</div>
+          <div className="z-sec-tag cyan">{stack.sectionTag}</div>
           <h2 className="z-sec-title cyan">
-            Core Stack
+            {stack.titlePrefix}
             <br />
-            <em>for production systems.</em>
+            <em>{stack.titleEmphasis}</em>
           </h2>
-          <p className="z-stack__intro">
-            Compact tooling for systems, automation and delivery. The mix stays practical:
-            the languages, runtimes and platforms I actually use to ship and keep services observable.
-          </p>
+          <p className="z-stack__intro">{stack.intro}</p>
         </div>
 
         <div className="z-stack__carousel z-reveal">
           <div className="z-stack__carousel-topbar">
-            <span className="z-stack__carousel-label">Browse the stack modules</span>
+            <span className="z-stack__carousel-label">{stack.carouselLabel}</span>
             <div className="z-stack__controls">
-              <button type="button" className="z-stack__arrow" onClick={handlePrev} aria-label="Previous stack page">
+              <button type="button" className="z-stack__arrow" onClick={handlePrev} aria-label={stack.prev}>
                 <ArrowLeft size={18} />
               </button>
               <div className="z-stack__dots" aria-label="Stack carousel pages">
@@ -135,11 +136,11 @@ export default function Stack() {
                     type="button"
                     className={`z-stack__dot${index === pageIndex ? ' active' : ''}`}
                     onClick={() => setPageIndex(index)}
-                    aria-label={`Go to stack page ${index + 1}`}
+                    aria-label={stack.goTo(index + 1)}
                   />
                 ))}
               </div>
-              <button type="button" className="z-stack__arrow" onClick={handleNext} aria-label="Next stack page">
+              <button type="button" className="z-stack__arrow" onClick={handleNext} aria-label={stack.next}>
                 <ArrowRight size={18} />
               </button>
             </div>
@@ -171,7 +172,7 @@ export default function Stack() {
 
           <div className="z-stack__mobile-list">
             <div className="z-stack__mobile-list-content">
-              {stackData.map((item) => (
+              {stack.items.map((item) => (
                 <StackItem key={item.name} {...item} />
               ))}
             </div>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import BrandLogo from '../BrandLogo/BrandLogo';
+import { useI18n } from '../../i18n';
 import './AIChatWidget.css';
 
 const cleanUrl = (url) => {
@@ -11,19 +12,7 @@ const cleanUrl = (url) => {
 };
 
 const CHAT_API_URL = cleanUrl(import.meta.env.VITE_AI_CHAT_URL);
-const STORAGE_KEY = 'zeus-protocol-chat-history';
-const LEGACY_WELCOME_REGEX =
-  /assistente da Zeus Protocol|assistente da Zeus|Posso te ajudar com site, automacao|Sou o ZEUS AI\. Posso te ajudar com sistemas, automacoes, DevOps e infraestrutura\./i;
-const INITIAL_HISTORY = [
-  {
-    role: 'bot',
-    text: 'ZEUS AI online. Send scope, stack, deadline and contact to start intake.',
-    meta: 'LIVE | CRM',
-    createdAt: new Date().toISOString(),
-  },
-];
-
-function formatTime(value) {
+function formatTime(value, locale) {
   if (!value) return '--:--';
 
   const date = new Date(value);
@@ -31,7 +20,7 @@ function formatTime(value) {
     return '--:--';
   }
 
-  return date.toLocaleTimeString('pt-BR', {
+  return date.toLocaleTimeString(locale, {
     hour: '2-digit',
     minute: '2-digit',
   });
@@ -45,47 +34,64 @@ function normalizeMessage(message) {
   };
 }
 
-function loadHistory() {
+function loadHistory({ storageKey, initialHistory, legacyWelcome }) {
   if (typeof window === 'undefined') {
-    return INITIAL_HISTORY;
+    return initialHistory;
   }
 
   try {
-    const saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY));
+    const saved = JSON.parse(window.localStorage.getItem(storageKey))
+      ?? JSON.parse(window.localStorage.getItem('zeus-protocol-chat-history'));
+
     if (!Array.isArray(saved) || !saved.length) {
-      return INITIAL_HISTORY;
+      return initialHistory;
     }
 
     const history = saved.map(normalizeMessage);
     const firstMessage = history[0];
-    if (firstMessage?.role === 'bot' && LEGACY_WELCOME_REGEX.test(firstMessage.text || '')) {
-      history[0] = INITIAL_HISTORY[0];
+    if (firstMessage?.role === 'bot' && legacyWelcome.test(firstMessage.text || '')) {
+      history[0] = initialHistory[0];
     }
 
     return history;
   } catch {
-    return INITIAL_HISTORY;
+    return initialHistory;
   }
 }
 
-function fallbackMessage() {
-  return 'ZEUS AI offline. Send scope, stack, deadline and contact and I will route it when the link returns.';
-}
-
 export default function AIChatWidget() {
+  const { locale, content } = useI18n();
+  const { aiChat } = content;
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
-  const [messages, setMessages] = useState(loadHistory);
+  const [messages, setMessages] = useState(() =>
+    loadHistory({
+      storageKey: `${aiChat.storageKey}:${locale}`,
+      initialHistory: aiChat.initialHistory,
+      legacyWelcome: aiChat.legacyWelcome,
+    })
+  );
   const [mounted, setMounted] = useState(false);
   const [connectionState, setConnectionState] = useState('idle');
   const listRef = useRef(null);
 
   useEffect(() => {
+    setMessages(
+      loadHistory({
+        storageKey: `${aiChat.storageKey}:${locale}`,
+        initialHistory: aiChat.initialHistory,
+        legacyWelcome: aiChat.legacyWelcome,
+      })
+    );
+    setConnectionState('idle');
+  }, [locale, aiChat]);
+
+  useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+      window.localStorage.setItem(`${aiChat.storageKey}:${locale}`, JSON.stringify(messages));
     }
-  }, [messages]);
+  }, [messages, locale, aiChat.storageKey]);
 
   useEffect(() => {
     const element = listRef.current;
@@ -110,7 +116,7 @@ export default function AIChatWidget() {
       return;
     }
 
-    pushMessage({ role: 'user', text, meta: 'Mensagem enviada' });
+    pushMessage({ role: 'user', text, meta: aiChat.messageMeta.userSent });
     setInput('');
     setSending(true);
     setConnectionState('loading');
@@ -121,6 +127,7 @@ export default function AIChatWidget() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: text,
+          locale,
           history: messages.map((message) => ({
             role: message.role === 'user' ? 'user' : 'assistant',
             content: message.text,
@@ -134,32 +141,32 @@ export default function AIChatWidget() {
 
       const details = [];
       if (data.meta?.intention && data.meta.intention !== 'general') {
-        details.push(`Intencao: ${data.meta.intention}`);
+        details.push(`${aiChat.messageMeta.intent}: ${data.meta.intention}`);
       }
       if (data.meta?.email) {
-        details.push(`Email: ${data.meta.email}`);
+        details.push(`${aiChat.messageMeta.email}: ${data.meta.email}`);
       }
       if (data.meta?.phone) {
-        details.push(`Contato: ${data.meta.phone}`);
+        details.push(`${aiChat.messageMeta.phone}: ${data.meta.phone}`);
       }
       if (data.meta?.leadSaved) {
-        details.push('Lead salvo');
+        details.push(aiChat.messageMeta.leadSaved);
       }
       if (!data.meta?.aiAvailable) {
-        details.push('Fallback ativo');
+        details.push(aiChat.messageMeta.fallbackActive);
       }
 
       pushMessage({
         role: 'bot',
-        text: data.reply || fallbackMessage(),
-        meta: details.join(' | ') || 'Resposta entregue',
+        text: data.reply || aiChat.fallbackMessage,
+        meta: details.join(' | ') || aiChat.messageMeta.replyDelivered,
       });
       setConnectionState(data.meta?.aiAvailable ? 'online' : 'fallback');
     } catch (error) {
       pushMessage({
         role: 'bot',
-        text: fallbackMessage(),
-        meta: error.message || 'Erro no chat',
+        text: aiChat.fallbackMessage,
+        meta: error.message || aiChat.messageMeta.error,
       });
       setConnectionState('error');
     } finally {
@@ -167,13 +174,7 @@ export default function AIChatWidget() {
     }
   };
 
-  const statusLabel = {
-    idle: 'STANDBY',
-    loading: 'SCANNING',
-    online: 'LIVE',
-    fallback: 'FALLBACK',
-    error: 'ERROR',
-  }[connectionState];
+  const statusLabel = aiChat.statusLabels[connectionState];
 
   if (!mounted || typeof document === 'undefined') {
     return null;
@@ -191,14 +192,14 @@ export default function AIChatWidget() {
 
           <div className="z-ai-chat__title">
             <BrandLogo variant="inline" size="sm" />
-            <span>zeus-shell:~/ops</span>
+            <span>{aiChat.terminalLabel}</span>
           </div>
 
           <div className={`z-ai-chat__status is-${connectionState}`}>{statusLabel}</div>
         </header>
 
         <div className="z-ai-chat__frame">
-          <div className="z-ai-chat__frame-label">DEVOPS / HACKER CHANNEL</div>
+          <div className="z-ai-chat__frame-label">{aiChat.frameLabel}</div>
           <div className="z-ai-chat__frame-grid" aria-hidden="true"></div>
         </div>
 
@@ -207,9 +208,9 @@ export default function AIChatWidget() {
             <article className={`z-ai-chat__message ${message.role}`} key={`${message.role}-${index}`}>
               <div className="z-ai-chat__message-head">
                 <span className="z-ai-chat__message-author">
-                  {message.role === 'user' ? 'operator@client' : 'root@zeus'}
+                  {message.role === 'user' ? aiChat.authorUser : aiChat.authorBot}
                 </span>
-                <span className="z-ai-chat__message-time">{formatTime(message.createdAt)}</span>
+                <span className="z-ai-chat__message-time">{formatTime(message.createdAt, locale)}</span>
               </div>
               <p>{message.text}</p>
               {message.meta ? (
@@ -230,11 +231,11 @@ export default function AIChatWidget() {
           {sending ? (
             <article className="z-ai-chat__message bot is-typing">
               <div className="z-ai-chat__message-head">
-                <span className="z-ai-chat__message-author">root@zeus</span>
-                <span className="z-ai-chat__message-time">{formatTime(new Date().toISOString())}</span>
+                <span className="z-ai-chat__message-author">{aiChat.authorBot}</span>
+                <span className="z-ai-chat__message-time">{formatTime(new Date().toISOString(), locale)}</span>
               </div>
               <p>
-                scanning payload
+                {aiChat.typing}
                 <span className="z-ai-chat__cursor" aria-hidden="true"></span>
               </p>
             </article>
@@ -249,14 +250,14 @@ export default function AIChatWidget() {
             <textarea
               className="z-ai-chat__input"
               rows="2"
-              placeholder="enter scope, stack, deadline and contact"
+              placeholder={aiChat.inputPlaceholder}
               value={input}
               onChange={(event) => setInput(event.target.value)}
               required
             />
           </div>
           <button className="z-ai-chat__send" type="submit" disabled={sending}>
-            {sending ? 'RUN...' : 'RUN'}
+            {sending ? aiChat.sending : aiChat.send}
           </button>
         </form>
 
@@ -271,7 +272,7 @@ export default function AIChatWidget() {
         type="button"
         className="z-ai-chat__toggle"
         onClick={() => setIsOpen((current) => !current)}
-        aria-label={isOpen ? 'Close Zeus hacker shell' : 'Open Zeus hacker shell'}
+        aria-label={isOpen ? aiChat.toggleClose : aiChat.toggleOpen}
       >
         <span>&gt;_</span>
       </button>

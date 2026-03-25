@@ -85,7 +85,7 @@ export const projectsData = [
     badge: 'NODE OPS / ACTIVE',
     title: 'QELO-X',
     desc: 'Node operations layer for blockchain infrastructure. Supervises services, keeps control local, surfaces runtime telemetry and automates recovery on Linux production hosts.',
-    link: '/Quelox',
+    link: '/qelox',
     muted: false,
     comingSoon: false,
     skills: [

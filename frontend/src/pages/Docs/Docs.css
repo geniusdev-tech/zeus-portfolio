@@ -1,0 +1,400 @@
+/* =========================================
+   DOCS PAGE
+   ========================================= */
+
+.z-docs {
+  min-height: 100vh;
+  color: var(--z-text, #e2e8f0);
+  padding-bottom: 6rem;
+}
+
+/* ── Top bar ── */
+.z-docs__top {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 5rem 1.5rem 3rem;
+  margin-bottom: 3rem;
+}
+
+.z-docs__top-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.z-docs__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.z-docs__breadcrumb-link {
+  color: rgba(0, 255, 180, 0.7);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.z-docs__breadcrumb-link:hover {
+  color: #00ffb4;
+}
+
+.z-docs__breadcrumb-sep {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.z-docs__title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin: 0 0 0.75rem;
+  line-height: 1.15;
+}
+
+.z-docs__subtitle {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 560px;
+  line-height: 1.65;
+  margin: 0 0 1.5rem;
+}
+
+.z-docs__topbar-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.z-docs__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00ffb4;
+  animation: z-docs-pulse 2s ease-in-out infinite;
+}
+
+@keyframes z-docs-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Content ── */
+.z-docs__content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+.z-docs__section-head {
+  margin-bottom: 1.5rem;
+}
+
+.z-docs__section-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(0, 255, 180, 0.8);
+  border: 1px solid rgba(0, 255, 180, 0.25);
+  padding: 0.25rem 0.75rem;
+  border-radius: 2px;
+}
+
+/* ── Project card ── */
+.z-docs__project {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.z-docs__project-header {
+  padding: 2rem 2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.z-docs__project-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.z-docs__badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 3px;
+}
+
+.z-docs__badge--active {
+  background: rgba(0, 255, 180, 0.12);
+  color: #00ffb4;
+  border: 1px solid rgba(0, 255, 180, 0.3);
+}
+
+.z-docs__badge--coming {
+  background: rgba(255, 200, 0, 0.1);
+  color: rgba(255, 200, 0, 0.9);
+  border: 1px solid rgba(255, 200, 0, 0.25);
+}
+
+.z-docs__project-ver {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: monospace;
+}
+
+.z-docs__project-cat {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.z-docs__project-name {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.z-docs__project-tagline {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ── Project body ── */
+.z-docs__project-body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.z-docs__section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0 0 0.75rem;
+}
+
+.z-docs__project-desc p {
+  font-size: 0.96rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── Highlights list ── */
+.z-docs__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.z-docs__list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.94rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.5;
+}
+
+.z-docs__check {
+  color: #00ffb4;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.05em;
+}
+
+/* ── Stack grid ── */
+.z-docs__stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.65rem;
+}
+
+.z-docs__stack-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  padding: 0.65rem 0.9rem;
+}
+
+.z-docs__stack-name {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.15rem;
+}
+
+.z-docs__stack-role {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Access box ── */
+.z-docs__access-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  background: rgba(0, 255, 180, 0.04);
+  border: 1px solid rgba(0, 255, 180, 0.15);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+}
+
+.z-docs__access-price {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.z-docs__price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #00ffb4;
+  letter-spacing: -0.01em;
+}
+
+.z-docs__price-note {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.z-docs__access-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.z-docs__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  background: #00ffb4;
+  color: #0a0a0f;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 5px;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.z-docs__cta-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.z-docs__secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.z-docs__secondary-btn:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+/* ── Upcoming card ── */
+.z-docs__upcoming {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 1.75rem 2rem;
+}
+
+.z-docs__upcoming-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.z-docs__upcoming-desc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ── Footer ── */
+.z-docs__footer {
+  max-width: 800px;
+  margin: 4rem auto 0;
+  padding: 2rem 1.5rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.z-docs__back-link {
+  font-size: 0.85rem;
+  color: rgba(0, 255, 180, 0.7);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.z-docs__back-link:hover {
+  color: #00ffb4;
+}
+
+.z-docs__footer-note {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .z-docs__project-header,
+  .z-docs__project-body {
+    padding: 1.25rem;
+  }
+
+  .z-docs__access-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .z-docs__stack-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

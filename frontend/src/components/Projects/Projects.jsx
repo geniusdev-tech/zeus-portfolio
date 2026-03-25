@@ -1,26 +1,25 @@
 import { Link } from 'react-router-dom';
-import { projectsData } from '../../data';
+import { useI18n } from '../../i18n';
 import BrandLogo from '../BrandLogo/BrandLogo';
 import './Projects.css';
 
 export default function Projects() {
+  const { content } = useI18n();
+  const { projects } = content;
   const isMaintenance = import.meta.env.VITE_MAINTENANCE_MODE === 'true';
-  const featuredProject = projectsData[0];
+  const featuredProject = projects.featured;
 
   return (
     <section className="z-full z-proj" id="projects">
       <div className="z-section">
         <div className="z-sec-header z-reveal">
-          <div className="z-sec-tag">02 — Active Build</div>
+          <div className="z-sec-tag">{projects.sectionTag}</div>
           <h2 className="z-sec-title">
-            Current Build
+            {projects.titlePrefix}
             <br />
-            <em>in Active Development.</em>
+            <em>{projects.titleEmphasis}</em>
           </h2>
-          <p className="z-proj__intro">
-            A focused view of the live build, with the stack and delivery weight behind each
-            layer of the product.
-          </p>
+          <p className="z-proj__intro">{projects.intro}</p>
         </div>
 
         <div className="z-proj__grid z-reveal">
@@ -30,21 +29,21 @@ export default function Projects() {
           >
             {featuredProject.comingSoon && (
               <div className="z-proj__coming-soon">
-                <span className="z-proj__cs-label">COMING SOON</span>
+                <span className="z-proj__cs-label">{projects.comingSoon}</span>
               </div>
             )}
 
             <div className="z-proj__brand-row">
               <BrandLogo variant="mark" size="sm" className="z-proj__brand-logo" />
               <div className="z-proj__brand-copy">
-                <span className="z-proj__brand-label">Zeus Protocol</span>
-                <span className="z-proj__brand-note">Live case and delivery surface</span>
+                <span className="z-proj__brand-label">{projects.brandLabel}</span>
+                <span className="z-proj__brand-note">{projects.brandNote}</span>
               </div>
             </div>
 
             <div className="z-proj__badge">
-              {isMaintenance && featuredProject.link === '/Quelox' ? (
-                <span style={{ color: '#ffcc00' }}>MAINTENANCE ACTIVE</span>
+              {isMaintenance && featuredProject.link === '/qelox' ? (
+                <span style={{ color: '#ffcc00' }}>{projects.maintenanceActive}</span>
               ) : (
                 featuredProject.badge
               )}
@@ -89,21 +88,21 @@ export default function Projects() {
             )}
 
             {!featuredProject.comingSoon && (
-              featuredProject.external ? (
+                featuredProject.external ? (
                 <a
                   href={featuredProject.link}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="z-proj__btn"
                 >
-                  <span>Open Case</span>
+                  <span>{projects.openCase}</span>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2.5 7H11.5M7.5 3L11.5 7L7.5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </a>
               ) : (
                 <Link to={featuredProject.link} className="z-proj__btn">
-                  <span>Open Case</span>
+                  <span>{projects.openCase}</span>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2.5 7H11.5M7.5 3L11.5 7L7.5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>

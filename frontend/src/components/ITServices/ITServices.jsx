@@ -1,52 +1,8 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Blocks, Cloud, Code, Network, Server, Wrench } from 'lucide-react';
+import { useI18n } from '../../i18n';
 import './ITServices.css';
-
-const services = [
-  {
-    title: 'Systems Support',
-    description:
-      'Troubleshooting, maintenance, backups and recovery for production environments.',
-    icon: Wrench,
-    accent: 'green',
-  },
-  {
-    title: 'Platform Operations',
-    description:
-      'Linux and Windows server management, automation and monitoring for steady delivery.',
-    icon: Server,
-    accent: 'cyan',
-  },
-  {
-    title: 'Network Engineering',
-    description:
-      'LAN, firewall, VPN and infrastructure diagnostics tuned for control.',
-    icon: Network,
-    accent: 'green',
-  },
-  {
-    title: 'Cloud Automation',
-    description:
-      'Cloud deployments, CI/CD pipelines, containerization and scalable delivery.',
-    icon: Cloud,
-    accent: 'cyan',
-  },
-  {
-    title: 'Node Infrastructure',
-    description:
-      'Blockchain node deployment, telemetry and recovery workflows.',
-    icon: Blocks,
-    accent: 'green',
-  },
-  {
-    title: 'Custom Systems',
-    description:
-      'Backend systems, APIs, desktop tools and automation built around your workflow.',
-    icon: Code,
-    accent: 'cyan',
-  },
-];
 
 function ServiceCard({ service, index }) {
   const [tiltStyle, setTiltStyle] = useState({});
@@ -121,7 +77,7 @@ function ServiceCard({ service, index }) {
 
         <div className="z-itservices__meta">
           <span className="z-itservices__meta-line" />
-          <span className="z-itservices__meta-label">service node {index + 1}</span>
+          <span className="z-itservices__meta-label">{service.nodeLabel(index)}</span>
         </div>
       </div>
     </motion.div>
@@ -129,6 +85,9 @@ function ServiceCard({ service, index }) {
 }
 
 export default function ITServices() {
+  const { content } = useI18n();
+  const { services } = content;
+
   return (
     <section className="z-itservices z-full relative isolate" id="services">
       <div className="z-itservices__mesh" />
@@ -157,20 +116,26 @@ export default function ITServices() {
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="z-sec-tag cyan">04 — Service Scope</div>
+          <div className="z-sec-tag cyan">{services.sectionTag}</div>
           <h2 className="z-sec-title cyan">
-            Systems &amp; Automation<br />
-            <em>Service Stack</em>
+            {services.titlePrefix}<br />
+            <em>{services.titleEmphasis}</em>
           </h2>
-          <p className="z-itservices__subtitle">
-            Focused delivery across systems, automation, cloud and node operations.
-          </p>
+          <p className="z-itservices__subtitle">{services.subtitle}</p>
         </motion.div>
 
         <div className="z-itservices__cards-container">
           <div className="z-itservices__cards-content">
-            {services.map((service, index) => (
-              <ServiceCard key={service.title} service={service} index={index} />
+            {services.items.map((service, index) => (
+              <ServiceCard
+                key={service.title}
+                service={{
+                  ...service,
+                  icon: [Wrench, Server, Network, Cloud, Blocks, Code][index] || Code,
+                  nodeLabel: services.nodeLabel,
+                }}
+                index={index}
+              />
             ))}
           </div>
         </div>

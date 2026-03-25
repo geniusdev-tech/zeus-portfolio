@@ -6,6 +6,7 @@ import ITServices from '../components/ITServices';
 import Projects from '../components/Projects';
 import Philosophy from '../components/Philosophy';
 import Stack from '../components/Stack';
+import FAQ from '../components/FAQ/FAQ';
 import Contact from '../components/Contact';
 import StatusDashboard from '../components/StatusDashboard';
 import Footer from '../components/Footer';
@@ -24,19 +25,22 @@ export default function Portfolio() {
             <Projects />
 
             <div className="z-divider-line" />
-            <Stack />
+            <StatusDashboard />
 
             <div className="z-divider-line" />
             <ITServices />
 
             <div className="z-divider-line" />
+            <Stack />
+
+            <div className="z-divider-line" />
             <Contact />
 
             <div className="z-divider-line" />
-            <Philosophy />
+            <FAQ />
 
             <div className="z-divider-line" />
-            <StatusDashboard />
+            <Philosophy />
 
             <Footer />
         </>

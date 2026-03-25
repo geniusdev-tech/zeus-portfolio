@@ -1,5 +1,36 @@
 const OFFICIAL_CONTACT_EMAIL = 'walletzeus@proton.me';
 
+function normalizeLocale(locale) {
+  if (!locale) {
+    return 'pt-BR';
+  }
+
+  const normalized = String(locale).toLowerCase();
+  if (normalized.startsWith('en')) {
+    return 'en-US';
+  }
+
+  if (normalized.startsWith('es')) {
+    return 'es-ES';
+  }
+
+  return 'pt-BR';
+}
+
+function getLanguageInstruction(locale) {
+  const normalized = normalizeLocale(locale);
+
+  if (normalized === 'en-US') {
+    return 'Respond in English unless the user explicitly asks for another language.';
+  }
+
+  if (normalized === 'es-ES') {
+    return 'Responde en español, salvo que el usuario pida otro idioma.';
+  }
+
+  return 'Responda em portugues do Brasil, a menos que o usuario escreva em outro idioma.';
+}
+
 const SYSTEM_PROMPT = `
 Voce e o ZEUS AI, um assistente inteligente com funcao de atendimento, qualificacao de leads e suporte comercial dentro de um sistema profissional.
 
@@ -22,7 +53,7 @@ COMPORTAMENTO:
 2. Use linguagem moderna e natural
 3. Evite textos longos
 4. Seja estrategico: conduza a conversa
-5. Responda em portugues do Brasil, a menos que o usuario escreva em outro idioma
+5. Responda no idioma do usuario, seguindo a instrução adicional de idioma
 
 MEMORIA:
 - Use o historico da conversa
@@ -126,13 +157,14 @@ function sanitizeHistory(history) {
     .slice(-10);
 }
 
-function buildAIMLMessages(message, history = []) {
+function buildAIMLMessages(message, history = [], locale) {
   const sanitizedHistory = sanitizeHistory(history);
+  const languageInstruction = getLanguageInstruction(locale);
 
   return [
     {
       role: 'system',
-      content: SYSTEM_PROMPT,
+      content: `${languageInstruction}\n\n${SYSTEM_PROMPT}`,
     },
     ...sanitizedHistory,
     {
@@ -142,13 +174,16 @@ function buildAIMLMessages(message, history = []) {
   ];
 }
 
-function buildOllamaPrompt(message, history = []) {
+function buildOllamaPrompt(message, history = [], locale) {
   const sanitizedHistory = sanitizeHistory(history);
+  const languageInstruction = getLanguageInstruction(locale);
   const transcript = sanitizedHistory
     .map((item) => `${item.role === 'assistant' ? 'Assistente' : 'Usuario'}: ${item.content}`)
     .join('\n');
 
   return [
+    languageInstruction,
+    '',
     SYSTEM_PROMPT,
     '',
     transcript ? `Historico da conversa:\n${transcript}` : '',

@@ -6,19 +6,58 @@ export default function NeuralBackground() {
 
     useEffect(() => {
         const canvas = canvasRef.current;
+        if (!canvas) return undefined;
         const ctx = canvas.getContext('2d');
+        if (!ctx) return undefined;
         let animationFrameId;
 
         let particles = [];
         const isMobile = window.innerWidth < 768;
-        const particleCount = isMobile ? 55 : 130;
-        const connectionDistance = isMobile ? 140 : 200;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const particleCount = isMobile ? 36 : 90;
+        const connectionDistance = isMobile ? 120 : 180;
         const mouse = { x: null, y: null, radius: 150 };
         let phase = 0;
 
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+        };
+
+        const drawStaticBackdrop = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            ctx.strokeStyle = 'rgba(0, 229, 255, 0.035)';
+            ctx.lineWidth = 1;
+            for (let x = -40; x < canvas.width + 40; x += 56) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = -40; y < canvas.height + 40; y += 56) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+            ctx.restore();
+
+            ctx.save();
+            ctx.fillStyle = 'rgba(0, 255, 140, 0.12)';
+            const seeds = [
+                [canvas.width * 0.18, canvas.height * 0.22],
+                [canvas.width * 0.74, canvas.height * 0.16],
+                [canvas.width * 0.56, canvas.height * 0.74],
+                [canvas.width * 0.26, canvas.height * 0.68],
+            ];
+            seeds.forEach(([x, y], index) => {
+                ctx.beginPath();
+                ctx.arc(x, y, 2.2 + index * 0.35, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.restore();
         };
 
         class Particle {
@@ -139,9 +178,24 @@ export default function NeuralBackground() {
         };
 
         window.addEventListener('resize', resizeCanvas);
-        window.addEventListener('mousemove', handleMouseMove);
 
         resizeCanvas();
+
+        if (prefersReducedMotion.matches) {
+            drawStaticBackdrop();
+            const handleResize = () => {
+                resizeCanvas();
+                drawStaticBackdrop();
+            };
+
+            window.addEventListener('resize', handleResize);
+            return () => {
+                window.removeEventListener('resize', resizeCanvas);
+                window.removeEventListener('resize', handleResize);
+            };
+        }
+
+        window.addEventListener('mousemove', handleMouseMove);
         init();
         animate();
 

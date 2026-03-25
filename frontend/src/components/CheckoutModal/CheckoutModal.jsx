@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { contactLinks } from '../../data';
 import BrandLogo from '../BrandLogo/BrandLogo';
+import { CONTACT_EMAIL, useI18n } from '../../i18n';
 import './CheckoutModal.css';
 
 const STEPS = ['IDENTIFICATION', 'METHOD_SELECTION', 'PAYMENT'];
@@ -12,9 +12,20 @@ const cleanUrl = (url) => {
 };
 
 const API_URL = cleanUrl(import.meta.env.VITE_API_URL);
-const supportEmail = contactLinks.find((link) => link.label === 'Email')?.value || 'walletzeus@proton.me';
+const supportEmail = CONTACT_EMAIL;
+
+const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+function getFocusableElements(container) {
+    if (!container) return [];
+    return Array.from(container.querySelectorAll(focusableSelector));
+}
 
 export default function CheckoutModal({ isOpen, onClose, productName, price }) {
+    const { content } = useI18n();
+    const { checkout } = content;
+    const containerRef = useRef(null);
+    const previousFocusRef = useRef(null);
     const [step, setStep] = useState('IDENTIFICATION');
     const [paymentMethod, setPaymentMethod] = useState('PIX');
     const [form, setForm] = useState({ name: '', email: '' });
@@ -35,6 +46,11 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
     }, [isOpen]);
 
     useEffect(() => {
+        document.body.classList.toggle('z-modal-open', isOpen);
+        return () => document.body.classList.remove('z-modal-open');
+    }, [isOpen]);
+
+    useEffect(() => {
         if (step === 'PAYMENT' && timeLeft > 0) {
             const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
             return () => clearInterval(timer);
@@ -46,6 +62,82 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
         const timer = setTimeout(() => setCopied(''), 1800);
         return () => clearTimeout(timer);
     }, [copied]);
+
+    useEffect(() => {
+        if (!isOpen) {
+            return undefined;
+        }
+
+        previousFocusRef.current = document.activeElement instanceof HTMLElement
+            ? document.activeElement
+            : null;
+
+        const timer = window.requestAnimationFrame(() => {
+            const primaryTarget = containerRef.current?.querySelector('[data-modal-primary="true"]');
+            if (primaryTarget instanceof HTMLElement) {
+                primaryTarget.focus();
+                return;
+            }
+
+            const focusables = getFocusableElements(containerRef.current);
+            if (focusables.length > 0) {
+                focusables[0].focus();
+            } else {
+                containerRef.current?.focus();
+            }
+        });
+
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                onClose();
+                return;
+            }
+
+            if (event.key !== 'Tab') {
+                return;
+            }
+
+            const focusables = getFocusableElements(containerRef.current);
+            if (!focusables.length) {
+                event.preventDefault();
+                containerRef.current?.focus();
+                return;
+            }
+
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.cancelAnimationFrame(timer);
+            document.removeEventListener('keydown', handleKeyDown);
+            previousFocusRef.current?.focus?.();
+        };
+    }, [isOpen, onClose]);
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const primaryTarget = containerRef.current?.querySelector('[data-modal-primary="true"]');
+        if (primaryTarget instanceof HTMLElement) {
+            primaryTarget.focus();
+            return;
+        }
+
+        const focusables = getFocusableElements(containerRef.current);
+        focusables[0]?.focus();
+    }, [isOpen, step]);
 
     if (!isOpen) return null;
 
@@ -134,14 +226,18 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
     );
 
     const paymentValue = paymentMethod === 'PIX' ? pixPayload : usdtAddress;
-    const paymentLabel = paymentMethod === 'PIX' ? 'PIX Copy and Paste' : 'USDT Polygon Address';
+    const paymentLabel = paymentMethod === 'PIX' ? checkout.pix.label : checkout.crypto.label;
     const paymentHint = paymentMethod === 'PIX'
-        ? 'PIX confirmation is handled automatically after transfer.'
-        : `After sending USDT, forward the transaction hash to ${supportEmail}.`;
-    const paymentMethodLabel = paymentMethod === 'PIX' ? 'Pix instant transfer' : 'USDT on Polygon';
+        ? checkout.pix.hint
+        : checkout.crypto.hint(supportEmail);
+    const paymentMethodLabel = paymentMethod === 'PIX' ? checkout.pix.banner : checkout.crypto.banner;
+    const paymentStatus = paymentMethod === 'PIX' ? checkout.pix.status : checkout.crypto.status;
+    const scanLabel = paymentMethod === 'PIX' ? checkout.pix.scan : checkout.crypto.scan;
+    const copyFeedbackLabel = paymentMethod === 'PIX' ? checkout.pix.copyFeedback : checkout.crypto.copyFeedback;
+    const copyHelp = paymentMethod === 'PIX' ? checkout.pix.help : checkout.crypto.help;
 
     const shortValue = !paymentValue
-        ? 'Configuration pending'
+        ? checkout.configurationPending
         : paymentMethod === 'PIX'
             ? `${paymentValue.substring(0, 30)}...`
             : paymentValue;
@@ -149,7 +245,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
     const handleCopy = async (text) => {
         if (!text) return;
         await navigator.clipboard.writeText(text);
-        setCopied(paymentMethod === 'PIX' ? 'PIX code copied' : 'Wallet address copied');
+        setCopied(copyFeedbackLabel);
     };
 
     const handlePurchaseConfirmation = async () => {
@@ -175,12 +271,12 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
 
             setPurchaseState({
                 type: 'success',
-                message: 'Delivery email sent with the QELO-X access link.',
+                message: checkout.deliverySuccess,
             });
         } catch (error) {
             setPurchaseState({
                 type: 'error',
-                message: error.message || 'Failed to send the delivery email.',
+                message: error.message || checkout.deliveryError,
             });
         } finally {
             setPurchaseSending(false);
@@ -188,12 +284,21 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
     };
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-overlay" onClick={onClose} role="presentation">
+            <div
+                className="modal-container"
+                onClick={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="checkout-modal-title"
+                aria-describedby="checkout-modal-description"
+                tabIndex={-1}
+                ref={containerRef}
+            >
                 <div className="modal-ambient" />
                 <div className="modal-grid" />
 
-                <button className="modal-close" onClick={onClose} aria-label="Close checkout">
+                <button type="button" className="modal-close" onClick={onClose} aria-label={checkout.closeAria}>
                     ×
                 </button>
 
@@ -201,28 +306,28 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                     <div className="header-left">
                         <div className="modal-brand-row">
                             <BrandLogo variant="inline" size="sm" className="modal-brand-logo" />
-                            <span className="modal-brand-row__label">Checkout intake channel</span>
+                            <span className="modal-brand-row__label">{checkout.brandRowLabel}</span>
                         </div>
-                        <span className="modal-tag">Operator Checkout</span>
-                        <h2 className="modal-title">{productName}</h2>
-                        <p className="modal-subtitle">
-                            Guided payment flow for operator access with PIX and USDT support.
+                        <span className="modal-tag">{checkout.tag}</span>
+                        <h2 className="modal-title" id="checkout-modal-title">{productName}</h2>
+                        <p className="modal-subtitle" id="checkout-modal-description">
+                            {checkout.subtitle}
                         </p>
-                        <div className="modal-header__chips" aria-label="Checkout highlights">
-                            <span className="modal-chip">Access delivery by email</span>
-                            <span className="modal-chip">PIX and crypto support</span>
-                            <span className="modal-chip">Operator intake checkout</span>
+                        <div className="modal-header__chips" aria-label={checkout.highlightsLabel}>
+                            {checkout.chips.map((chip) => (
+                                <span className="modal-chip" key={chip}>{chip}</span>
+                            ))}
                         </div>
                     </div>
                     <div className="modal-pricebox">
-                        <span className="modal-pricebox__label">Current access</span>
+                        <span className="modal-pricebox__label">{checkout.currentAccess}</span>
                         <div className="modal-price">R$ {price}</div>
-                        <span className="modal-pricebox__hint">Single release access</span>
+                        <span className="modal-pricebox__hint">{checkout.releaseAccess}</span>
                     </div>
                 </div>
 
                 <div className="modal-steps" aria-hidden="true">
-                    {['Identification', 'Method', 'Payment'].map((label, index) => (
+                    {checkout.stepLabels.map((label, index) => (
                         <div
                             key={label}
                             className={`modal-step${currentStep >= index + 1 ? ' active' : ''}`}
@@ -237,30 +342,30 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                     {step === 'IDENTIFICATION' ? (
                         <form className="checkout-form" onSubmit={handleNext}>
                             <div className="modal-section-intro">
-                                <span className="modal-section-tag">Step 01</span>
-                                <p>Enter the delivery contact so access and payment follow-up land in the correct inbox.</p>
+                                <span className="modal-section-tag">{checkout.stepNumbers[0]}</span>
+                                <p>{checkout.step01}</p>
                             </div>
                             <div className="checkout-hintbar">
-                                <span className="checkout-hintbar__item">Used for access delivery</span>
-                                <span className="checkout-hintbar__item">Used for payment follow-up</span>
+                                <span className="checkout-hintbar__item">{checkout.usedForAccess}</span>
+                                <span className="checkout-hintbar__item">{checkout.usedForFollowUp}</span>
                             </div>
                             <div className="form-group">
-                                <label>Full Name</label>
+                                <label>{checkout.fullName}</label>
                                 <input
                                     type="text"
-                                    placeholder="Ex: Joao Silva"
+                                    placeholder={checkout.placeholders.name}
                                     value={form.name}
                                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                                     required
-                                    autoFocus
+                                    data-modal-primary="true"
                                     autoComplete="name"
                                 />
                             </div>
                             <div className="form-group">
-                                <label>Delivery Email</label>
+                                <label>{checkout.deliveryEmail}</label>
                                 <input
                                     type="email"
-                                    placeholder="example@email.com"
+                                    placeholder={checkout.placeholders.email}
                                     value={form.email}
                                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                                     required
@@ -269,77 +374,77 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                             </div>
                             <div className="modal-actions">
                                 <button type="submit" className="btn-modal-primary">
-                                    Continue to Payment Method
+                                    {checkout.continue}
                                 </button>
                             </div>
                         </form>
                     ) : step === 'METHOD_SELECTION' ? (
                         <div className="method-selection">
                             <div className="modal-section-intro">
-                                <span className="modal-section-tag">Step 02</span>
-                                <p>Select the payment rail you want to use for this order.</p>
+                                <span className="modal-section-tag">{checkout.stepNumbers[1]}</span>
+                                <p>{checkout.step02}</p>
                             </div>
                             <div className="checkout-context">
                                 <div className="checkout-context__item">
-                                    <span className="checkout-context__label">Buyer</span>
+                                    <span className="checkout-context__label">{checkout.buyer}</span>
                                     <strong>{form.name}</strong>
                                 </div>
                                 <div className="checkout-context__item">
-                                    <span className="checkout-context__label">Delivery</span>
+                                    <span className="checkout-context__label">{checkout.delivery}</span>
                                     <strong>{form.email}</strong>
                                 </div>
                             </div>
-                            <p className="selection-label">Select the payment method</p>
+                            <p className="selection-label">{checkout.selectMethod}</p>
                             <div className="method-cards">
-                                <button type="button" className="method-card" onClick={() => handleSelectMethod('PIX')}>
+                                <button type="button" className="method-card" onClick={() => handleSelectMethod('PIX')} data-modal-primary="true">
                                     <div className="method-icon">PIX</div>
                                     <div className="method-info">
-                                        <span className="method-name">Pix</span>
-                                        <span className="method-desc">Instant payment with automatic confirmation.</span>
+                                        <span className="method-name">{checkout.pix.name}</span>
+                                        <span className="method-desc">{checkout.pix.desc}</span>
                                     </div>
                                     <div className="method-arrow">→</div>
                                 </button>
                                 <button type="button" className="method-card" onClick={() => handleSelectMethod('CRYPTO')}>
                                     <div className="method-icon">USDT</div>
                                     <div className="method-info">
-                                        <span className="method-name">USDT (Polygon)</span>
-                                        <span className="method-desc">Crypto payment for operators who prefer on-chain transfer.</span>
+                                        <span className="method-name">{checkout.crypto.name}</span>
+                                        <span className="method-desc">{checkout.crypto.desc}</span>
                                     </div>
                                     <div className="method-arrow">→</div>
                                 </button>
                             </div>
                             <div className="modal-actions">
                                 <button type="button" className="btn-modal-secondary" onClick={goBack}>
-                                    Back
+                                    {checkout.changeMethod}
                                 </button>
                             </div>
                         </div>
                     ) : (
                         <div className="payment-step">
                             <div className="modal-section-intro">
-                                <span className="modal-section-tag">Step 03</span>
-                                <p>Use the QR code or copy field below to complete payment and keep the order active within the time window.</p>
+                                <span className="modal-section-tag">{checkout.stepNumbers[2]}</span>
+                                <p>{checkout.step03}</p>
                             </div>
 
                             <div className="payment-topbar">
                                 <div className="payment-status">
                                     <span className="status-dot blink" />
-                                    {paymentMethod === 'PIX' ? 'Awaiting PIX payment' : 'Awaiting wallet transfer'}
+                                    {paymentStatus}
                                 </div>
                                 <div className="payment-timer">
-                                    Payment window <span className="highlight">{formatTime(timeLeft)}</span>
+                                    {checkout.paymentWindow} <span className="highlight">{formatTime(timeLeft)}</span>
                                 </div>
                             </div>
 
                             <div className="payment-method-banner">
-                                <span className="payment-method-banner__label">Selected rail</span>
+                                <span className="payment-method-banner__label">{checkout.selectedRail}</span>
                                 <strong>{paymentMethodLabel}</strong>
                             </div>
 
                             <div className="payment-grid">
                                 <div className="qr-code-panel">
                                     <div className="qr-code-meta">
-                                        <span>{paymentMethod === 'PIX' ? 'Scan to pay' : 'Scan to open wallet'}</span>
+                                        <span>{scanLabel}</span>
                                         <strong>{paymentMethod}</strong>
                                     </div>
                                     <div className="qr-code-wrapper">
@@ -352,7 +457,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                                     includeMargin={true}
                                                 />
                                             ) : (
-                                                <div className="qr-error">Configuration pending</div>
+                                                <div className="qr-error">{checkout.configurationPending}</div>
                                             )}
                                         </div>
                                     </div>
@@ -360,18 +465,18 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
 
                                 <div className="payment-details">
                                     <div className="payment-detail payment-detail--summary">
-                                        <span className="small-label">Access summary</span>
+                                        <span className="small-label">{checkout.accessSummary}</span>
                                         <div className="checkout-context checkout-context--compact">
                                             <div className="checkout-context__item">
-                                                <span className="checkout-context__label">Product</span>
+                                                <span className="checkout-context__label">{checkout.product}</span>
                                                 <strong>{productName}</strong>
                                             </div>
                                             <div className="checkout-context__item">
-                                                <span className="checkout-context__label">Buyer</span>
+                                                <span className="checkout-context__label">{checkout.buyer}</span>
                                                 <strong>{form.name}</strong>
                                             </div>
                                             <div className="checkout-context__item">
-                                                <span className="checkout-context__label">Delivery</span>
+                                                <span className="checkout-context__label">{checkout.delivery}</span>
                                                 <strong>{form.email}</strong>
                                             </div>
                                         </div>
@@ -384,28 +489,27 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                                 type="button"
                                                 onClick={() => handleCopy(paymentValue)}
                                                 disabled={!paymentValue}
+                                                data-modal-primary="true"
                                             >
-                                                Copy
+                                                {checkout.copy}
                                             </button>
                                         </div>
                                         <div className={`copy-feedback${copied ? ' visible' : ''}`}>
                                             {copied || ' '}
                                         </div>
                                         <p className="copy-support">
-                                            {paymentMethod === 'PIX'
-                                                ? 'If scanning fails, use the copy-and-paste field.'
-                                                : 'If your wallet does not scan QR codes, copy the address directly.'}
+                                            {copyHelp}
                                         </p>
                                     </div>
 
                                     <div className="payment-detail payment-detail--note">
-                                        <span className="small-label">Instructions</span>
+                                        <span className="small-label">{checkout.instructions}</span>
                                         <p className="payment-note">{paymentHint}</p>
                                     </div>
                                     <div className="payment-detail payment-detail--confirmation">
-                                        <span className="small-label">Finalize delivery email</span>
+                                        <span className="small-label">{checkout.finalizeEmail}</span>
                                         <p className="payment-note">
-                                            After completing the transfer, confirm below to send the delivery email with the QELO-X access link to {form.email}.
+                                            {checkout.confirmationCopy(form.email)}
                                         </p>
                                         <div className="modal-actions modal-actions--stack">
                                             <button
@@ -414,7 +518,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                                 onClick={handlePurchaseConfirmation}
                                                 disabled={purchaseSending}
                                             >
-                                                {purchaseSending ? 'Sending delivery email...' : 'I completed payment'}
+                                                {purchaseSending ? checkout.sendingEmail : checkout.confirmButton}
                                             </button>
                                             <div className={`purchase-feedback${purchaseState.type ? ` ${purchaseState.type}` : ''}`} aria-live="polite">
                                                 {purchaseState.message || ' '}
@@ -423,7 +527,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
                                     </div>
                                     <div className="modal-actions modal-actions--inline">
                                         <button type="button" className="btn-modal-secondary" onClick={goBack}>
-                                            Change Method
+                                            {checkout.changeMethod}
                                         </button>
                                     </div>
                                 </div>
@@ -434,7 +538,7 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
 
                 <div className="modal-footer-brand">
                     <BrandLogo variant="mark" size="sm" className="modal-footer-brand__logo" />
-                    <span>Secure checkout surface for operator access workflow</span>
+                    <span>{checkout.sectionFooter}</span>
                 </div>
             </div>
         </div>

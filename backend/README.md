@@ -1,7 +1,7 @@
 # zeus-backend
 
 Go API backend for zeus.dev portfolio.
-Handles contact form emails (Resend) and serves live status + GitHub activity.
+Handles contact form emails (Resend), serves live status + GitHub activity, and forwards GA4 events server-side.
 
 ## Endpoints
 
@@ -9,6 +9,7 @@ Handles contact form emails (Resend) and serves live status + GitHub activity.
 |--------|------|-------------|
 | `POST` | `/api/contact` | Sends contact form email via Resend |
 | `POST` | `/api/qelox/purchase-confirmation` | Sends QELO-X thank-you email with download link |
+| `POST` | `/api/analytics` | Proxies GA4 Measurement Protocol events server-side |
 | `GET`  | `/api/status` | Server metrics + project health checks |
 | `GET`  | `/api/github/activity` | Real GitHub public events feed |
 | `GET`  | `/api/health` | Health check (used by Railway/Render) |
@@ -56,6 +57,9 @@ GITHUB_TOKEN          = (optional, for higher rate limit)
 ALLOWED_ORIGIN        = https://zeus.dev,https://www.zeus.dev,https://tech-bot-d4cb6.web.app
 PORTFOLIO_URL         = https://zeus.dev
 SELF_URL              = https://your-app.railway.app
+GA4_MEASUREMENT_ID    = G-XXXXXXXXXX
+GA4_API_SECRET        = your_measurement_protocol_secret
+GA4_DEBUG             = false
 ```
 
 6. Go to **Settings → Networking** → **Generate Domain** to get your public URL
@@ -127,3 +131,7 @@ With a token: **5,000 requests/hour**.
 | `PORTFOLIO_URL` | No | Health check URL for portfolio |
 | `QELOX_HEALTH_URL` | No | Health check URL for QELO-X |
 | `SELF_URL` | No | Backend's own URL (for self health check) |
+| `GA4_MEASUREMENT_ID` | Yes for analytics | Google Analytics 4 Measurement ID |
+| `GA4_API_SECRET` | Yes for analytics | GA4 Measurement Protocol API secret |
+| `GA4_DEBUG` | No | Use the GA4 debug endpoint while testing |
+| `GA4_MP_ENDPOINT` | No | Override the GA4 Measurement Protocol endpoint |

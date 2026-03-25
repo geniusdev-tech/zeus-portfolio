@@ -10,11 +10,23 @@
     <meta name="author" content="ZeusProtocol.cloud" />
     <meta name="keywords" content="IT professional, infrastructure, Linux, networking, DevOps, backend development, systems analysis, automation" />
     <meta name="theme-color" content="#080b0d" />
+    <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://zeusprotocol.cloud/" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('zeus-protocol-locale');
+          var browser = (navigator.language || navigator.languages && navigator.languages[0] || 'en-US').toLowerCase();
+          var lang = stored || (browser.indexOf('pt') === 0 ? 'pt-BR' : browser.indexOf('es') === 0 ? 'es-ES' : 'en-US');
+          document.documentElement.lang = lang;
+        } catch (error) {}
+      })();
+    </script>
 
     <!-- Open Graph (LinkedIn, Facebook, WhatsApp) -->
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content="ZeusProtocol.cloud | Systems, Automation & CRM" />
     <meta property="og:description" content="Systems, automation, cloud and CRM-style intake built for production-ready projects." />
     <meta property="og:url" content="https://zeusprotocol.cloud" />
@@ -34,13 +46,13 @@
     <meta name="twitter:image:alt" content="ZeusProtocol.cloud social preview with neon logo and systems, automation & CRM messaging." />
 
     <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8HWM8CB7T"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA_MEASUREMENT_ID%"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       window.gtag = gtag;
       gtag('js', new Date());
-      gtag('config', 'G-V8HWM8CB7T');
+      gtag('config', '%VITE_GA_MEASUREMENT_ID%', { send_page_view: false });
     </script>
 
     <!-- Favicon -->

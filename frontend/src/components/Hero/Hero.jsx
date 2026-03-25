@@ -1,46 +1,16 @@
+import { Link } from 'react-router-dom';
 import BrandLogo from '../BrandLogo/BrandLogo';
+import { useI18n } from '../../i18n';
 import './Hero.css';
 
-const pillars = [
-  {
-    label: '01 / Lead Intake',
-    title: 'Capture requests with less friction.',
-    text: 'Forms, routing and qualification that make the next step obvious.',
-  },
-  {
-    label: '02 / Automation',
-    title: 'Turn repetitive work into flows.',
-    text: 'Follow-ups, internal routines and process automation that keep teams moving.',
-  },
-  {
-    label: '03 / Infrastructure',
-    title: 'Keep delivery observable and stable.',
-    text: 'Servers, deploys, monitoring and recovery routines under control.',
-  },
-];
-
-const metrics = [
-  { label: 'Primary focus', value: 'Lead flow + delivery' },
-  { label: 'Operational model', value: 'Terminal-first / Cloud' },
-  { label: 'Tooling', value: 'Go · Shell · Python' },
-];
-
-const signals = [
-  {
-    label: 'Intake',
-    text: 'Lead qualification and routing built into the first interaction.',
-  },
-  {
-    label: 'Automation',
-    text: 'Follow-up, handoff and operational tasks without manual churn.',
-  },
-  {
-    label: 'Delivery',
-    text: 'Cloud systems with monitoring, deploys and recovery under control.',
-  },
-];
-
 export default function Hero() {
+  const { content } = useI18n();
+  const { hero } = content;
+  const actions = hero.actions || [
+    { label: 'Send brief', href: '#contact', variant: 'primary' },
+    { label: 'View QELO-X', href: '/qelox', variant: 'secondary' },
+  ];
+
   return (
     <section className="z-hero-section">
       <div className="z-hero">
@@ -50,38 +20,51 @@ export default function Hero() {
               <div className="z-hero__brand-strip">
                 <BrandLogo variant="mark" size="sm" className="z-hero__brand-mark" />
                 <div className="z-hero__brand-text">
-                  <span className="z-hero__brand-kicker">LIVE BRAND NODE</span>
-                  <span className="z-hero__brand-note">
-                    Zeus Protocol / systems, automation and cloud delivery
-                  </span>
+                  <span className="z-hero__brand-kicker">{hero.brandKicker}</span>
+                  <span className="z-hero__brand-note">{hero.brandNote}</span>
                 </div>
               </div>
 
-              <div className="z-hero__tag">ZEUS PROTOCOL // SYSTEMS, AUTOMATION & CRM</div>
+              <div className="z-hero__tag">{hero.tag}</div>
 
               <div className="z-hero__lead-grid">
                 <div className="z-hero__lead-copy">
                   <h1 className="z-hero__h1">
-                    Systems built to
-                    <span className="z-hero__h1-accent">qualify leads, automate work</span>
-                    and stay stable in production.
+                    {hero.headlinePrefix}
+                    <br />
+                    <span className="z-hero__h1-accent">{hero.headlineAccent}</span>{' '}
+                    {hero.headlineSuffix}
                   </h1>
 
-                  <p className="z-hero__sub">
-                    I design software, automations and infrastructure with one flow: reduce manual
-                    work, keep delivery predictable and move the right request to the next step fast.
-                  </p>
+                  <p className="z-hero__sub">{hero.sub}</p>
+
+                  <div className="z-hero__actions">
+                    {actions.map((action) => {
+                      const className = `z-btn z-hero__action${action.variant === 'primary' ? ' z-btn-g' : ' z-btn-o'}`;
+
+                      if (action.href.startsWith('/')) {
+                        return (
+                          <Link key={action.label} to={action.href} className={className}>
+                            {action.label}
+                          </Link>
+                        );
+                      }
+
+                      return (
+                        <a key={action.label} href={action.href} className={className}>
+                          {action.label}
+                        </a>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div className="z-hero__lead-side">
-                  <div className="z-hero__lead-side-head">Operational snapshot</div>
-                  <p className="z-hero__lead-side-copy">
-                    Built to qualify, route and deliver with less friction, with the infrastructure
-                    side kept clean and observable.
-                  </p>
+                  <div className="z-hero__lead-side-head">{hero.snapshotHead}</div>
+                  <p className="z-hero__lead-side-copy">{hero.snapshotCopy}</p>
 
                   <div className="z-hero__metrics">
-                    {metrics.map((item) => (
+                    {hero.metrics.map((item) => (
                       <div className="z-hero__metric" key={item.label}>
                         <span className="z-hero__metric-label">{item.label}</span>
                         <span className="z-hero__metric-value">{item.value}</span>
@@ -90,7 +73,7 @@ export default function Hero() {
                   </div>
 
                   <div className="z-hero__signals">
-                    {signals.map((signal) => (
+                    {hero.signals.map((signal) => (
                       <div className="z-hero__signal" key={signal.label}>
                         <span className="z-hero__signal-label">{signal.label}</span>
                         <span className="z-hero__signal-text">{signal.text}</span>
@@ -104,7 +87,7 @@ export default function Hero() {
         </div>
 
         <div className="z-hero__pillars">
-          {pillars.map((pillar) => (
+          {hero.pillars.map((pillar) => (
             <article className="z-hero__pillar" key={pillar.label}>
               <div className="z-hero__pillar-label">{pillar.label}</div>
               <h2 className="z-hero__pillar-title">{pillar.title}</h2>

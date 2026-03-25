@@ -1,0 +1,62 @@
+.z-notfound {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.z-notfound__panel {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: clamp(32px, 6vw, 56px);
+  background:
+    radial-gradient(circle at top right, rgba(0, 229, 255, 0.06), transparent 30%),
+    rgba(12, 16, 20, 0.88);
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+}
+
+.z-notfound__brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.z-notfound__code {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.z-notfound__copy {
+  display: grid;
+  gap: 16px;
+}
+
+.z-notfound__lead {
+  max-width: 620px;
+  color: var(--text2);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.z-notfound__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+@media (max-width: 640px) {
+  .z-notfound__panel {
+    padding: 28px 20px;
+  }
+
+  .z-notfound__brand {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
