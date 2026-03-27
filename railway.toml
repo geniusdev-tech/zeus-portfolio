@@ -1,8 +1,0 @@
-[build]
-# No buildCommand needed as Dockerfile handles it
-
-[deploy]
-healthcheckPath = "/api/health"
-healthcheckTimeout = 60
-restartPolicyType = "ON_FAILURE"
-

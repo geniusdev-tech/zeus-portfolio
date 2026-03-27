@@ -1,18 +1,16 @@
 {
-    "name": "zeus-portfolio-root",
-    "private": true,
-    "dependencies": {
-    "mongoose": "^8.10.0"
-  },
+  "name": "zeus-portfolio-root",
+  "private": true,
   "scripts": {
     "dev": "npm run dev --prefix frontend",
     "build": "npm run build --prefix frontend",
     "preview": "npm run preview --prefix frontend",
     "chat:dev": "npm run dev --prefix ai-chat",
     "chat:start": "npm run start --prefix ai-chat",
-    "deploy": "npm run build && vercel --prod",
+    "deploy": "npm run deploy:firebase && npm run deploy:backend",
+    "deploy:backend": "supabase functions deploy api",
     "deploy:firebase": "npm run deploy:firebase --prefix frontend",
-    "deploy:preview": "npm run build && vercel",
+    "deploy:preview": "npm run build --prefix frontend",
     "install:all": "npm install && npm install --prefix frontend && npm install --prefix ai-chat"
   }
 }

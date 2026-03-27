@@ -2,16 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import BrandLogo from '../../components/BrandLogo/BrandLogo';
 import { useI18n } from '../../i18n';
+import { resolveChatApiBaseUrl } from '../../lib/apiUrls';
 import './Terminal.css';
 
-const cleanUrl = (url) => {
-  if (!url) return 'https://zeus-portfolio-iota.vercel.app/api';
-  if (url.startsWith('/')) return url.replace(/\/$/, '');
-  const match = url.match(/^https?:\/\/[^\s]+$/);
-  return match ? url.replace(/\/$/, '') : 'https://zeus-portfolio-iota.vercel.app/api';
-};
-
-const CHAT_API_URL = cleanUrl(import.meta.env.VITE_AI_CHAT_URL);
+const CHAT_API_URL = resolveChatApiBaseUrl(import.meta.env.VITE_AI_CHAT_URL);
 
 function formatTime(value, locale) {
   if (!value) return '--:--';

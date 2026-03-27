@@ -1,21 +1,13 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { resolveApiBaseUrl } from '../lib/apiUrls';
 
 const MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-V8HWM8CB7T';
-const ANALYTICS_API_URL = `${cleanUrl(import.meta.env.VITE_API_URL)}/api/analytics`;
+const ANALYTICS_API_URL = `${resolveApiBaseUrl(import.meta.env.VITE_API_URL)}/api/analytics`;
 const CLIENT_ID_KEY = 'zeus-ga-client-id';
 const SESSION_ID_KEY = 'zeus-ga-session-id';
 const RECENT_EVENT_WINDOW_MS = 1500;
 const recentEvents = new Map();
-
-function cleanUrl(url) {
-  const fallback = import.meta.env.DEV
-    ? 'http://localhost:8080'
-    : 'https://zeus-backend-production-ee33.up.railway.app';
-  if (!url) return fallback;
-  const match = url.match(/https?:\/\/[^/\s]+/);
-  return match ? match[0] : fallback;
-}
 
 function getStoredValue(storage, key, createValue) {
   if (typeof window === 'undefined' || !storage) {

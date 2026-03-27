@@ -2,16 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import BrandLogo from '../BrandLogo/BrandLogo';
 import { CONTACT_EMAIL, useI18n } from '../../i18n';
+import { resolveApiBaseUrl } from '../../lib/apiUrls';
 import './CheckoutModal.css';
 
 const STEPS = ['IDENTIFICATION', 'METHOD_SELECTION', 'PAYMENT'];
-const cleanUrl = (url) => {
-    if (!url) return 'http://localhost:8080';
-    const match = url.match(/https?:\/\/[^/\s]+/);
-    return match ? match[0] : url;
-};
-
-const API_URL = cleanUrl(import.meta.env.VITE_API_URL);
+const API_URL = resolveApiBaseUrl(import.meta.env.VITE_API_URL);
 const supportEmail = CONTACT_EMAIL;
 
 const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';

@@ -1,17 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useI18n } from '../../i18n';
+import { resolveApiBaseUrl } from '../../lib/apiUrls';
 import './StatusDashboard.css';
 
-const cleanUrl = (url) => {
-  const fallback = import.meta.env.DEV
-    ? 'http://localhost:8080'
-    : 'https://zeus-backend-production-ee33.up.railway.app';
-  if (!url) return fallback;
-  const match = url.match(/https?:\/\/[^/\s]+/);
-  return match ? match[0] : fallback;
-};
-
-const API_URL = cleanUrl(import.meta.env.VITE_API_URL);
+const API_URL = resolveApiBaseUrl(import.meta.env.VITE_API_URL);
 const POLL_INTERVAL = 15_000;
 
 // Service grouping config

@@ -469,7 +469,7 @@ const enUS = {
     updated: 'Updated',
     refresh: 'Refresh',
     errorTitle: 'Cannot reach backend',
-    errorHintBeforeCode: 'Deploy the Go backend — see',
+    errorHintBeforeCode: 'Deploy the Supabase backend — see',
     errorHintAfterCode: '.',
     hostMetrics: 'Host Metrics',
     systemServices: 'System Services',

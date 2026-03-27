@@ -6,25 +6,24 @@ const ZSH_PROMPT = { user: 'zeus', host: 'infra-prod', branch: 'main' };
 // ── Scenarios: DevSecOps + Blockchain ────────────────
 const SCENARIOS = [
   {
-    cmd: 'trivy image zeus-backend:latest --severity HIGH,CRITICAL',
+    cmd: 'supabase functions deploy api',
     exitCode: 0,
     output: [
-      { text: 'INFO  Scanning image: zeus-backend:latest', color: 'dim' },
-      { text: 'INFO  [vuln] ✓  0 HIGH, 0 CRITICAL found', color: 'green' },
-      { text: '─────────────────────────────────────────', color: 'dim' },
-      { text: 'Total: 0 (HIGH: 0, CRITICAL: 0)', color: 'green' },
-      { text: 'Image hardened.  PASS ✓', color: 'green' },
+      { text: 'Deploying Edge Function: api', color: 'dim' },
+      { text: 'Bundling Deno runtime assets…', color: 'cyan' },
+      { text: 'Uploading function and shared modules…', color: 'cyan' },
+      { text: 'Deployment complete.  PASS ✓', color: 'green' },
     ]
   },
   {
-    cmd: 'docker build -t zeus/backend:v2.1 . && docker push zeus/backend:v2.1',
+    cmd: 'firebase deploy --only hosting',
     exitCode: 0,
     output: [
-      { text: '[1/4] FROM golang:1.22-alpine   ✓', color: 'dim' },
-      { text: '[2/4] COPY . /app               ✓', color: 'dim' },
-      { text: '[3/4] RUN go build -o /bin/api  ✓', color: 'cyan' },
-      { text: '[4/4] EXPOSE 8080               ✓', color: 'cyan' },
-      { text: 'Successfully pushed zeus/backend:v2.1', color: 'green' },
+      { text: '[1/4] Building production bundle   ✓', color: 'dim' },
+      { text: '[2/4] Generating hashed assets     ✓', color: 'dim' },
+      { text: '[3/4] Uploading to Firebase        ✓', color: 'cyan' },
+      { text: '[4/4] CDN propagation              ✓', color: 'cyan' },
+      { text: 'Hosting release complete', color: 'green' },
     ]
   },
   {
