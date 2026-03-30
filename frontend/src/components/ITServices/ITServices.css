@@ -61,6 +61,23 @@
 
 .z-itservices__cards-container {
   display: block;
+  margin-top: 40px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--green) transparent;
+  mask-image: linear-gradient(to bottom, transparent, black 4%, black 96%, transparent);
+}
+
+.z-itservices__cards-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.z-itservices__cards-container::-webkit-scrollbar-thumb {
+  background: var(--green);
+  border-radius: 999px;
+  box-shadow: 0 0 10px rgba(0, 255, 140, 0.35);
 }
 
 .z-itservices__cards-content {
@@ -314,15 +331,10 @@
   }
 
   .z-itservices__cards-container {
-    margin-top: 28px;
     max-height: 560px;
     padding: 12px;
-    overflow-y: auto;
     border: 1px solid rgba(255, 255, 255, 0.06);
     background: rgba(8, 11, 13, 0.24);
-    mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);
-    scrollbar-width: thin;
-    scrollbar-color: var(--green) transparent;
     scroll-snap-type: y proximity;
   }
 

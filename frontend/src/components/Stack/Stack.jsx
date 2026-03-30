@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -19,6 +19,7 @@ import {
   Waypoints,
 } from 'lucide-react';
 import { useI18n } from '../../i18n';
+import { useAutoScroll } from '../../hooks';
 import './Stack.css';
 
 const ICON_MAP = {
@@ -98,16 +99,13 @@ function StackItem({ name, type, pct, years, accent }) {
 export default function Stack() {
   const { content } = useI18n();
   const { stack } = content;
-  const pages = useMemo(() => chunkStack(stack.items), [stack.items]);
-  const [pageIndex, setPageIndex] = useState(0);
+  const scrollRef = useRef(null);
 
-  const handlePrev = () => {
-    setPageIndex((current) => (current - 1 + pages.length) % pages.length);
-  };
-
-  const handleNext = () => {
-    setPageIndex((current) => (current + 1) % pages.length);
-  };
+  const { onWheel, onTouchStart, onMouseEnter, onFocusCapture, onScroll } = useAutoScroll({
+    scrollRef,
+    speed: 0.45,
+    pauseDelay: 2200,
+  });
 
   return (
     <section className="z-stack" id="stack">
@@ -122,60 +120,19 @@ export default function Stack() {
           <p className="z-stack__intro">{stack.intro}</p>
         </div>
 
-        <div className="z-stack__carousel z-reveal">
-          <div className="z-stack__carousel-topbar">
-            <span className="z-stack__carousel-label">{stack.carouselLabel}</span>
-            <div className="z-stack__controls">
-              <button type="button" className="z-stack__arrow" onClick={handlePrev} aria-label={stack.prev}>
-                <ArrowLeft size={18} />
-              </button>
-              <div className="z-stack__dots" aria-label="Stack carousel pages">
-                {pages.map((_, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    className={`z-stack__dot${index === pageIndex ? ' active' : ''}`}
-                    onClick={() => setPageIndex(index)}
-                    aria-label={stack.goTo(index + 1)}
-                  />
-                ))}
-              </div>
-              <button type="button" className="z-stack__arrow" onClick={handleNext} aria-label={stack.next}>
-                <ArrowRight size={18} />
-              </button>
-            </div>
-          </div>
-
-          <div className="z-stack__viewport">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={pageIndex}
-                className="z-stack__grid"
-                initial={{ opacity: 0, x: 80 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -80 }}
-                transition={{ duration: 0.42, ease: 'easeOut' }}
-              >
-                {pages[pageIndex].map((item, index) => (
-                  <motion.div
-                    key={item.name}
-                    initial={{ opacity: 0, y: 18 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.28, delay: index * 0.035 }}
-                  >
-                    <StackItem {...item} />
-                  </motion.div>
-                ))}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          <div className="z-stack__mobile-list">
-            <div className="z-stack__mobile-list-content">
-              {stack.items.map((item) => (
-                <StackItem key={item.name} {...item} />
-              ))}
-            </div>
+        <div 
+          className="z-stack__vertical-scroll z-reveal"
+          ref={scrollRef}
+          onWheel={onWheel}
+          onTouchStart={onTouchStart}
+          onMouseEnter={onMouseEnter}
+          onFocusCapture={onFocusCapture}
+          onScroll={onScroll}
+        >
+          <div className="z-stack__vertical-scroll-content">
+            {stack.items.map((item) => (
+              <StackItem key={item.name} {...item} />
+            ))}
           </div>
         </div>
       </div>

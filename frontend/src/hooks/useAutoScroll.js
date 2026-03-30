@@ -1,37 +1,11 @@
 import { useEffect, useRef } from 'react';
 
 /**
- * useReveal — adds `.visible` to every `.z-reveal` element
- * when it enters the viewport via IntersectionObserver.
- */
-export function useReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll('.z-reveal');
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.08 }
-    );
-
-    els.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-}
-
-
-
-/**
  * useAutoScroll
  * @param {Object} options
  * @param {RefObject} options.scrollRef - Ref for the scrollable container.
  * @param {number} [options.speed=0.55] - Pixels per tick.
- * @param {number} [options.interval=24] - ms per tick.
+ * @param {number} [options.interval=20] - ms per tick.
  * @param {number} [options.pauseDelay=1800] - ms to pause after interaction.
  * @param {boolean} [options.enabled=true] - Toggle auto-scroll.
  */

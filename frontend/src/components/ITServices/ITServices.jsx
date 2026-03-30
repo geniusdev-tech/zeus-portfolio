@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Blocks, Cloud, Code, Network, Server, Wrench } from 'lucide-react';
 import { useI18n } from '../../i18n';
+import { useAutoScroll } from '../../hooks';
 import './ITServices.css';
 
 function ServiceCard({ service, index }) {
@@ -87,6 +88,13 @@ function ServiceCard({ service, index }) {
 export default function ITServices() {
   const { content } = useI18n();
   const { services } = content;
+  const scrollRef = useRef(null);
+
+  const { onWheel, onTouchStart, onMouseEnter, onFocusCapture, onScroll } = useAutoScroll({
+    scrollRef,
+    speed: 0.5,
+    pauseDelay: 2000,
+  });
 
   return (
     <section className="z-itservices z-full relative isolate" id="services">
@@ -124,7 +132,15 @@ export default function ITServices() {
           <p className="z-itservices__subtitle">{services.subtitle}</p>
         </motion.div>
 
-        <div className="z-itservices__cards-container">
+        <div 
+          className="z-itservices__cards-container"
+          ref={scrollRef}
+          onWheel={onWheel}
+          onTouchStart={onTouchStart}
+          onMouseEnter={onMouseEnter}
+          onFocusCapture={onFocusCapture}
+          onScroll={onScroll}
+        >
           <div className="z-itservices__cards-content">
             {services.items.map((service, index) => (
               <ServiceCard
