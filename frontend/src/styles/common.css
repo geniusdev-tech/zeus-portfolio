@@ -1,10 +1,12 @@
 :root {
-  --z-card-bg: var(--bg2);
-  --z-card-bg-hover: var(--bg3);
-  --z-card-border: var(--border);
-  --z-card-border-hover: var(--green-mid);
-  --z-card-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
-  --z-card-shadow-hover: 0 18px 34px rgba(0, 0, 0, 0.28);
+  /* Fundos Glassmorphism para os cards */
+  --z-card-bg: rgba(15, 22, 36, 0.6);
+  --z-card-bg-hover: rgba(22, 31, 48, 0.8);
+  --z-card-border: rgba(255, 255, 255, 0.05); /* Borda vidro fraca */
+  --z-card-border-hover: rgba(20, 184, 166, 0.3); /* Teal sutil no hover */
+  
+  --z-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  --z-card-shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
 /* ── Layout ─────────────────────────────────────────── */
@@ -20,11 +22,11 @@
 .z-full {
   position: relative;
   z-index: 1;
-  background: rgba(12, 16, 20, 0.56);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  background: rgba(15, 22, 36, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--z-card-border);
+  border-bottom: 1px solid var(--z-card-border);
   padding: 120px 0;
   scroll-margin-top: 140px;
 }
@@ -49,99 +51,124 @@
 
 .z-sec-tag {
   font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.25em;
+  font-size: 0.70rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--green);
-  margin-bottom: 14px;
-  display: flex;
+  margin-bottom: 16px;
+  display: inline-flex;
   align-items: center;
   gap: 10px;
+  
+  /* Novo estilo "Badge" do mercado SaaS em vez de apenas texto + linha */
+  padding: 6px 16px;
+  background: var(--green-lo);
+  border: 1px solid var(--green-mid);
+  border-radius: 100px;
 }
 
 .z-sec-tag::before {
   content: '';
   display: block;
-  width: 24px;
-  height: 1px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
   background: var(--green);
+  opacity: 0.8;
+  box-shadow: 0 0 6px var(--green);
 }
 
 .z-sec-tag.cyan {
   color: var(--cyan);
+  background: var(--cyan-lo);
+  border-color: rgba(20, 184, 166, 0.2);
 }
 
 .z-sec-tag.cyan::before {
   background: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
 }
 
 .z-sec-title {
   font-family: var(--font-display);
   font-size: clamp(2.2rem, 3.5vw, 3.8rem);
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  line-height: 1.05;
+  font-weight: 600; /* Mais pesado que antes */
+  letter-spacing: -0.02em; /* Tratamento moderno de display font */
+  line-height: 1.1;
   color: var(--text);
 }
 
+/* Removido o italico neon antigo, trocado por um gradiente luxuoso com texto reto */
 .z-sec-title em {
   font-style: normal;
-  color: var(--green);
+  background: linear-gradient(to right, #34D399, var(--green));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .z-sec-title.cyan em {
-  color: var(--cyan);
+  background: linear-gradient(to right, #2DD4BF, var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .z-brand {
   display: inline-flex;
   align-items: baseline;
   gap: 1px;
-  font-family: var(--font-mono);
+  font-family: var(--font-display); /* Logo usando a mesma tipografia de títlo, traz consistência */
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+  color: var(--text);
 }
 
 .z-brand__text {
   color: var(--green);
+  font-weight: 400; /* Protocol com peso menor para diferenciar */
 }
 
 .z-brand__cursor {
-  color: var(--green);
-  animation: zblink 1.1s step-end infinite;
+  display: none; /* Removendo o cursor de terminal para limpar a interface */
 }
 
-/* ── Buttons ────────────────────────────────────────── */
+/* ── Buttons (Mudança Sci-Fi => SaaS Arredondado) ────────────────────────── */
 .z-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  padding: 14px 24px;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
+  padding: 14px 28px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
   font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
   text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  
+  /* Substituto do "clip-path" poligonal agressivo do cyberpunk */
+  border-radius: 8px; 
+  border: 1px solid transparent;
+  
   position: relative;
   overflow: hidden;
-  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .z-btn:focus-visible {
   outline-offset: 4px;
 }
 
+/* Efeito de flash/shine que era agressivo foi suavizado */
 .z-btn::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.14), transparent 80%);
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.1), transparent 70%);
   transform: translateX(-120%);
-  transition: transform 0.45s ease;
+  transition: transform 0.6s ease-in-out;
   pointer-events: none;
 }
 
@@ -150,19 +177,16 @@
 }
 
 .z-btn-g {
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent 36%),
-    rgba(0, 255, 140, 0.12);
-  color: var(--green);
-  border-color: rgba(0, 255, 140, 0.28);
+  background: var(--green);
+  color: #022c22; /* Texto bem escuro no fundo verde esmeralda fica mais luxuoso que apenas preto */
+  font-weight: 600;
+  box-shadow: 0 4px 12px var(--green-mid);
 }
 
 .z-btn-g:hover {
   transform: translateY(-2px);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 36%),
-    rgba(0, 255, 140, 0.18);
-  box-shadow: 0 16px 26px rgba(0, 0, 0, 0.22), var(--glow-g);
+  background: #34D399; /* Um pouco mais brilhante no hover */
+  box-shadow: 0 8px 24px var(--glow-g);
 }
 
 .z-btn:active {
@@ -170,21 +194,18 @@
 }
 
 .z-btn-o {
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 36%),
-    rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--text);
-  border-color: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .z-btn-o:hover {
   transform: translateY(-2px);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent 36%),
-    rgba(0, 229, 255, 0.08);
-  border-color: var(--cyan);
-  color: var(--cyan);
-  box-shadow: 0 16px 26px rgba(0, 0, 0, 0.22);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* ── Scroll Reveal ──────────────────────────────────── */
@@ -199,18 +220,17 @@
   transform: translateY(0);
 }
 
-/* ── Shared Panels / Cards ──────────────────────────── */
+/* ── Shared Panels / Cards ("Glassmorphism") ──────────────────────────── */
 .z-panel-surface {
   background: var(--z-card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--z-card-border);
   box-shadow: var(--z-card-shadow);
+  border-radius: 16px; /* Bordas arredondadas nos cards do site inteiro */
   position: relative;
   overflow: hidden;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .z-panel-surface::before {
@@ -220,16 +240,16 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, var(--green), transparent);
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s ease;
 }
 
 .z-panel-surface:hover {
   background: var(--z-card-bg-hover);
   border-color: var(--z-card-border-hover);
   box-shadow: var(--z-card-shadow-hover);
-  transform: translateY(-3px);
+  transform: translateY(-4px); /* Levantamento suave clássico */
 }
 
 .z-panel-surface:hover::before {

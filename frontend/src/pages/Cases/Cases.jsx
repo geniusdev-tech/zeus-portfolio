@@ -46,15 +46,15 @@ export default function Cases() {
 
   return (
     <div className="z-cases">
-      <header className="z-packages__top"> {/* Reusing the same header layout from docs/packages */}
-        <div className="z-packages__top-inner">
-          <div className="z-docs__breadcrumb">
-            <Link to="/" className="z-docs__breadcrumb-link">Zeus Protocol</Link>
-            <span className="z-docs__breadcrumb-sep">/</span>
+      <header className="z-cases__top"> {/* Reusing the same header layout from docs/packages */}
+        <div className="z-cases__top-inner">
+          <div className="z-cases__breadcrumb">
+            <Link to="/" className="z-cases__breadcrumb-link">Zeus Protocol</Link>
+            <span className="z-cases__breadcrumb-sep">/</span>
             <span>{casesData.title}</span>
           </div>
-          <h1 className="z-packages__title">{casesData.title}</h1>
-          <p className="z-packages__subtitle">{casesData.subtitle}</p>
+          <h1 className="z-cases__title">{casesData.title}</h1>
+          <p className="z-cases__subtitle">{casesData.subtitle}</p>
         </div>
       </header>
       
@@ -67,7 +67,7 @@ export default function Cases() {
       </section>
       
       <div className="z-cases__site-footer">
-        <Link to="/" className="z-docs__back-link">← Voltar</Link>
+        <Link to="/" className="z-cases__back-link">← Voltar</Link>
       </div>
     </div>
   );

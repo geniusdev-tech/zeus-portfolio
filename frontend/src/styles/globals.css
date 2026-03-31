@@ -1,25 +1,40 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #080b0d;
-  --bg1: #0c1014;
-  --bg2: #101519;
-  --bg3: #141a1f;
-  --green: #00ff8c;
-  --cyan: #00e5ff;
-  --green-lo: rgba(0, 255, 140, 0.06);
-  --cyan-lo: rgba(0, 229, 255, 0.06);
-  --green-mid: rgba(0, 255, 140, 0.18);
-  --border: rgba(0, 255, 140, 0.10);
-  --border-c: rgba(0, 229, 255, 0.10);
-  --text: #dde4ec;
-  --text2: #8a95a3;
-  --text3: #7c8c9c;
-  --glow-g: 0 0 24px rgba(0, 255, 140, 0.35), 0 0 80px rgba(0, 255, 140, 0.1);
-  --glow-c: 0 0 24px rgba(0, 229, 255, 0.35), 0 0 80px rgba(0, 229, 255, 0.1);
+  /* Fundo base levemente mais azul escuro (Slate/Navy) em vez de preto puro */
+  --bg: #090e17;
+  --bg1: #0f1624;
+  --bg2: #161f30;
+  --bg3: #1e293b;
+  
+  /* Cores de destaque Premium Tech */
+  /* Verde Esmeralda no lugar de Verde Matrix */
+  --green: #10B981; 
+  /* Ciano Teal no lugar de Ciano Neon */
+  --cyan: #14B8A6;   
+
+  /* Tons translúcidos esmeralda (glow light) */
+  --green-lo: rgba(16, 185, 129, 0.08);
+  --cyan-lo: rgba(20, 184, 166, 0.08);
+  --green-mid: rgba(16, 185, 129, 0.20);
+  
+  /* Bordas vidro */
+  --border: rgba(255, 255, 255, 0.08); /* Borda genérica mais neutra/transparente */
+  --border-c: rgba(20, 184, 166, 0.15); /* Borda teal hover */
+  
+  /* Textos - Contraste suave */
+  --text: #F8FAFC;
+  --text2: #94A3B8;
+  --text3: #64748B;
+  
+  /* Glows amplos e suaves (blur grande, menos intesidade central) */
+  --glow-g: 0 4px 20px rgba(16, 185, 129, 0.15), 0 0 60px rgba(16, 185, 129, 0.05);
+  --glow-c: 0 4px 20px rgba(20, 184, 166, 0.15), 0 0 60px rgba(20, 184, 166, 0.05);
+  
+  /* Novas Fontes */
   --font-mono: 'JetBrains Mono', monospace;
-  --font-display: 'Bebas Neue', sans-serif;
-  --font-body: 'Barlow', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
 }
 
 *,
@@ -36,7 +51,7 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 5px; /* Ligeiramente mais grosso que o antigo, mas sutil */
 }
 
 ::-webkit-scrollbar-track {
@@ -44,8 +59,11 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 2px;
+  background: var(--bg3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text3);
 }
 
 body {
@@ -53,7 +71,9 @@ body {
   color: var(--text);
   font-family: var(--font-body);
   overflow-x: hidden;
-  line-height: 1.5;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased; /* Torna a fonte Inter muito mais limpa */
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body.z-menu-open,
@@ -88,19 +108,19 @@ select {
 }
 
 :focus-visible {
-  outline: 2px solid rgba(0, 229, 255, 0.65);
+  outline: 2px solid rgba(20, 184, 166, 0.65);
   outline-offset: 3px;
 }
 
+/* Animações atualizadas */
+/* Blink mais suave, sem piscar 0 totalmente */
 @keyframes zblink {
-
   0%,
   100% {
     opacity: 1;
   }
-
   50% {
-    opacity: 0.15;
+    opacity: 0.3;
   }
 }
 
@@ -109,7 +129,6 @@ select {
     opacity: 0;
     transform: translateY(24px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -117,14 +136,12 @@ select {
 }
 
 @keyframes zpulse {
-
   0%,
   100% {
     opacity: 1;
   }
-
   50% {
-    opacity: 0.2;
+    opacity: 0.4;
   }
 }
 
@@ -132,7 +149,7 @@ select {
 .z-neon-scroll {
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--green) transparent;
+  scrollbar-color: var(--green-mid) transparent;
 }
 
 .z-neon-scroll::-webkit-scrollbar {
@@ -144,9 +161,12 @@ select {
 }
 
 .z-neon-scroll::-webkit-scrollbar-thumb {
+  background: var(--green-mid);
+  border-radius: 4px;
+}
+
+.z-neon-scroll:hover::-webkit-scrollbar-thumb {
   background: var(--green);
-  border-radius: 2px;
-  box-shadow: 0 0 10px var(--green);
 }
 
 /* ── Vertical Marquee ──────────────────────────────── */
