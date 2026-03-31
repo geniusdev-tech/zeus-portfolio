@@ -1,15 +1,23 @@
-# Backend
-backend/zeus-backend
-backend/.env
+# Node modules
+node_modules/
+**/node_modules/
+!ai-chat/node_modules/
+!ai-chat/node_modules/**
 
-# Frontend
-frontend/node_modules/
-frontend/dist/
-frontend/.env
-frontend/.env.local
+# Environment files
+**/.env
+**/.env.*
+!**/.env.example
 
-# OS
+# Build and cache
+**/dist/
+**/.firebase/
+.vercel/
+
+# OS and logs
 .DS_Store
 *.log
-.vercel
-.env*.local
+
+# Project specific
+zeus-backend
+backend/zeus-backend
