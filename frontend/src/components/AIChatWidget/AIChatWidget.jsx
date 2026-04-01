@@ -6,6 +6,7 @@ import { resolveChatApiBaseUrl } from '../../lib/apiUrls';
 import './AIChatWidget.css';
 
 const CHAT_API_URL = resolveChatApiBaseUrl(import.meta.env.VITE_AI_CHAT_URL);
+const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 function formatTime(value, locale) {
   if (!value) return '--:--';
 
@@ -118,7 +119,10 @@ export default function AIChatWidget() {
     try {
       const response = await fetch(`${CHAT_API_URL}/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(ANON_KEY ? { Authorization: `Bearer ${ANON_KEY}` } : {}),
+        },
         body: JSON.stringify({
           message: text,
           locale,

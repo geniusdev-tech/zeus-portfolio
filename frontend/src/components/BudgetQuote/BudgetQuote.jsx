@@ -4,6 +4,7 @@ import { resolveApiBaseUrl } from '../../lib/apiUrls';
 import './BudgetQuote.css';
 
 const API_URL = resolveApiBaseUrl(import.meta.env.VITE_API_URL);
+const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 const initialForm = {
   name: '',
@@ -51,7 +52,10 @@ export default function BudgetQuote() {
     try {
       const response = await fetch(`${API_URL}/api/contact`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(ANON_KEY ? { Authorization: `Bearer ${ANON_KEY}` } : {}),
+        },
         body: JSON.stringify({
           name: form.name,
           company: form.company,

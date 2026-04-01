@@ -7,6 +7,7 @@ import './CheckoutModal.css';
 
 const STEPS = ['IDENTIFICATION', 'METHOD_SELECTION', 'PAYMENT'];
 const API_URL = resolveApiBaseUrl(import.meta.env.VITE_API_URL);
+const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 const supportEmail = CONTACT_EMAIL;
 
 const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -250,7 +251,10 @@ export default function CheckoutModal({ isOpen, onClose, productName, price }) {
         try {
             const response = await fetch(`${API_URL}/api/qelox/purchase-confirmation`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    ...(ANON_KEY ? { Authorization: `Bearer ${ANON_KEY}` } : {}),
+                },
                 body: JSON.stringify({
                     name: form.name,
                     email: form.email,
