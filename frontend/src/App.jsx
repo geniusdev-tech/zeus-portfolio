@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Nav from './components/Nav';
 import RouteEffects from './components/RouteEffects/RouteEffects';
+import TerminalLoader from './components/RouteEffects/TerminalLoader';
 import NeuralBackground from './components/NeuralBackground/NeuralBackground';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import { I18nProvider } from './i18n';
@@ -54,6 +55,7 @@ function AppShell() {
     <div className="zeus-app">
       <NeuralBackground />
       <RouteEffects />
+      <TerminalLoader />
 
       {!isTerminal ? <Nav /> : null}
 

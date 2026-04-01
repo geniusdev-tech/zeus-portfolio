@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import BrandLogo from '../BrandLogo/BrandLogo';
 import { useI18n } from '../../i18n';
+import useMagnetic from '../../hooks/useMagnetic';
 import './Hero.css';
 
 export default function Hero() {
@@ -10,6 +11,25 @@ export default function Hero() {
     { label: 'Send brief', href: '#contact', variant: 'primary' },
     { label: 'View QELO-X', href: '/qelox', variant: 'secondary' },
   ];
+
+  function MagneticButton({ action }) {
+    const { ref, style } = useMagnetic(0.15, 100);
+    const className = `z-btn z-hero__action${action.variant === 'primary' ? ' z-btn-g' : ' z-btn-o'}`;
+
+    if (action.href.startsWith('/')) {
+      return (
+        <Link ref={ref} to={action.href} className={className} style={style}>
+          {action.label}
+        </Link>
+      );
+    }
+
+    return (
+      <a ref={ref} href={action.href} className={className} style={style}>
+        {action.label}
+      </a>
+    );
+  }
 
   return (
     <section className="z-hero-section">
@@ -39,23 +59,12 @@ export default function Hero() {
                   <p className="z-hero__sub">{hero.sub}</p>
 
                   <div className="z-hero__actions">
-                    {actions.map((action) => {
-                      const className = `z-btn z-hero__action${action.variant === 'primary' ? ' z-btn-g' : ' z-btn-o'}`;
-
-                      if (action.href.startsWith('/')) {
-                        return (
-                          <Link key={action.label} to={action.href} className={className}>
-                            {action.label}
-                          </Link>
-                        );
-                      }
-
-                      return (
-                        <a key={action.label} href={action.href} className={className}>
-                          {action.label}
-                        </a>
-                      );
-                    })}
+                    {actions.map((action) => (
+                      <MagneticButton 
+                        key={action.label} 
+                        action={action} 
+                      />
+                    ))}
                   </div>
                 </div>
 

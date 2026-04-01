@@ -14,9 +14,10 @@ export default function NeuralBackground() {
         let particles = [];
         const isMobile = window.innerWidth < 768;
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-        const particleCount = isMobile ? 36 : 90;
-        const connectionDistance = isMobile ? 120 : 180;
-        const mouse = { x: null, y: null, radius: 150 };
+        const particleCount = isMobile ? 36 : 100;
+        const connectionDistance = isMobile ? 120 : 190;
+        const mouse = { x: null, y: null, radius: 180 };
+        const scroll = { y: 0, targetY: 0 };
         let phase = 0;
 
         const resizeCanvas = () => {
@@ -26,37 +27,22 @@ export default function NeuralBackground() {
 
         const drawStaticBackdrop = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
             ctx.save();
-            ctx.strokeStyle = 'rgba(0, 229, 255, 0.035)';
+            ctx.strokeStyle = 'rgba(16, 185, 129, 0.05)';
             ctx.lineWidth = 1;
-            for (let x = -40; x < canvas.width + 40; x += 56) {
+            const gridGap = 56;
+            for (let x = -gridGap; x < canvas.width + gridGap; x += gridGap) {
                 ctx.beginPath();
                 ctx.moveTo(x, 0);
                 ctx.lineTo(x, canvas.height);
                 ctx.stroke();
             }
-            for (let y = -40; y < canvas.height + 40; y += 56) {
+            for (let y = -gridGap; y < canvas.height + gridGap; y += gridGap) {
                 ctx.beginPath();
                 ctx.moveTo(0, y);
                 ctx.lineTo(canvas.width, y);
                 ctx.stroke();
             }
-            ctx.restore();
-
-            ctx.save();
-            ctx.fillStyle = 'rgba(0, 255, 140, 0.12)';
-            const seeds = [
-                [canvas.width * 0.18, canvas.height * 0.22],
-                [canvas.width * 0.74, canvas.height * 0.16],
-                [canvas.width * 0.56, canvas.height * 0.74],
-                [canvas.width * 0.26, canvas.height * 0.68],
-            ];
-            seeds.forEach(([x, y], index) => {
-                ctx.beginPath();
-                ctx.arc(x, y, 2.2 + index * 0.35, 0, Math.PI * 2);
-                ctx.fill();
-            });
             ctx.restore();
         };
 
@@ -68,39 +54,65 @@ export default function NeuralBackground() {
             reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 1.5 + 0.5;
+                this.vx = (Math.random() - 0.5) * 0.45;
+                this.vy = (Math.random() - 0.5) * 0.45;
+                this.size = Math.random() * 1.6 + 0.4;
                 this.pulse = Math.random() * Math.PI * 2;
+                this.baseOpacity = 0.2 + Math.random() * 0.15;
+                this.glitchTimer = 0;
             }
 
             update() {
+                // Parallax effect
+                const parallaxY = scroll.y * 0.15;
+                
                 this.x += this.vx;
                 this.y += this.vy;
-                this.pulse += 0.015;
+                this.pulse += 0.018;
 
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                if (this.x < -10 || this.x > canvas.width + 10) this.vx *= -1;
+                if (this.y < -10 || this.y > canvas.height + 10) this.vy *= -1;
 
                 // Mouse interaction
                 if (mouse.x !== null) {
                     const dx = this.x - mouse.x;
-                    const dy = this.y - mouse.y;
+                    const dy = (this.y + parallaxY) - mouse.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
+                    
                     if (dist < mouse.radius) {
                         const force = (mouse.radius - dist) / mouse.radius;
-                        this.x += dx * force * 0.02;
-                        this.y += dy * force * 0.02;
+                        this.x += dx * force * 0.025;
+                        this.y += dy * force * 0.025;
+                        
+                        if (Math.random() > 0.985) {
+                            this.glitchTimer = 8;
+                        }
                     }
                 }
+
+                if (this.glitchTimer > 0) this.glitchTimer--;
             }
 
             draw() {
+                const drawY = this.y - (scroll.y * 0.15);
+                
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                const alpha = 0.28 + ((Math.sin(this.pulse) + 1) * 0.18);
-                ctx.fillStyle = `rgba(0, 255, 140, ${alpha})`;
+                const currentRadius = this.glitchTimer > 0 ? this.size * 2.5 : this.size;
+                ctx.arc(this.x, drawY, currentRadius, 0, Math.PI * 2);
+                
+                const alphaMod = (Math.sin(this.pulse) + 1) * 0.15;
+                const alpha = this.glitchTimer > 0 ? 0.8 : this.baseOpacity + alphaMod;
+                
+                ctx.fillStyle = this.glitchTimer > 0 
+                    ? `rgba(20, 184, 166, ${alpha})`
+                    : `rgba(16, 185, 129, ${alpha})`;
                 ctx.fill();
+                
+                if (this.glitchTimer > 0) {
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
             }
         }
 
@@ -112,23 +124,28 @@ export default function NeuralBackground() {
         };
 
         const animate = () => {
-            phase += 0.0045;
+            phase += 0.005;
+            // Smooth scroll tracking
+            scroll.y += (scroll.targetY - scroll.y) * 0.08;
+            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const gridShift = Math.sin(phase) * 18;
+            // Draw Parallax Grid
+            const gridShift = (Math.sin(phase) * 12) + (scroll.y * 0.05);
             ctx.save();
-            ctx.strokeStyle = 'rgba(0, 229, 255, 0.035)';
+            ctx.strokeStyle = 'rgba(20, 184, 166, 0.04)';
             ctx.lineWidth = 1;
-            for (let x = -40; x < canvas.width + 40; x += 48) {
+            const step = 64;
+            for (let x = -step; x < canvas.width + step; x += step) {
                 ctx.beginPath();
-                ctx.moveTo(x + gridShift, 0);
-                ctx.lineTo(x + gridShift, canvas.height);
+                ctx.moveTo(x + (gridShift % step), 0);
+                ctx.lineTo(x + (gridShift % step), canvas.height);
                 ctx.stroke();
             }
-            for (let y = -40; y < canvas.height + 40; y += 48) {
+            for (let y = -step; y < canvas.height + step; y += step) {
                 ctx.beginPath();
-                ctx.moveTo(0, y - gridShift * 0.5);
-                ctx.lineTo(canvas.width, y - gridShift * 0.5);
+                ctx.moveTo(0, y - (gridShift * 0.8 % step));
+                ctx.lineTo(canvas.width, y - (gridShift * 0.8 % step));
                 ctx.stroke();
             }
             ctx.restore();
@@ -139,35 +156,34 @@ export default function NeuralBackground() {
 
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
+                    const dy = (particles[i].y - (scroll.y * 0.15)) - (particles[j].y - (scroll.y * 0.15));
                     const dist = Math.sqrt(dx * dx + dy * dy);
 
                     if (dist < connectionDistance) {
-                        const linkAlpha = 0.22 * (1 - dist / connectionDistance);
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(0, 229, 255, ${linkAlpha})`;
-                        ctx.lineWidth = 1;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-
-                        if (Math.random() > 0.992) {
-                            const midX = (particles[i].x + particles[j].x) * 0.5;
-                            const midY = (particles[i].y + particles[j].y) * 0.5;
-                            ctx.fillStyle = 'rgba(0, 255, 140, 0.28)';
-                            ctx.fillRect(midX - 1, midY - 1, 2, 2);
+                        let linkAlpha = 0.18 * (1 - dist / connectionDistance);
+                        
+                        // Mouse glow on lines
+                        if (mouse.x !== null) {
+                            const mdx = (particles[i].x + particles[j].x) * 0.5 - mouse.x;
+                            const mdy = (particles[i].y + particles[j].y) * 0.5 - (scroll.y * 0.15) - mouse.y;
+                            const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                            if (mdist < 120) {
+                                linkAlpha *= 2.5;
+                                ctx.shadowBlur = 4;
+                                ctx.shadowColor = 'rgba(20, 184, 166, 0.4)';
+                            }
                         }
+
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(20, 184, 166, ${linkAlpha})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.moveTo(particles[i].x, particles[i].y - (scroll.y * 0.15));
+                        ctx.lineTo(particles[j].x, particles[j].y - (scroll.y * 0.15));
+                        ctx.stroke();
+                        ctx.shadowBlur = 0;
                     }
                 }
             }
-
-            ctx.save();
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-            for (let i = 0; i < 18; i++) {
-                const y = ((phase * 1200) + i * 83) % canvas.height;
-                ctx.fillRect(0, y, canvas.width, 1);
-            }
-            ctx.restore();
 
             animationFrameId = requestAnimationFrame(animate);
         };
@@ -177,30 +193,31 @@ export default function NeuralBackground() {
             mouse.y = e.clientY;
         };
 
+        const handleScroll = () => {
+            scroll.targetY = window.scrollY;
+        };
+
         window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('mousemove', handleMouseMove);
 
         resizeCanvas();
 
         if (prefersReducedMotion.matches) {
             drawStaticBackdrop();
-            const handleResize = () => {
-                resizeCanvas();
-                drawStaticBackdrop();
-            };
-
-            window.addEventListener('resize', handleResize);
             return () => {
                 window.removeEventListener('resize', resizeCanvas);
-                window.removeEventListener('resize', handleResize);
+                window.removeEventListener('scroll', handleScroll);
+                window.removeEventListener('mousemove', handleMouseMove);
             };
         }
 
-        window.addEventListener('mousemove', handleMouseMove);
         init();
         animate();
 
         return () => {
             window.removeEventListener('resize', resizeCanvas);
+            window.removeEventListener('scroll', handleScroll);
             window.removeEventListener('mousemove', handleMouseMove);
             cancelAnimationFrame(animationFrameId);
         };
@@ -208,3 +225,4 @@ export default function NeuralBackground() {
 
     return <canvas ref={canvasRef} className="neural-bg" />;
 }
+

@@ -1,0 +1,91 @@
+.terminal-loader {
+  position: fixed;
+  inset: 0;
+  background: #090e17; /* Matches --bg in globals.css */
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #10B981; /* Matches --green */
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  overflow: hidden;
+  user-select: none;
+  pointer-events: auto;
+}
+
+.terminal-loader__content {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.terminal-loader__logo pre {
+  font-size: 0.75rem;
+  line-height: 1.2;
+  margin: 0;
+  color: #14B8A6; /* Matches --cyan */
+  text-shadow: 0 0 10px rgba(20, 184, 166, 0.4);
+}
+
+.terminal-loader__logs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  min-height: 120px;
+}
+
+.terminal-loader__log-line {
+  display: flex;
+  gap: 12px;
+  animation: zfadeup 0.2s ease-out forwards;
+}
+
+.terminal-loader__prompt {
+  color: #14B8A6;
+  opacity: 0.8;
+}
+
+.terminal-loader__cursor {
+  display: inline-block;
+  width: 8px;
+  height: 18px;
+  background: #10B981;
+  animation: zblink 0.8s infinite;
+  margin-top: 4px;
+}
+
+.terminal-loader__scanline {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.1) 51%,
+    transparent 52%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  opacity: 0.15;
+  animation: scanline-move 10s linear infinite;
+}
+
+@keyframes scanline-move {
+  from { background-position: 0 0; }
+  to { background-position: 0 100%; }
+}
+
+@media (max-width: 640px) {
+  .terminal-loader__logo pre {
+    font-size: 0.5rem;
+  }
+  .terminal-loader__content {
+    padding: 1.5rem;
+  }
+  .terminal-loader__logs {
+    font-size: 0.75rem;
+  }
+}

@@ -17,26 +17,28 @@ export default function Portfolio() {
         <>
             <Hero />
 
-            <div className="z-divider-line" />
-            <About />
+            <div className="z-mobile-card-wrapper">
+                <div className="z-divider-line" />
+                <div className="z-mobile-card"><About /></div>
 
-            <div className="z-divider-line" />
-            <Projects />
+                <div className="z-divider-line" />
+                <div className="z-mobile-card"><Projects /></div>
 
-            <div className="z-divider-line" />
-            <ITServices />
+                <div className="z-divider-line" />
+                <div className="z-mobile-card"><ITServices /></div>
 
-            <div className="z-divider-line" />
-            <Stack />
+                <div className="z-divider-line" />
+                <div className="z-mobile-card"><Stack /></div>
 
-            <div className="z-divider-line" />
-            <Contact />
+                <div className="z-divider-line" />
+                <div className="z-mobile-card"><Contact /></div>
 
-            <div className="z-divider-line" />
-            <FAQ />
+                <div className="z-divider-line" />
+                <div className="z-mobile-card"><FAQ /></div>
 
-            <div className="z-divider-line" />
-            <Philosophy />
+                <div className="z-divider-line" />
+                <div className="z-mobile-card"><Philosophy /></div>
+            </div>
 
             <Footer />
         </>
