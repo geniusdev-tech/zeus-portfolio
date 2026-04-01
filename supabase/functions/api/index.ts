@@ -419,6 +419,7 @@ async function handleChat(req: Request, body: Record<string, unknown>) {
       },
     });
   } catch (error) {
+    console.error('[CHAT_ERROR]', error);
     const leadSaved = shouldSaveLead(email, phone, intention)
       ? await saveLead(leadPayload).catch(() => false)
       : false;
@@ -432,18 +433,17 @@ async function handleChat(req: Request, body: Record<string, unknown>) {
         intention,
         email,
         phone,
-        error: (error as Error).message,
       },
     });
   }
 }
 
 async function handleContact(req: Request, body: Record<string, unknown>) {
-  const name = String(body.name || '').trim();
-  const company = String(body.company || '').trim();
-  const email = String(body.email || '').trim().toLowerCase();
-  const subject = String(body.subject || '').trim();
-  const message = String(body.message || '').trim();
+  const name = String(body.name || '').trim().substring(0, 100);
+  const company = String(body.company || '').trim().substring(0, 100);
+  const email = String(body.email || '').trim().toLowerCase().substring(0, 100);
+  const subject = String(body.subject || '').trim().substring(0, 150);
+  const message = String(body.message || '').trim().substring(0, 5000);
   const destination = String(Deno.env.get('CONTACT_TO_EMAIL') || '').trim() || 'walletzeus@proton.me';
 
   if (!name) {

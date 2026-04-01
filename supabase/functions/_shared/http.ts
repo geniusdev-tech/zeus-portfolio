@@ -19,10 +19,10 @@ export function getAllowedOrigin(req: Request): string {
 
   const requestOrigin = req.headers.get('origin');
   if (!requestOrigin) {
-    return allowedOrigins[0] || '*';
+    return allowedOrigins[0];
   }
 
-  return allowedOrigins.includes(requestOrigin) ? requestOrigin : (allowedOrigins[0] || '*');
+  return allowedOrigins.includes(requestOrigin) ? requestOrigin : allowedOrigins[0];
 }
 
 export function corsHeaders(req: Request, methods = 'GET, POST, OPTIONS'): Headers {
