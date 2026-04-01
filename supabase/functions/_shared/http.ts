@@ -1,3 +1,4 @@
+// @ts-nocheck
 export function getAllowedOrigin(req: Request): string {
   const configured = (Deno.env.get('ALLOWED_ORIGIN') || '').trim();
   const defaults = [

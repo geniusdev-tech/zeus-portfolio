@@ -8,7 +8,6 @@ import Philosophy from '../components/Philosophy';
 import Stack from '../components/Stack';
 import FAQ from '../components/FAQ/FAQ';
 import Contact from '../components/Contact';
-import StatusDashboard from '../components/StatusDashboard';
 import Footer from '../components/Footer';
 
 export default function Portfolio() {
@@ -23,9 +22,6 @@ export default function Portfolio() {
 
             <div className="z-divider-line" />
             <Projects />
-
-            <div className="z-divider-line" />
-            <StatusDashboard />
 
             <div className="z-divider-line" />
             <ITServices />

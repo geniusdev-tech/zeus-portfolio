@@ -1,0 +1,17 @@
+{
+  "name": "Zeus Protocol",
+  "short_name": "Zeus",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090e17",
+  "theme_color": "#090e17",
+  "description": "Systems, Automation, Cloud and CRM",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

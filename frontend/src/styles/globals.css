@@ -48,6 +48,7 @@
 html {
   scroll-behavior: smooth;
   color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
 }
 
 ::-webkit-scrollbar {
@@ -74,6 +75,16 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased; /* Torna a fonte Inter muito mais limpa */
   -moz-osx-font-smoothing: grayscale;
+  
+  /* App-like Behaviors */
+  overscroll-behavior-y: none;
+  -webkit-touch-callout: none;
+}
+
+/* Base PWA Restrictions */
+img, svg, button, .z-nav, .z-bottom-nav, .z-btn {
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 body.z-menu-open,
@@ -87,9 +98,33 @@ body.z-modal-open {
   min-height: 100vh;
 }
 
-.zeus-app > *:not(.neural-bg) {
+.zeus-app > *:not(.neural-bg):not(.z-nav):not(.z-bottom-nav) {
   position: relative;
   z-index: 1;
+}
+
+.z-main-content {
+  padding-top: 56px; /* Space for the top fixed nav */
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+section, .z-section {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+@media (min-width: 1920px) {
+  .z-main-content {
+    max-width: 1600px;
+  }
+}
+
+@media (max-width: 768px) {
+  .z-main-content {
+    /* Space for the bottom fixed nav + safe area */
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+  }
 }
 
 input,

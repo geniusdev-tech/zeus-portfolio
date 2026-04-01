@@ -378,9 +378,9 @@
 
 .z-packages__grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
   gap: 2rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 .z-packages__grid--scroll {
@@ -933,6 +933,17 @@
 @media (max-width: 920px) {
   .z-packages__toolbar {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .z-cases-card__meta,
+  .z-cases-card__body,
+  .z-cases-card__footer {
+    padding: 1.25rem;
+  }
+  .z-cases-card__section {
+    padding-left: 1rem;
   }
 }
 

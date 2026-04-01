@@ -1,4 +1,21 @@
+# Zeus Protocol Robots.txt
+# https://zeusprotocol.cloud
+
 User-agent: *
 Allow: /
+
+# Prevent indexing of internal SaaS / Auth areas
+Disallow: /login
+Disallow: /register
+Disallow: /dashboard
+
+# Prevent indexing of legacy & dev tools to save crawl budget
+Disallow: /terminal
+Disallow: /qelox
+
+# Do not crawl internal API or assets paths
+Disallow: /api/
+Disallow: /assets/
+Disallow: /_next/
 
 Sitemap: https://zeusprotocol.cloud/sitemap.xml

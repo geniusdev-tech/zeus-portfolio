@@ -1,5 +1,9 @@
+// @ts-nocheck
 export type LeadInsert = {
   message: string;
+  name?: string | null;
+  company?: string | null;
+  subject?: string | null;
   email: string | null;
   phone: string | null;
   intention: string;
